@@ -26,12 +26,31 @@ class BranchNode extends NodeAbstract
      * @param bool          $isAReturningVal
      * @param bool          $isATraversable
      */
-    public function __construct($payload, $isAReturningVal, $isATraversable)
+    public function __construct($payload, $isAReturningVal, $isATraversable = false)
     {
         if (!($payload instanceof FlowInterface)) {
             throw new \Exception('Payload does not implement FlowInterface : ' . (is_object($payload) ? get_class($payload) : gettype($payload)));
         }
 
+        if ($isATraversable) {
+            $nodes    = $payload->getNodes();
+            $lastNode = end($nodes);
+            if (!($lastNode instanceof TraversableNodeInterface)) {
+                throw new \Exception('Last node of a Traversable Branch must be Travsersable in branch Flow : ' . get_class($payload));
+            }
+        }
+
         parent::__construct($payload, $isAReturningVal, $isATraversable);
+    }
+
+    /**
+     * @param mixed
+     * @param null|mixed $param
+     *
+     * @return mixed
+     */
+    public function exec($param = null)
+    {
+        return $this->payload->exec($param);
     }
 }

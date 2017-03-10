@@ -21,7 +21,7 @@ class CallableNode extends NodeAbstract implements TraversableNodeInterface, Exe
      *
      * @throws \Exception
      */
-    public function __construct($payload, $isAReturningVal, $isATraversable)
+    public function __construct($payload, $isAReturningVal, $isATraversable = false)
     {
         $this->enforceIsATraversable($isATraversable);
 

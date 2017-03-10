@@ -17,9 +17,9 @@ use fab2s\NodalFlow\Nodes\NodeInterface;
 interface FlowInterface
 {
     /**
-     * @param mmixed $payload
-     * @param bool   $isAReturningVal
-     * @param bool   $isATraversable
+     * @param mixed $payload
+     * @param bool  $isAReturningVal
+     * @param bool  $isATraversable
      */
     public function add($payload, $isAReturningVal, $isATraversable);
 
@@ -40,4 +40,18 @@ interface FlowInterface
      * @return mixed, the last value returned in the chain
      */
     public function exec($param = null);
+
+    /**
+     * Rewinds the Flow
+     *
+     * @return $this
+     */
+    public function rewind();
+
+    /**
+     * get the underlying node array
+     *
+     * @return array
+     */
+    public function getNodes();
 }

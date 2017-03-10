@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7920b512f6f610f3b638933427ad8ab3",
+    "content-hash": "3f05ef728d520a62fb9f9fd72daf61d9",
     "packages": [],
     "packages-dev": [
         {
@@ -703,46 +703,6 @@
             "time": "2016-12-08T20:27:08+00:00"
         },
         {
-            "name": "rappasoft/laravel-helpers",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/rappasoft/laravel-helpers.git",
-                "reference": "9dfbb3f316db9ec304eeeb94d2cfedd803680a57"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/rappasoft/laravel-helpers/zipball/9dfbb3f316db9ec304eeeb94d2cfedd803680a57",
-                "reference": "9dfbb3f316db9ec304eeeb94d2cfedd803680a57",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/helpers.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Anthony Rappa",
-                    "email": "rappa819@gmail.com"
-                }
-            ],
-            "description": "Laravel Helpers for Non-Laravel Projects",
-            "keywords": [
-                "helpers",
-                "laravel"
-            ],
-            "time": "2016-10-19 14:15:19"
-        },
-        {
             "name": "sebastian/code-unit-reverse-lookup",
             "version": "1.0.1",
             "source": {
@@ -1257,7 +1217,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.2.5",
+            "version": "v3.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
@@ -1363,9 +1323,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "rappasoft/laravel-helpers": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

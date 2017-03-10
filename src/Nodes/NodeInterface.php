@@ -26,7 +26,7 @@ interface NodeInterface
      *
      * @throws \Exception
      */
-    public function __construct($payload, $isAReturningVal, $isATraversable);
+    public function __construct($payload, $isAReturningVal, $isATraversable = false);
 
     /**
      * @return bool
@@ -34,13 +34,13 @@ interface NodeInterface
     public function isTraversable();
 
     /**
-     * @return bool true if payload instanceof FlowInterface
+     * @return bool true if payload is an instanceof FlowInterface
      */
     public function isFlow();
 
     /**
      * @return bool true if payload is expected to return
-     *              something to pass on next node as param.
+     *              something to pass to the next node as param.
      *              If nothing is returned, the previously
      *              returned value will be use as param
      *              for next nodes.
@@ -48,7 +48,7 @@ interface NodeInterface
     public function isReturningVal();
 
     /**
-     * @return object
+     * @return object NodeInterface|FlowInterface
      */
     public function getPayload();
 

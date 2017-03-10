@@ -17,6 +17,8 @@ namespace fab2s\NodalFlow\Nodes;
 interface TraversableNodeInterface extends NodeInterface
 {
     /**
+     * get the traversable to traverse within the Flow
+     *
      * @param mixed
      * @param null|mixed $param
      *

@@ -167,7 +167,15 @@ abstract class FlowAbstract implements FlowInterface
     }
 
     /**
-     * @return $this
+     * @return array
+     */
+    public function getNodes()
+    {
+        return $this->nodes;
+    }
+
+    /**
+     * @return array
      */
     public function getNodeMap()
     {
@@ -175,7 +183,7 @@ abstract class FlowAbstract implements FlowInterface
     }
 
     /**
-     * @return $this
+     * @return array
      */
     public function getNodeStats()
     {
@@ -183,21 +191,11 @@ abstract class FlowAbstract implements FlowInterface
     }
 
     /**
-     * @staticvar int $nonce
-     *
-     * @return type
-     */
-    protected function getNonce()
-    {
-        return self::$nonce++;
-    }
-
-    /**
-     * Rewinds current branch
+     * Rewinds the Flow
      *
      * @return $this
      */
-    protected function rewind()
+    public function rewind()
     {
         $this->nodeCount = count($this->nodes);
         $this->lastIdx   = $this->nodeCount - 1;
@@ -207,8 +205,16 @@ abstract class FlowAbstract implements FlowInterface
     }
 
     /**
+     * @return int
+     */
+    protected function getNonce()
+    {
+        return self::$nonce++;
+    }
+
+    /**
      * Recurse over flows and nodes which may
-     * as well be Traversable we recurse on.
+     * as well be Traversable ...
      * Welcome to the abysses of recursion ^^
      *
      * @param mixed $param
@@ -228,21 +234,17 @@ abstract class FlowAbstract implements FlowInterface
         $node      = $this->nodes[$nodeIdx];
         $nodeStat  = &$this->nodeStats[$nodeIdx];
         $returnVal = $node->isReturningVal();
+
         if ($node->isFlow()) {
-            // exec branch
-            $value = $node->getPayload()->exec($param);
-            ++$nodeStat['num_exec'];
+            // execute a Flow
+            $execPayload = $node->getPayload();
+        } else {
+            // execute a Node
+            $execPayload = $node;
+        }
 
-            if ($returnVal) {
-                // pass current $value as next param
-                $param = $value;
-            }
-
-            // continue with this flow
-            $param = $this->recurse($param, $nodeIdx + 1);
-        } elseif ($node->isTraversable()) {
-            $recurseToIdx = $nodeIdx + 1;
-            foreach ($node->getTraversable($param) as $value) {
+        if ($execPayload->isTraversable()) {
+            foreach ($execPayload->getTraversable($param) as $value) {
                 if ($returnVal) {
                     // pass current $value as next param
                     // else keep last $param
@@ -251,13 +253,15 @@ abstract class FlowAbstract implements FlowInterface
 
                 ++$nodeStat['num_iterate'];
                 // here this means that if a deeper child does return something
-                // it will buble up to the first node as param in case first node
-                // is a Traversable
-                $param = $this->recurse($param, $recurseToIdx);
+                // its result will buble up to the first node as param in case
+                // one of the previous node is a Traversable
+                // It's of course up to each node to decide what to do with the
+                // input param.
+                $param = $this->recurse($param, $nodeIdx + 1);
             }
             ++$nodeStat['num_exec'];
         } else {
-            $value = $node->exec($param);
+            $value = $execPayload->exec($param);
             ++$nodeStat['num_exec'];
             if ($returnVal) {
                 // pass current $value as next param

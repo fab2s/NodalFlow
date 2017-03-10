@@ -9,8 +9,6 @@
 
 use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\Nodes\BranchNode;
-use fab2s\NodalFlow\Nodes\CallableNode;
-use fab2s\NodalFlow\Nodes\ClosureNode;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
@@ -29,15 +27,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @var array
      */
     protected $nodes = [
-        'CallableNode' => 'fab2s\NodalFlow\Nodes\CallableNode',
-        'ClosureNode'  => 'fab2s\NodalFlow\Nodes\ClosureNode',
-        'BranchNode'   => 'fab2s\NodalFlow\Nodes\BranchNode',
+        'CallableNode' => 'fab2s\\NodalFlow\\Nodes\\CallableNode',
+        'ClosureNode'  => 'fab2s\\NodalFlow\\Nodes\\ClosureNode',
+        'BranchNode'   => 'fab2s\\NodalFlow\\Nodes\\BranchNode',
     ];
-
-    /**
-     * @var array
-     */
-    protected $callableNodeSetup = [];
 
     /**
      * @var array
@@ -72,11 +65,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected static $generationOrder = 0;
 
     /**
-     * @var array
-     */
-    protected $payLoadSpy = [];
-
-    /**
      * @var int
      */
     protected $traversableIterations = 7;
@@ -92,55 +80,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected $flowParam = 42;
 
     /**
-     * Setup the test environment.
-     */
-    protected function setUp()
-    {
-        $this->callableNodeSetup = [
-            'exec' => [
-                'payload' => function () {
-                    return 42;
-                },
-                'validate' => function (NodeInterface $node) {
-                    return $node->exec() === 42;
-                },
-            ],
-            'yield' => [
-                'payload' => function ($param = null) {
-                    for ($i = 1; $i <= 5; ++$i) {
-                        if ($param) {
-                            yield $i * $param;
-                        } else {
-                            yield $i;
-                        }
-                    }
-                },
-                'validate' => function (NodeInterface $node, $param = null) {
-                    $i = 1;
-                    $result = true;
-                    foreach ($node->getTraversable() as $value) {
-                        $factor = $param ? ($param * $i) : $i;
-                        $result = $result && $factor === $value;
-                        ++$i;
-                    }
-
-                    return $result;
-                },
-            ],
-        ];
-
-        parent::setUp();
-    }
-
-    /**
-     * Clean up the testing environment before the next test.
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-    }
-
-    /**
      * @param NodeInterface $node
      * @param bool          $isAReturningVal
      * @param bool          $isATraversable
@@ -150,7 +89,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         $payload = $node->getPayload();
         $this->assertEquals($isAReturningVal, $node->isReturningVal(), 'isReturningVal for: ' . get_class($node));
-        $this->assertEquals($isATraversable, $node->isTraversable(), 'isTraversable Val for: ' . get_class($node));
+        $this->assertEquals($node->isFlow() ? false : $isATraversable, $node->isTraversable(), 'isTraversable Val for: ' . get_class($node));
         $this->assertEquals($node->isFlow(), is_a($node, BranchNode::class), 'BranchNode isFlow for: ' . get_class($node));
         $this->assertEquals($node->isFlow(), $payload instanceof FlowInterface, 'FlowInterface isFlow for: ' . get_class($node));
 
@@ -223,15 +162,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return false;
     }
 
-    protected function getCallableNodeSetup($type)
-    {
-        if (isset($this->callableNodeSetup[$type])) {
-            return new $this->callableNodeSetup[$type];
-        }
-
-        return false;
-    }
-
     /**
      * @param bool $debug
      *
@@ -263,32 +193,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param int    $generationOrder
-     * @param string $generator
-     * @param int    $invocations
-     * @param mixed  $param
-     * @param mixed  $value
-     * @param int    $iteration
-     */
-    protected function payloadClosureCalled($generationOrder, $generator, $invocations, $param, $value, $iteration = 0)
-    {
-        //var_dump($generationOrder, $generator, $invocations, $param, $value, $iteration);
-        $this->payLoadSpy[] = [
-            'genorder'    => $generationOrder,
-            'generator'   => $generator,
-            'invocations' => $invocations,
-            'param'       => $param,
-            'value'       => $value,
-            'iteration'   => $iteration,
-        ];
-    }
-
-    protected function getPayloadSpy()
-    {
-        return $this->payLoadSpy;
-    }
-
-    /**
      * @param bool $debug
      *
      * @return \Closure
@@ -303,7 +207,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             $param = max(0, (int) $param);
             $limit = $param + 5;
             for ($i = $param; $i < $limit; ++$i) {
-                $this->payloadClosureCalled($generationOrder, $caller, $invocations, $param, $i, $i - $param + 1);
                 if ($debug) {
                     echo str_repeat('    ', $generationOrder) . "#$generationOrder traversablePayload invocations: $invocations, param: $param yield: $i\n";
                 }
@@ -331,7 +234,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             ++$invocations;
             $param  = max(0, (int) $param);
             $result = $param + 1;
-            $this->payloadClosureCalled($generationOrder, $caller, $invocations, $param, $result);
             if ($debug) {
                 echo str_repeat('    ', $generationOrder) . "#$generationOrder execPayload invocations: $invocations, param: $param result: $result\n";
             }
@@ -345,8 +247,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param object $payloadMock
      * @param string $type
+     * @param object $payloadMock
      * @param mixed  $spy
      *
      * @return array

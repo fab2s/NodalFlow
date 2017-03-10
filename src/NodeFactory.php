@@ -22,9 +22,9 @@ use fab2s\NodalFlow\Nodes\NodeInterface;
 class NodeFactory implements NodeFactoryInterface
 {
     /**
-     * @param object $payload
-     * @param bool   $isAReturningVal
-     * @param bool   $isATraversable
+     * @param mixed $payload
+     * @param bool  $isAReturningVal
+     * @param bool  $isATraversable
      *
      * @return NodeInterface
      */
@@ -33,7 +33,7 @@ class NodeFactory implements NodeFactoryInterface
         if (is_array($payload) || is_string($payload)) {
             return new CallableNode($payload, $isAReturningVal, $isATraversable);
         } elseif ($payload instanceof \Closure) {
-            // distinguishing Closures allows us to play with references
+            // distinguishing Closures actually is surrealistic
             return new ClosureNode($payload, $isAReturningVal, $isATraversable);
         } elseif ($payload instanceof FlowInterface) {
             return new BranchNode($payload, $isAReturningVal, $isATraversable);

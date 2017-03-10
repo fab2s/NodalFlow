@@ -54,12 +54,14 @@ abstract class NodeAbstract implements NodeInterface
      *
      * @throws \Exception
      */
-    public function __construct($payload, $isAReturningVal, $isATraversable)
+    public function __construct($payload, $isAReturningVal, $isATraversable = false)
     {
         $this->payload         = $payload;
         $this->isAFlow         = (bool) ($payload instanceof FlowInterface);
         $this->isAReturningVal = (bool) $isAReturningVal;
-        $this->isATraversable  = (bool) $isATraversable;
+        $this->isATraversable  = (bool) (!$this->isAFlow && $isATraversable);
+
+        $this->enforceIsATraversable();
     }
 
     /**
@@ -67,13 +69,17 @@ abstract class NodeAbstract implements NodeInterface
      *
      * @throws \Exception
      */
-    public function enforceIsATraversable($isATraversable)
+    public function enforceIsATraversable()
     {
-        if ($isATraversable && !($this instanceof TraversableNodeInterface)) {
+        if ($this->isATraversable && $this->isFlow()) {
+            throw new \Exception('Cannot Traverse a Branch');
+        }
+
+        if ($this->isATraversable && !($this instanceof TraversableNodeInterface)) {
             throw new \Exception('Cannot Traverse a Node that does not implement TraversableNodeInterface');
         }
 
-        if (!$isATraversable && !($this instanceof ExecNodeInterface)) {
+        if (!$this->isATraversable && !$this->isFlow() && !($this instanceof ExecNodeInterface)) {
             throw new \Exception('Cannot Exec a Node that does not implement ExecNodeInterface');
         }
     }

@@ -21,7 +21,7 @@ class ClosureNode extends NodeAbstract implements TraversableNodeInterface, Exec
      *
      * @throws \Exception
      */
-    public function __construct($payload, $isAReturningVal, $isATraversable)
+    public function __construct($payload, $isAReturningVal, $isATraversable = false)
     {
         $this->enforceIsATraversable($isATraversable);
 

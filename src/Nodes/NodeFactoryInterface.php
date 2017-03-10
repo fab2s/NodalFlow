@@ -15,9 +15,9 @@ namespace fab2s\NodalFlow\Nodes;
 interface NodeFactoryInterface
 {
     /**
-     * @param object $payload
-     * @param bool   $isAReturningVal
-     * @param bool   $isATraversable
+     * @param mixed $payload
+     * @param bool  $isAReturningVal
+     * @param bool  $isATraversable
      *
      * @return NodeInterface
      */

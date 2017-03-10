@@ -92,7 +92,13 @@ class NodeTest extends \TestCase
                 ],
             ],
             'ClosureNode'  => $closure,
-            'BranchNode'   => new CallableFlow,
+            'BranchNode'   => [
+                [
+                    'payload'           => new CallableFlow,
+                    'isAReturningVal'   => true,
+                    'isATraversable'    => false,
+                ],
+            ],
         ];
 
         $result = [];
