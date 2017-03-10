@@ -1,5 +1,7 @@
 # NodalFlow
 
+[![Build Status](https://travis-ci.org/fab2s/NodalFlow.svg?branch=master)](https://travis-ci.org/fab2s/NodalFlow)
+
 NodalFlow is a generic Workflow that can execute chained tasks. It is designed arround simple interfaces that specifies a flow composed of executable nodes and flows. Nodes can be executed or traversed. They accept a single parameter as argument and can be set pass or not a result to be used as argument to the next node.
 Flow also accept one argument and may return a result to be used as an argument to the next node.
 
