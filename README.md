@@ -13,6 +13,11 @@ NodalFlow enforces minimalistic requirements upon nodes. This means that in most
 
 NodalFlow shares conceptual similarities with [Transduction](https://en.wikipedia.org/wiki/Transduction) as it allow basic interaction chaining, but the comparison diverges quickly.
 
+## Traversability
+
+A Traversable Node is a node that implement the `getTraversable` method as defined in `TraversableNodeInterface`. The `getTraversable` method returns a `Traversable` that will be iterated over during the Flow execution. In other words, a Traversable Node is a node that provides many values at once, with each values being fed as argument to the remaining nodes in the chain. This would be exactly what occurs if the `Traversable` is an array, but you can also use a `Generator` and `yield` results one by one or whatever `Traversable`.
+
+Upon each iteration, the remaining Nodes in the chain will be recursed on. This is for example usefull when a data generator needs some kind of manipulation(s) and / or actions on each of his "records".
 
 ## NodalFlow Citizens
 
@@ -66,7 +71,7 @@ The current version comes with three instanciable Nodes :
 
     $callableTraversableNode = new CallableNode(function($param) {
         for($i = 1; $i < 1024; $i++) {
-            return $param + $i;
+            yield $param + $i;
         }
     }, true, true);
 
@@ -138,7 +143,7 @@ And one instanciable Flow :
         }, true)
         ->add(function($param) {
             for($i = 1; $i < 1024; $i++) {
-                return $param + $i;
+                yield $param + $i;
             }
         }, true, true)
         ->add($branchFlow, false)
