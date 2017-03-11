@@ -51,6 +51,7 @@ class BranchNode extends NodeAbstract
      */
     public function exec($param = null)
     {
+        // in the branch case, we actually exec a Flow
         return $this->payload->exec($param);
     }
 }

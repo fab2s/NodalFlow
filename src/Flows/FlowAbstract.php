@@ -235,16 +235,8 @@ abstract class FlowAbstract implements FlowInterface
         $nodeStat  = &$this->nodeStats[$nodeIdx];
         $returnVal = $node->isReturningVal();
 
-        if ($node->isFlow()) {
-            // execute a Flow
-            $execPayload = $node->getPayload();
-        } else {
-            // execute a Node
-            $execPayload = $node;
-        }
-
-        if ($execPayload->isTraversable()) {
-            foreach ($execPayload->getTraversable($param) as $value) {
+        if ($node->isTraversable()) {
+            foreach ($node->getTraversable($param) as $value) {
                 if ($returnVal) {
                     // pass current $value as next param
                     // else keep last $param
@@ -261,7 +253,7 @@ abstract class FlowAbstract implements FlowInterface
             }
             ++$nodeStat['num_exec'];
         } else {
-            $value = $execPayload->exec($param);
+            $value = $node->exec($param);
             ++$nodeStat['num_exec'];
             if ($returnVal) {
                 // pass current $value as next param
