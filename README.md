@@ -92,7 +92,7 @@ The current version comes with three instanciable Nodes :
 
 * ClosureNode
 
-    ClosureNode is not bringing anything really other than providing another example. It is very similar to CallableNode except it will only accept Closure as payload.
+    ClosureNode is not bringing anything really other than providing with another example. It is very similar to CallableNode except it will only accept Closure as payload.
 
 NodalFlow also comes with a NodeFactory to ease Node instanciation :
 ```php
@@ -150,7 +150,7 @@ As you can see, it is possible to dynamically generate and organize tasks which 
 
 ## Serialization
 
-As the work flow became an object, it is serializable, but this is unless it carries Closures. Closure serialization is not natively supported by php, but there are ways around it like [Opis Closure](https://github.com/opis/closure)
+As the workflow became an object, it became serializable, but this is unless it carries Closures. Closure serialization is not natively supported by PHP, but there are ways around it like [Opis Closure](https://github.com/opis/closure)
 
 
 ## Requirements
