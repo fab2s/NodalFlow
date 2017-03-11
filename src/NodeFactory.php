@@ -28,7 +28,7 @@ class NodeFactory implements NodeFactoryInterface
      *
      * @return NodeInterface
      */
-    public static function create($payload, $isAReturningVal, $isATraversable)
+    public static function create($payload, $isAReturningVal, $isATraversable = false)
     {
         if (is_array($payload) || is_string($payload)) {
             return new CallableNode($payload, $isAReturningVal, $isATraversable);
