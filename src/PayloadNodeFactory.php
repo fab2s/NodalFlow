@@ -13,20 +13,20 @@ use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\Nodes\BranchNode;
 use fab2s\NodalFlow\Nodes\CallableNode;
 use fab2s\NodalFlow\Nodes\ClosureNode;
-use fab2s\NodalFlow\Nodes\NodeFactoryInterface;
-use fab2s\NodalFlow\Nodes\NodeInterface;
+use fab2s\NodalFlow\Nodes\PayloadNodeFactoryInterface;
+use fab2s\NodalFlow\Nodes\PayloadNodeInterface;
 
 /**
- * class NodeFactoryAbstract
+ * class PayloadNodeFactory
  */
-class NodeFactory implements NodeFactoryInterface
+class PayloadNodeFactory implements PayloadNodeFactoryInterface
 {
     /**
      * @param mixed $payload
      * @param bool  $isAReturningVal
      * @param bool  $isATraversable
      *
-     * @return NodeInterface
+     * @return PayloadNodeInterface
      */
     public static function create($payload, $isAReturningVal, $isATraversable = false)
     {

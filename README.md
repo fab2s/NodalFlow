@@ -23,24 +23,28 @@ Upon each iteration, the remaining Nodes in the chain will be recursed on. This 
 
 A Flow is an executable workflow composed of a set of executable Nodes. They all carry a somehow executable payload carrying the execution logic and can be of three kinds :
 
-* Exec Nodes :
+* Exec Nodes:
 
     An Exec Node is a Node that exposes an exec method accepting one parameter and eventually returning one value that may or may not be used as argument to the next node in the flow.
 
-* Traversable Node :
+* Traversable Node:
 
     A Traversable Node is a not that exposes a getTraversable method one parameter and returns with a Traversable which may or may not spit values that may or may not be used as argument to the next node in the flow
 
-* Branch Node
+* Payload Nodes:
 
-    Branch Node is a special case where the Node's payload is a Flow. It will be treated as an exec node which may return a value that may (which results in executing the branch within the parent's Flow's flow, as if it was part of it) or may not (which result in a true branch which will only start from a specific location in the parent's Flow'w flow) be used as argument to the next node in the flow.
+    A Payload Node is a node carrying an underlying payload which holds the execution logic. It is used to allow things like Callable Nodes where the execution logic is fully generic and cannot implement NodeInterface directly. It acts kind of like a proxy between the business payload and the workflow.
+
+* Branch Node:
+
+    Branch Node is a PayloadNode where the payload is a Flow. It will be treated as an exec node which may return a value that may (which results in executing the branch within the parent's Flow's flow, as if it was part of it) or may not (which result in a true branch which will only start from a specific location in the parent's Flow'w flow) be used as argument to the next node in the flow.
     Branch Nodes cannot be traversed. It is not a technical limitation, but rather something that requires further thinking and may be later implemented.
 
-Each Node share the same constructor signature :
+Each PayloadNode share the same constructor signature :
 
 ```php
     /**
-     * As a node is supposed to be immutable, and thus
+     * As a Payload Node is supposed to be immutable, and thus
      * have no setters on $isAReturningVal and $isATraversable
      * we enforce the constructor's signature in this interface
      * One can of course still add defaulting param in extend
@@ -54,7 +58,7 @@ Each Node share the same constructor signature :
     public function __construct($payload, $isAReturningVal, $isATraversable = false);
 ```
 
-The current version comes with three instanciable Nodes :
+The current version comes with three useable Payload Nodes :
 
 * CallableNode
 
@@ -99,37 +103,37 @@ The current version comes with three instanciable Nodes :
 
     ClosureNode is not bringing anything really other than providing with another example. It is very similar to CallableNode except it will only accept Closure as payload.
 
-NodalFlow also comes with a NodeFactory to ease Node instanciation :
+NodalFlow also comes with a PayloadNodeFactory to ease Payload Node usage :
 ```php
-use fab2s\NodalFlow\NodeFactory;
+use fab2s\NodalFlow\PayloadNodeFactory;
 
-$node = new NodeFactory(function($param) {
+$node = new PayloadNodeFactory(function($param) {
     return $param + 1;
 }, true);
 
-$node = new NodeFactory('trim', true);
+$node = new PayloadNodeFactory('trim', true);
 
-$node = new NodeFactory([$someObject, 'someMethod'], true);
+$node = new PayloadNodeFactory([$someObject, 'someMethod'], true);
 
-$node = new NodeFactory('SomeClass::someTraversableMethod', true, true);
+$node = new PayloadNodeFactory('SomeClass::someTraversableMethod', true, true);
 
 
 $branchFlow = new ClassImplementingFlwoInterface;
 // feed the flow
 // ...
 
-$node = new NodeFactory($branchFlow, true);
+$node = new PayloadNodeFactory($branchFlow, true);
 
 // ..
 ```
 
-And one instanciable Flow :
+And one useable Flow :
 
 * CallableFlow
 
     ```php
     use fab2s\NodalFlow\CallableFlow;
-    use fab2s\NodalFlow\NodeFactory;
+    use fab2s\NodalFlow\PayloadNodeFactory;
 
     $branchFlow = new ClassImplementingFlwoInterface;
     // feed the branch flow

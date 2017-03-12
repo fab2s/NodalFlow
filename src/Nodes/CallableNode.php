@@ -12,7 +12,7 @@ namespace fab2s\NodalFlow\Nodes;
 /**
  * Class CallableNode
  */
-class CallableNode extends NodeAbstract implements TraversableNodeInterface, ExecNodeInterface
+class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterface, ExecNodeInterface
 {
     /**
      * @param callable $payload
@@ -23,8 +23,6 @@ class CallableNode extends NodeAbstract implements TraversableNodeInterface, Exe
      */
     public function __construct($payload, $isAReturningVal, $isATraversable = false)
     {
-        $this->enforceIsATraversable($isATraversable);
-
         if (!is_callable($payload)) {
             throw new \Exception('Payload is not callable');
         }

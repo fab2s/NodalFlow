@@ -12,7 +12,7 @@ namespace fab2s\NodalFlow\Nodes;
 /**
  * Class ClosureNode
  */
-class ClosureNode extends NodeAbstract implements TraversableNodeInterface, ExecNodeInterface
+class ClosureNode extends PayloadNodeAbstract implements TraversableNodeInterface, ExecNodeInterface
 {
     /**
      * @param \Closure $payload
@@ -23,8 +23,6 @@ class ClosureNode extends NodeAbstract implements TraversableNodeInterface, Exec
      */
     public function __construct($payload, $isAReturningVal, $isATraversable = false)
     {
-        $this->enforceIsATraversable($isATraversable);
-
         if (!($payload instanceof \Closure)) {
             throw new \Exception('Payload is not a Closure');
         }

@@ -15,20 +15,6 @@ namespace fab2s\NodalFlow\Nodes;
 interface NodeInterface
 {
     /**
-     * As a node is supposed to be immutable, and thus
-     * have no setters on $isAReturningVal and $isATraversable
-     * we enforce the constructor's signature in this interface
-     * One can of course still add defaulting param in extend
-     *
-     * @param mixed $payload
-     * @param bool  $isAReturningVal
-     * @param bool  $isATraversable
-     *
-     * @throws \Exception
-     */
-    public function __construct($payload, $isAReturningVal, $isATraversable = false);
-
-    /**
      * @return bool
      */
     public function isTraversable();
@@ -46,11 +32,6 @@ interface NodeInterface
      *              for next nodes.
      */
     public function isReturningVal();
-
-    /**
-     * @return object NodeInterface|FlowInterface
-     */
-    public function getPayload();
 
     /**
      * @param mixed $branchId

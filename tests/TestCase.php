@@ -90,6 +90,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $payload = $node->getPayload();
         $this->assertEquals($isAReturningVal, $node->isReturningVal(), 'isReturningVal for: ' . get_class($node));
         $this->assertEquals($node->isFlow() ? false : $isATraversable, $node->isTraversable(), 'isTraversable Val for: ' . get_class($node));
+        if ($node->isFlow() !==is_a($node, BranchNode::class)) {
+            dump($node->isFlow(), get_class($node),BranchNode::class);
+        }
         $this->assertEquals($node->isFlow(), is_a($node, BranchNode::class), 'BranchNode isFlow for: ' . get_class($node));
         $this->assertEquals($node->isFlow(), $payload instanceof FlowInterface, 'FlowInterface isFlow for: ' . get_class($node));
 

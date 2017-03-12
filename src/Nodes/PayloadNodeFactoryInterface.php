@@ -10,16 +10,16 @@
 namespace fab2s\NodalFlow\Nodes;
 
 /**
- * Interface NodeFactoryInterface
+ * Interface PayloadNodeFactoryInterface
  */
-interface NodeFactoryInterface
+interface PayloadNodeFactoryInterface
 {
     /**
      * @param mixed $payload
      * @param bool  $isAReturningVal
      * @param bool  $isATraversable
      *
-     * @return NodeInterface
+     * @return PayloadNodeInterface
      */
     public static function create($payload, $isAReturningVal, $isATraversable = false);
 }
