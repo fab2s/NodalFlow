@@ -150,8 +150,10 @@ And the Flow :
 
     // Then the root flow
     $nodalFlow = new NodalFlow;
-    $result = $nodalFlow->addPayload('trim', true)
-        ->addPayload(('SomeClass::someTraversableMethod', true, true))
+    $result = $nodalFlow->addPayload(('SomeClass::someTraversableMethod', true, true))
+        ->addPayload('intval', true)
+        // or ->add(new CallableNode('intval', false))
+        // or ->add(new PayloadNodeFactory('intval', false))
         ->addPayload(function($param) {
             return $param + 1;
         }, true)
@@ -164,8 +166,6 @@ And the Flow :
         // or ->add(new BranchNode($branchFlow, false))
         // or ->add(new PayloadNodeFactory($branchFlow, false))
         ->addPayload([$someObject, 'someMethod'], false)
-        // or ->add(new CallableNode([$someObject, 'someMethod'], false))
-        // or ->add(new PayloadNodeFactory([$someObject, 'someMethod'], false))
         ->exec();
     ```
 

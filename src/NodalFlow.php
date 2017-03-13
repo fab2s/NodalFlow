@@ -10,8 +10,8 @@
 namespace fab2s\NodalFlow;
 
 use fab2s\NodalFlow\Callbacks\CallbackInterface;
-use fab2s\NodalFlow\Nodes\NodeInterface;
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\Nodes\NodeInterface;
 
 /**
  * Class NodalFlow
@@ -170,8 +170,8 @@ class NodalFlow implements FlowInterface
 
     /**
      * @param callable $payload
-     * @param mixed $isAReturningVal
-     * @param mixed $isATraversable
+     * @param mixed    $isAReturningVal
+     * @param mixed    $isATraversable
      *
      * @return $this
      */
@@ -179,7 +179,7 @@ class NodalFlow implements FlowInterface
     {
         $node = PayloadNodeFactory::create($payload, $isAReturningVal, $isATraversable);
 
-        parent::addNode($node);
+        parent::add($node);
 
         return $this;
     }
