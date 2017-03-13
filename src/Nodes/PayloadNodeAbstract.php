@@ -8,6 +8,7 @@
  */
 
 namespace fab2s\NodalFlow\Nodes;
+
 use fab2s\NodalFlow\Flows\FlowInterface;
 
 /**
@@ -16,7 +17,7 @@ use fab2s\NodalFlow\Flows\FlowInterface;
 abstract class PayloadNodeAbstract extends NodeAbstract implements PayloadNodeInterface
 {
     /**
-     * @var object|Callable
+     * @var object|callable
      */
     protected $payload;
 
@@ -37,13 +38,14 @@ abstract class PayloadNodeAbstract extends NodeAbstract implements PayloadNodeIn
         $this->payload         = $payload;
         $this->isAFlow         = (bool) ($payload instanceof FlowInterface);
         $this->isAReturningVal = (bool) $isAReturningVal;
-        $this->isATraversable  = (bool) (!$this->isAFlow && $isATraversable);
+        // let wrong traversability be enforced by parent
+        $this->isATraversable  = (bool) $isATraversable;
 
         parent::__construct();
     }
 
     /**
-     * @return object|Callable
+     * @return object|callable
      */
     public function getPayload()
     {

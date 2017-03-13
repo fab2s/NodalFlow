@@ -21,23 +21,23 @@ Upon each iteration, the remaining Nodes in the chain will be recursed on. This 
 
 ## NodalFlow Citizens
 
-A Flow is an executable workflow composed of a set of executable Nodes. They all carry a somehow executable payload carrying the execution logic and can be of three kinds :
+A Flow is an executable workflow composed of a set of executable Nodes. They all carry a somehow executable logic and can be of four kinds :
 
 * Exec Nodes:
 
-    An Exec Node is a Node that exposes an exec method accepting one parameter and eventually returning one value that may or may not be used as argument to the next node in the flow.
+    An Exec Node is a Node that exposes an exec method accepting one parameter and eventually returning one value that may or may not be used as argument to the next node in the flow. The value eventually returned useage is defined when creating a Node, wich means that a Node that returns a value may still be used as if if was not.
 
 * Traversable Node:
 
-    A Traversable Node is a not that exposes a getTraversable method one parameter and returns with a Traversable which may or may not spit values that may or may not be used as argument to the next node in the flow
+    A Traversable Node is a not that exposes a getTraversable method one parameter and returns with a Traversable which may or may not spit values that may or may not be used as argument to the next node in the flow.
 
 * Payload Nodes:
 
-    A Payload Node is a node carrying an underlying payload which holds the execution logic. It is used to allow things like Callable Nodes where the execution logic is fully generic and cannot implement NodeInterface directly. It acts kind of like a proxy between the business payload and the workflow.
+    A Payload Node is a node carrying an underlying payload which holds the execution logic. It is used to allow things like Callable Nodes where the execution logic is fully generic and cannot implement NodeInterface directly. It acts kind of like a proxy between the business payload and the workflow. Payload Nodes may be executable and / or Traversable depending on their initialization. In the Callable Node case, NodalFlow cannot predict if the underlying payload is Traversable, so it up to the developper to properly initialize it in such case.
 
 * Branch Node:
 
-    Branch Node is a PayloadNode where the payload is a Flow. It will be treated as an exec node which may return a value that may (which results in executing the branch within the parent's Flow's flow, as if it was part of it) or may not (which result in a true branch which will only start from a specific location in the parent's Flow'w flow) be used as argument to the next node in the flow.
+    Branch Node is a Payload Node where the payload is a Flow. It will be treated as an exec node which may return a value that may (which results in executing the branch within the parent's Flow's flow, as if it was part of it) or may not (which result in a true branch which will only start from a specific location in the parent's Flow'w flow) be used as argument to the next node in the flow.
     Branch Nodes cannot be traversed. It is not a technical limitation, but rather something that requires further thinking and may be later implemented.
 
 Each PayloadNode share the same constructor signature :
@@ -58,7 +58,7 @@ Each PayloadNode share the same constructor signature :
     public function __construct($payload, $isAReturningVal, $isATraversable = false);
 ```
 
-The current version comes with three useable Payload Nodes :
+The current version comes with three directly useable Payload Nodes, which are alos used to build all tests :
 
 * CallableNode
 
@@ -101,7 +101,7 @@ The current version comes with three useable Payload Nodes :
 
 * ClosureNode
 
-    ClosureNode is not bringing anything really other than providing with another example. It is very similar to CallableNode except it will only accept Closure as payload.
+    ClosureNode is not bringing anything really other than providing with another example. It is very similar to CallableNode except it will only accept a Closure as payload.
 
 NodalFlow also comes with a PayloadNodeFactory to ease Payload Node usage :
 ```php
@@ -127,31 +127,41 @@ $node = new PayloadNodeFactory($branchFlow, true);
 // ..
 ```
 
-And one useable Flow :
+And the Flow :
 
-* CallableFlow
+* NodalFlow
 
     ```php
     use fab2s\NodalFlow\CallableFlow;
     use fab2s\NodalFlow\PayloadNodeFactory;
+    use fab2s\NodalFlow\Nodes\CallableNode;
 
     $branchFlow = new ClassImplementingFlwoInterface;
     // feed the branch flow
+    // adding Nodes
+    $branchFlow->add(new CallableNode(function ($param = null) use ($whatever) {
+        return doSomething($param);
+    }, true));
+    // or internally using the PayloadNodeFactory
+    $branchFlow->addPayload(function ($param = null) use ($whatever) {
+        return doSomething($param);
+    }, true);
     // ...
 
+    // Then the root flow
     $callableFlow = new CallableFlow;
-    $result = $callableFlow->add('trim', true)
-        ->add(('SomeClass::someTraversableMethod', true, true))
-        ->add(function($param) {
+    $result = $callableFlow->addPayload('trim', true)
+        ->addPayload(('SomeClass::someTraversableMethod', true, true))
+        ->addPayload(function($param) {
             return $param + 1;
         }, true)
-        ->add(function($param) {
+        ->addPayload(function($param) {
             for($i = 1; $i < 1024; $i++) {
                 yield $param + $i;
             }
         }, true, true)
-        ->add($branchFlow, false)
-        ->add([$someObject, 'someMethod'], false)
+        ->addPayload($branchFlow, false) // or ->add(new BranchNode($branchFlow, false))
+        ->addPayload([$someObject, 'someMethod'], false)
         ->exec();
     ```
 

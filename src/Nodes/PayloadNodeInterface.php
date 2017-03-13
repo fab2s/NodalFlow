@@ -29,7 +29,7 @@ interface PayloadNodeInterface extends NodeInterface
     public function __construct($payload, $isAReturningVal, $isATraversable = false);
 
     /**
-     * @return object|Callable
+     * @return object|callable
      */
     public function getPayload();
 }

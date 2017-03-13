@@ -17,18 +17,11 @@ use fab2s\NodalFlow\Nodes\NodeInterface;
 interface FlowInterface
 {
     /**
-     * @param mixed $payload
-     * @param bool  $isAReturningVal
-     * @param bool  $isATraversable
-     */
-    public function add($payload, $isAReturningVal, $isATraversable);
-
-    /**
      * @param NodeInterface $node
      *
      * @return $this
      */
-    public function addNode(NodeInterface $node);
+    public function add(NodeInterface $node);
 
     /**
      * Execute the Flow
@@ -54,4 +47,18 @@ interface FlowInterface
      * @return array
      */
     public function getNodes();
+
+    /**
+     * Triggered just before the flow starts
+     *
+     * @return $this
+     */
+    public function flowStart();
+
+    /**
+     * Triggered right after the flow stops
+     *
+     * @return $this
+     */
+    public function flowEnd();
 }

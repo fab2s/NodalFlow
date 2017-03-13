@@ -7,7 +7,7 @@
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
  */
 
-use fab2s\NodalFlow\CallableFlow;
+use fab2s\NodalFlow\NodalFlow;
 use fab2s\NodalFlow\Nodes\BranchNode;
 
 class NodeTest extends \TestCase
@@ -94,7 +94,7 @@ class NodeTest extends \TestCase
             'ClosureNode'  => $closure,
             'BranchNode'   => [
                 [
-                    'payload'           => new CallableFlow,
+                    'payload'           => new NodalFlow,
                     'isAReturningVal'   => true,
                     'isATraversable'    => false,
                 ],

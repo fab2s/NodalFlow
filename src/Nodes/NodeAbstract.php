@@ -27,6 +27,7 @@ abstract class NodeAbstract implements NodeInterface
      * @var string
      */
     public $nodeHash;
+
     /**
      * @var bool
      */
@@ -42,9 +43,6 @@ abstract class NodeAbstract implements NodeInterface
      */
     protected $isAFlow;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->enforceIsATraversable();

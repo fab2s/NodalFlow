@@ -9,7 +9,7 @@
 
 use fab2s\NodalFlow\Flows\FlowInterface;
 
-class CallableFlowInstanceTest extends \TestCase
+class NodalFlowInstanceTest extends \TestCase
 {
     public function flowCasesPovider()
     {
@@ -95,7 +95,7 @@ class CallableFlowInstanceTest extends \TestCase
             $node = new $nodeSetup['nodeClass']($nodeSetup['payload'], $nodeSetup['isAReturningVal'], $nodeSetup['isATraversable']);
             $this->validateNode($node, $nodeSetup['isAReturningVal'], $nodeSetup['isATraversable'], $nodeSetup['validate']);
 
-            $flow->addNode($node);
+            $flow->add($node);
             $nodes[$key]['hash'] = $node->getNodeHash();
         }
 
@@ -150,7 +150,7 @@ class CallableFlowInstanceTest extends \TestCase
          */
         $cases = [
             'single1' => [
-                'flowName'     => 'CallableFlow',
+                'flowName'     => 'NodalFlow',
                 'nodes'        => ['traversableInstance', 'execInstance'],
                 // expectations are seting combos for this flow
                 'expectations' => [
@@ -211,7 +211,7 @@ class CallableFlowInstanceTest extends \TestCase
                 ],
             ],
             'single2' => [
-                'flowName'     => 'CallableFlow',
+                'flowName'     => 'NodalFlow',
                 'nodes'        => ['execInstance', 'traversableInstance'],
                 'expectations' => [
                     [
@@ -269,7 +269,7 @@ class CallableFlowInstanceTest extends \TestCase
                 ],
             ],
             'single3' => [
-                'flowName'     => 'CallableFlow',
+                'flowName'     => 'NodalFlow',
                 'nodes'        => ['traversableInstance', 'traversableInstance'],
                 'expectations' => [
                     [
@@ -327,7 +327,7 @@ class CallableFlowInstanceTest extends \TestCase
                 ],
             ],
             'single4' => [
-                'flowName'     => 'CallableFlow',
+                'flowName'     => 'NodalFlow',
                 'nodes'        => ['execInstance', 'execInstance'],
                 'expectations' => [
                     [
@@ -385,7 +385,7 @@ class CallableFlowInstanceTest extends \TestCase
                 ],
             ],
             'single5' => [
-                'flowName'     => 'CallableFlow',
+                'flowName'     => 'NodalFlow',
                 //                          +4                      +4                 +1
                 'nodes'        => ['traversableInstance', 'traversableInstance', 'execInstance'],
                 'expectations' => [
@@ -457,7 +457,7 @@ class CallableFlowInstanceTest extends \TestCase
                 ],
             ],
             'single6' => [
-                'flowName'     => 'CallableFlow',
+                'flowName'     => 'NodalFlow',
                 //                          +4                   +1                 +4
                 'nodes'        => ['traversableInstance', 'execInstance', 'traversableInstance'],
                 'expectations' => [
@@ -529,7 +529,7 @@ class CallableFlowInstanceTest extends \TestCase
                 ],
             ],
             'single7' => [
-                'flowName'     => 'CallableFlow',
+                'flowName'     => 'NodalFlow',
                 //                       +1                  +4                   +4
                 'nodes'        => ['execInstance', 'traversableInstance', 'traversableInstance'],
                 'expectations' => [
