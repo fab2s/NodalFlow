@@ -132,7 +132,7 @@ And the Flow :
 * NodalFlow
 
     ```php
-    use fab2s\NodalFlow\CallableFlow;
+    use fab2s\NodalFlow\NodalFlow;
     use fab2s\NodalFlow\PayloadNodeFactory;
     use fab2s\NodalFlow\Nodes\CallableNode;
 
@@ -149,8 +149,8 @@ And the Flow :
     // ...
 
     // Then the root flow
-    $callableFlow = new CallableFlow;
-    $result = $callableFlow->addPayload('trim', true)
+    $nodalFlow = new NodalFlow;
+    $result = $nodalFlow->addPayload('trim', true)
         ->addPayload(('SomeClass::someTraversableMethod', true, true))
         ->addPayload(function($param) {
             return $param + 1;
@@ -160,8 +160,12 @@ And the Flow :
                 yield $param + $i;
             }
         }, true, true)
-        ->addPayload($branchFlow, false) // or ->add(new BranchNode($branchFlow, false))
+        ->addPayload($branchFlow, false)
+        // or ->add(new BranchNode($branchFlow, false))
+        // or ->add(new PayloadNodeFactory($branchFlow, false))
         ->addPayload([$someObject, 'someMethod'], false)
+        // or ->add(new CallableNode([$someObject, 'someMethod'], false))
+        // or ->add(new PayloadNodeFactory([$someObject, 'someMethod'], false))
         ->exec();
     ```
 
