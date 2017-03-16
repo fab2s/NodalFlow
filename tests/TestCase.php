@@ -67,17 +67,22 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * @var int
      */
-    protected $traversableIterations = 7;
+    protected $traversableIterations = 8;
 
     /**
      * @var int
      */
-    protected $ExecConst = 3;
+    protected $ExecConst = 27;
 
     /**
      * @var int
      */
     protected $flowParam = 42;
+
+    /**
+     * @var int
+     */
+    protected $interruptPos = 4;
 
     /**
      * @param NodeInterface $node
@@ -90,9 +95,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $payload = $node->getPayload();
         $this->assertEquals($isAReturningVal, $node->isReturningVal(), 'isReturningVal for: ' . get_class($node));
         $this->assertEquals($node->isFlow() ? false : $isATraversable, $node->isTraversable(), 'isTraversable Val for: ' . get_class($node));
-        if ($node->isFlow() !== is_a($node, BranchNode::class)) {
-            dump($node->isFlow(), get_class($node), BranchNode::class);
-        }
+
         $this->assertEquals($node->isFlow(), is_a($node, BranchNode::class), 'BranchNode isFlow for: ' . get_class($node));
         $this->assertEquals($node->isFlow(), $payload instanceof FlowInterface, 'FlowInterface isFlow for: ' . get_class($node));
 
@@ -145,6 +148,110 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             ));
 
         return $this->registerPayloadMock(self::PAYLOAD_TYPE_INSTANCE_TRAVERSABLE, $stub, $spy);
+    }
+
+    /**
+     * @return array
+     */
+    public function flowCasesPovider()
+    {
+        $testNodes = $this->getTestnodes();
+        $cases     = $this->getFlowCases();
+
+        $entryDefault = [
+            'flow'     => null,
+            'nodes'    => [],
+            'param'    => null,
+            'expected' => null,
+            'case'     => [],
+        ];
+
+        $result = [];
+        $debug  = false;
+        foreach ($cases as $flowName => $case) {
+            $flowName = $case['flowName'];
+            foreach ($case['expectations'] as $expectation) {
+                foreach ($expectation['cases'] as $expectationCase) {
+                    $entry         = $entryDefault;
+                    $entry['case'] = $expectationCase;
+                    $entry['flow'] = $this->getFlow($flowName);
+                    foreach ($case['nodes'] as $idx => $nodeName) {
+                        $nodeSetup                    = $testNodes[$nodeName];
+                        $nodeSetup['isAReturningVal'] = $expectation['isAReturningVal'][$idx];
+                        if (isset($expectationCase['expected_exec'])) {
+                            $nodeSetup['expected_iteration'] = $expectationCase['expected_exec'][$idx]['iterations'];
+                            $nodeSetup['expected_exec']      = $expectationCase['expected_exec'][$idx]['exec'];
+                        }
+
+                        if (isset($nodeSetup['payloadGenerator'])) {
+                            if ($nodeSetup['payloadGenerator'] === 'getExecInterruptClosure') {
+                                if (isset($expectationCase['interrupt'], $expectationCase['interruptAt'])) {
+                                    $nodeSetup['payload'] = $this->{$nodeSetup['payloadGenerator']}($expectationCase['interrupt'], $expectationCase['interruptAt'], $entry['flow'], $debug);
+                                } else {
+                                    continue;
+                                }
+                            } else {
+                                $nodeSetup['payloadSetup'] = $this->{$nodeSetup['payloadGenerator']}();
+                                $nodeSetup['payload']      = $nodeSetup['payloadSetup']['callable'];
+                            }
+                        }
+
+                        $entry['nodes'][] = $nodeSetup;
+                    }
+
+                    $entry['param']    = $expectationCase['param'];
+                    $entry['expected'] = $expectationCase['expected'];
+                    $result[]          = $entry;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTestnodes()
+    {
+        $testNodes = [
+            'traversableInstance' => [
+                'nodeName'         => 'CallableNode',
+                'payloadGenerator' => 'getTraversableInstance',
+                'isATraversable'   => true,
+            ],
+            'execInstance' => [
+                'nodeName'         => 'CallableNode',
+                'payloadGenerator' => 'getExecInstance',
+                'isATraversable'   => false,
+            ],
+            'execClosure' => [
+                'nodeName'       => 'CallableNode',
+                'payload'        => $this->getExecClosure(true),
+                'isATraversable' => false,
+            ],
+            'execInterruptClosure' => [
+                'nodeName'         => 'CallableNode',
+                'payloadGenerator' => 'getExecInterruptClosure',
+                'isATraversable'   => false,
+            ],
+        ];
+
+        $nodeDefault = [
+            'nodeName'        => 'CallableNode',
+            'nodeClass'       => null,
+            'payload'         => null,
+            'isAReturningVal' => true,
+            'isATraversable'  => false,
+            'validate'        => null,
+        ];
+
+        foreach ($testNodes as &$testNodeSetup) {
+            $testNodeSetup              = array_replace($nodeDefault, $testNodeSetup);
+            $testNodeSetup['nodeClass'] = $this->nodes[$testNodeSetup['nodeName']];
+        }
+
+        return $testNodes;
     }
 
     protected function getFlow($flowName = null)
@@ -203,8 +310,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected function getTraversableClosure($debug = false)
     {
         $generationOrder = self::$generationOrder;
-        $caller          = __FUNCTION__;
-        $closure         = function ($param = null) use ($generationOrder, $caller, $debug) {
+        $closure         = function ($param = null) use ($generationOrder, $debug) {
             static $invocations = 0;
             ++$invocations;
             $param = max(0, (int) $param);
@@ -231,8 +337,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected function getExecClosure($debug = false)
     {
         $generationOrder = self::$generationOrder;
-        $caller          = __FUNCTION__;
-        $closure         = function ($param = null) use ($generationOrder, $caller, $debug) {
+        $closure         = function ($param = null) use ($generationOrder, $debug) {
             static $invocations = 0;
             ++$invocations;
             $param  = max(0, (int) $param);

@@ -19,9 +19,9 @@ use fab2s\NodalFlow\Flows\FlowInterface;
 abstract class NodeAbstract implements NodeInterface
 {
     /**
-     * @var string
+     * @var FlowInterface
      */
-    public $branchId;
+    public $carrier;
 
     /**
      * @var string
@@ -121,13 +121,13 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
-     * @param string $branchId
+     * @param FlowInterface $flow
      *
      * @return $this
      */
-    public function setBranchId($branchId)
+    public function setCarrier(FlowInterface $flow)
     {
-        $this->branchId = trim($branchId);
+        $this->carrier = $flow;
 
         return $this;
     }
@@ -135,9 +135,9 @@ abstract class NodeAbstract implements NodeInterface
     /**
      * @return string
      */
-    public function getBranchId()
+    public function getCarrier()
     {
-        return $this->branchId;
+        return $this->carrier;
     }
 
     /**

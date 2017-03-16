@@ -9,6 +9,8 @@
 
 namespace fab2s\NodalFlow\Nodes;
 
+use fab2s\NodalFlow\Flows\FlowInterface;
+
 /**
  * Interface NodeInterface
  */
@@ -34,16 +36,16 @@ interface NodeInterface
     public function isReturningVal();
 
     /**
-     * @param mixed $branchId
+     * @param FlowInterface $flow
      *
      * @return $this
      */
-    public function setBranchId($branchId);
+    public function setCarrier(FlowInterface $flow);
 
     /**
      * @return mixed
      */
-    public function getBranchId();
+    public function getCarrier();
 
     /**
      * @param mixed $nodeHash

@@ -11,78 +11,6 @@ use fab2s\NodalFlow\Flows\FlowInterface;
 
 class NodalFlowInstanceTest extends \TestCase
 {
-    public function flowCasesPovider()
-    {
-        $testNodes = [
-            'traversableInstance' => [
-                'nodeName'         => 'CallableNode',
-                'payloadGenerator' => 'getTraversableInstance',
-                'isATraversable'   => true,
-            ],
-            'execInstance' => [
-                'nodeName'         => 'CallableNode',
-                'payloadGenerator' => 'getExecInstance',
-                'isATraversable'   => false,
-            ],
-            'execClosure' => [
-                'nodeName'       => 'CallableNode',
-                'payload'        => $this->getExecClosure(true),
-                'isATraversable' => false,
-            ],
-        ];
-
-        $nodeDefault = [
-            'nodeName'        => 'CallableNode',
-            'nodeClass'       => null,
-            'payload'         => null,
-            'isAReturningVal' => true,
-            'isATraversable'  => false,
-            'validate'        => null,
-        ];
-
-        foreach ($testNodes as &$testNodeSetup) {
-            $testNodeSetup              = array_replace($nodeDefault, $testNodeSetup);
-            $testNodeSetup['nodeClass'] = $this->nodes[$testNodeSetup['nodeName']];
-        }
-
-        $cases = $this->getFlowCases();
-
-        $entryDefault = [
-            'flow'     => null,
-            'nodes'    => [],
-            'param'    => null,
-            'expected' => null,
-        ];
-
-        $result = [];
-        foreach ($cases as $flowName => $case) {
-            $flowName = $case['flowName'];
-            foreach ($case['expectations'] as $expectation) {
-                foreach ($expectation['cases'] as $expectationCase) {
-                    $entry         = $entryDefault;
-                    $entry['flow'] = $this->getFlow($flowName);
-                    foreach ($case['nodes'] as $idx => $nodeName) {
-                        $nodeSetup                    = $testNodes[$nodeName];
-                        $nodeSetup['isAReturningVal'] = $expectation['isAReturningVal'][$idx];
-
-                        if (isset($nodeSetup['payloadGenerator'])) {
-                            $nodeSetup['payloadSetup'] = $this->{$nodeSetup['payloadGenerator']}();
-                            $nodeSetup['payload']      = $nodeSetup['payloadSetup']['callable'];
-                        }
-
-                        $entry['nodes'][] = $nodeSetup;
-                    }
-
-                    $entry['param']    = $expectationCase['param'];
-                    $entry['expected'] = $expectationCase['expected'];
-                    $result[]          = $entry;
-                }
-            }
-        }
-
-        return $result;
-    }
-
     /**
      * @dataProvider flowCasesPovider
      *
@@ -127,7 +55,7 @@ class NodalFlowInstanceTest extends \TestCase
 
                 if ($nodeStats['num_iterate']) {
                     // make sure we iterated as expected
-                    $this->assertSame($nodeStats['num_iterate'], $this->traversableIterations * $nodeStats['num_exec'], "Node num_iterate does not match expected $this->traversableIterations * num_exec");
+                    $this->assertSame($nodeStats['num_iterate'], $this->traversableIterations * $nodeStats['num_exec'], "Node num_iterate {$nodeStats['num_iterate']} does not match expected \$this->traversableIterations * num_exec = $this->traversableIterations * {$nodeStats['num_exec']}");
                 }
             }
         }

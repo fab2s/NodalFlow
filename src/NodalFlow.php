@@ -30,6 +30,7 @@ class NodalFlow implements FlowInterface
      * @var string
      */
     public $branchId;
+
     /**
      * @var array
      */
@@ -127,6 +128,16 @@ class NodalFlow implements FlowInterface
     protected $numExec = 0;
 
     /**
+     * @var bool
+     */
+    protected $continue = false;
+
+    /**
+     * @var bool
+     */
+    protected $break = false;
+
+    /**
      * @var int
      */
     private static $nonce = 0;
@@ -145,7 +156,7 @@ class NodalFlow implements FlowInterface
     public function add(NodeInterface $node)
     {
         $nodeHash = $this->objectHash($node);
-        $node->setBranchId($this->branchId)->setNodeHash($nodeHash);
+        $node->setCarrier($this)->setNodeHash($nodeHash);
 
         $this->nodes[$this->nodeIdx] = $node;
         $this->nodeMap[$nodeHash]    = array_replace($this->nodeMapDefault, [
@@ -349,6 +360,28 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * @return $this
+     */
+    public function breakFlow()
+    {
+        $this->break = true;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $continue
+     *
+     * @return $this
+     */
+    public function continueFlow()
+    {
+        $this->continue = true;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     protected function getNonce()
@@ -368,55 +401,70 @@ class NodalFlow implements FlowInterface
      */
     protected function recurse($param = null, $nodeIdx = 0)
     {
-        // in case we'v consumed all nodes,
-        // let the last retuned value pop up to
-        // upstream calls in the recursive abyss
-        if ($nodeIdx > $this->lastIdx) {
-            return $param;
-        }
+        // the while construct here saves as many recursion depth
+        // as there are exec nodes in the flow
+        while ($nodeIdx <= $this->lastIdx) {
+            $node      = $this->nodes[$nodeIdx];
+            $nodeStat  = &$this->nodeStats[$nodeIdx];
+            $returnVal = $node->isReturningVal();
 
-        $node      = $this->nodes[$nodeIdx];
-        $nodeStat  = &$this->nodeStats[$nodeIdx];
-        $returnVal = $node->isReturningVal();
+            if ($node->isTraversable()) {
+                foreach ($node->getTraversable($param) as $value) {
+                    if ($returnVal) {
+                        // pass current $value as next param
+                        // else keep last $param
+                        $param = $value;
+                    }
 
-        if ($node->isTraversable()) {
-            foreach ($node->getTraversable($param) as $value) {
-                if ($returnVal) {
-                    // pass current $value as next param
-                    // else keep last $param
-                    $param = $value;
+                    ++$nodeStat['num_iterate'];
+                    ++$this->numActions;
+                    if (!($this->numActions % $this->progressMod)) {
+                        $this->triggerCallback(static::FLOW_PROGRESS, $node);
+                    }
+
+                    // here this means that if a deeper child does return something
+                    // its result will buble up to the first node as param in case
+                    // one of the previous node is a Traversable
+                    // It's of course up to each node to decide what to do with the
+                    // input param.
+                    $param = $this->recurse($param, $nodeIdx + 1);
+                    if ($this->continue) {
+                        // we drop one action
+                        // could be because there is no matching join record from somewhere
+                        $this->continue = false;
+                        continue;
+                    }
+
+                    if ($this->break) {
+                        // we drop all subsequent actions
+                        break;
+                    }
                 }
+                // we reached the end of the flow
+                ++$nodeStat['num_exec'];
 
-                ++$nodeStat['num_iterate'];
-                ++$this->numActions;
-                if (!($this->numActions % $this->progressMod)) {
-                    $this->triggerCallback(static::FLOW_PROGRESS, $node);
-                }
-
-                // here this means that if a deeper child does return something
-                // its result will buble up to the first node as param in case
-                // one of the previous node is a Traversable
-                // It's of course up to each node to decide what to do with the
-                // input param.
-                $param = $this->recurse($param, $nodeIdx + 1);
+                return $param;
             }
-            ++$nodeStat['num_exec'];
-        } else {
             $value = $node->exec($param);
-            if ($returnVal) {
-                // pass current $value as next param
-                $param = $value;
-            }
-
             ++$nodeStat['num_exec'];
             ++$this->numActions;
+            if ($this->continue || $this->break) {
+                return $param;
+            }
+
             if (!($this->numActions % $this->progressMod)) {
                 $this->triggerCallback(static::FLOW_PROGRESS, $node);
             }
 
-            $param = $this->recurse($param, $nodeIdx + 1);
+            if ($returnVal) {
+                // pass current $value as next param
+                    $param = $value;
+            }
+
+            ++$nodeIdx;
         }
 
+        // we reached the end of the flow
         return $param;
     }
 

@@ -61,4 +61,21 @@ interface FlowInterface
      * @return $this
      */
     public function flowEnd();
+
+    /**
+     * Nodes may call breakFlow() on their carrier to
+     * break the flow
+     *
+     * @return $this
+     */
+    public function breakFlow();
+
+    /**
+     * Nodes may call breakFlow() on their carrier to
+     * skip the rest of the nodes and continue with next
+     * value fromt the first upstram traversable if any
+     *
+     * @return $this
+     */
+    public function continueFlow();
 }

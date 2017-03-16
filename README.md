@@ -17,7 +17,7 @@ NodalFlow shares conceptual similarities with [Transduction](https://en.wikipedi
 
 A Traversable Node is a node that implement the `getTraversable` method as defined in `TraversableNodeInterface`. The `getTraversable` method returns a `Traversable` that will be iterated over during the Flow execution. In other words, a Traversable Node is a node that provides many values at once, with each values being fed as argument to the remaining nodes in the chain. This would be exactly what occurs if the `Traversable` is an array, but you can also use a `Generator` and `yield` results one by one or whatever `Traversable`.
 
-Upon each iteration, the remaining Nodes in the chain will be recursed on. This is for example usefull when a data generator needs some kind of manipulation(s) and / or actions on each of his "records".
+Upon each iteration, the remaining Nodes in the chain will be recursed on. This is for example useful when a data generator needs some kind of manipulation(s) and / or actions on each of his "records".
 
 ## NodalFlow Citizens
 
@@ -25,19 +25,19 @@ A Flow is an executable workflow composed of a set of executable Nodes. They all
 
 * Exec Nodes:
 
-    An Exec Node is a Node that exposes an exec method accepting one parameter and eventually returning one value that may or may not be used as argument to the next node in the flow. The value eventually returned useage is defined when creating a Node, wich means that a Node that returns a value may still be used as if if was not.
+    An Exec Node is a Node that exposes an exec method accepting one parameter and eventually returning one value that may or may not be used as argument to the next node in the flow. The value eventually returned usage is defined when creating a Node, which means that a Node that returns a value may still be used as if if was not.
 
 * Traversable Node:
 
-    A Traversable Node is a not that exposes a getTraversable method one parameter and returns with a Traversable which may or may not spit values that may or may not be used as argument to the next node in the flow.
+    A Traversable Node is a not that exposes a `getTraversable` method one parameter and returns with a Traversable which may or may not spit values that may or may not be used as argument to the next node in the flow.
 
 * Payload Nodes:
 
-    A Payload Node is a node carrying an underlying payload which holds the execution logic. It is used to allow things like Callable Nodes where the execution logic is fully generic and cannot implement NodeInterface directly. It acts kind of like a proxy between the business payload and the workflow. Payload Nodes may be executable and / or Traversable depending on their initialization. In the Callable Node case, NodalFlow cannot predict if the underlying payload is Traversable, so it up to the developper to properly initialize it in such case.
+    A Payload Node is a node carrying an underlying payload which holds the execution logic. It is used to allow things like Callable Nodes where the execution logic is fully generic and cannot implement `NodeInterface` directly. It acts kind of like a proxy between the business payload and the workflow. Payload Nodes may be executable and / or Traversable depending on their initialization. In the Callable Node case, NodalFlow cannot predict if the underlying payload is Traversable, so it up to the developer to properly initialize it in such case.
 
 * Branch Node:
 
-    Branch Node is a Payload Node where the payload is a Flow. It will be treated as an exec node which may return a value that may (which results in executing the branch within the parent's Flow's flow, as if it was part of it) or may not (which result in a true branch which will only start from a specific location in the parent's Flow'w flow) be used as argument to the next node in the flow.
+    Branch Node is a Payload Node where the payload is a Flow. It will be treated as an exec node which may return a value that may (which results in executing the branch within the parent's Flow's flow, as if it was part of it) or may not (which result in a true branch which will only start from a specific location in the parent's Flow's flow) be used as argument to the next node in the flow.
     Branch Nodes cannot be traversed. It is not a technical limitation, but rather something that requires further thinking and may be later implemented.
 
 Each PayloadNode share the same constructor signature :
@@ -58,11 +58,27 @@ Each PayloadNode share the same constructor signature :
     public function __construct($payload, $isAReturningVal, $isATraversable = false);
 ```
 
-The current version comes with three directly useable Payload Nodes, which are alos used to build all tests :
+## Interruptions
+
+Each Node may issue interruptions that will act similarly to `continue` and `break` as if the whole branch was a single loop. This means that `continue` will only skip current action in chain and the flow will continue with the first upstream traversable next value (if any), while `break` will terminate the whole workflow.
+
+Each nodes is filled with it's carrier flow when it is attached to it. Using the provided `NodeAbtract` you can do :
+```php
+$this->carrier->continueFlow();
+```
+or
+```php
+$this->carrier->breackFlow();
+```
+
+whenever you need to in the `getTraversable()` and / or `exec()` methods to `continue` or `break` the flow.
+
+## Usage
+The current version comes with three directly usable Payload Nodes, which are also used to build all tests :
 
 * CallableNode
 
-    For conviniency, `CallableNode` implemments both `ExecNodeInterface` and `TraversableNodeInterface`. It's thus up to you to use a suitable Callable for each case.
+    For convenience, `CallableNode` implements both `ExecNodeInterface` and `TraversableNodeInterface`. It's thus up to you to use a suitable Callable for each case.
     ```php
     use fab2s\NodalFlow\Nodes\CallableNode;
 
