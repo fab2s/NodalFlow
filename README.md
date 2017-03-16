@@ -5,9 +5,9 @@
 NodalFlow is a generic Workflow that can execute chained tasks. It is designed around simple interfaces that specifies a flow composed of executable nodes and flows. Nodes can be executed or traversed. They accept a single parameter as argument and can be set to pass their result as an argument for the next node.
 Flows also accept one argument and may be set to pass their result to be used as an argument for the next node.
 
-NodalFlow aims at organizing and simplifying data processing workflows where data may come from various generators, pass through several data processors and / or end up in various places. It makes it possible to dynamically configure and execute complex scenario in a repeatable manner. And even more important, to write Nodes that will be reusable in any workflow.
+NodalFlow aims at organizing and simplifying data processing workflows where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. It makes it possible to dynamically configure and execute complex scenario in a repeatable manner. And even more important, to write Nodes that will be reusable in any other workflow you may use.
 
-NodalFlow enforces minimalistic requirements upon nodes. This means that in most cases, you should extend `FlowAbstract` to implement the required constraints for your use case.
+NodalFlow enforces minimalistic requirements upon nodes. This means that in most cases, you should extend `NodalFlow` to implement the required constraints and grammar for your use case.
 
 [YaEtl](https://github.com/fab2s/YaEtl) is an example of a more specified workflow build upon [NodalFlow](https://github.com/fab2s/NodalFlow).
 
@@ -143,47 +143,45 @@ $node = new PayloadNodeFactory($branchFlow, true);
 // ..
 ```
 
-And the Flow :
+And the Flow, NodalFlow:
 
-* NodalFlow
+```php
+use fab2s\NodalFlow\NodalFlow;
+use fab2s\NodalFlow\PayloadNodeFactory;
+use fab2s\NodalFlow\Nodes\CallableNode;
 
-    ```php
-    use fab2s\NodalFlow\NodalFlow;
-    use fab2s\NodalFlow\PayloadNodeFactory;
-    use fab2s\NodalFlow\Nodes\CallableNode;
+$branchFlow = new ClassImplementingFlwoInterface;
+// feed the branch flow
+// adding Nodes
+$branchFlow->add(new CallableNode(function ($param = null) use ($whatever) {
+    return doSomething($param);
+}, true));
+// or internally using the PayloadNodeFactory
+$branchFlow->addPayload(function ($param = null) use ($whatever) {
+    return doSomething($param);
+}, true);
+// ...
 
-    $branchFlow = new ClassImplementingFlwoInterface;
-    // feed the branch flow
-    // adding Nodes
-    $branchFlow->add(new CallableNode(function ($param = null) use ($whatever) {
-        return doSomething($param);
-    }, true));
-    // or internally using the PayloadNodeFactory
-    $branchFlow->addPayload(function ($param = null) use ($whatever) {
-        return doSomething($param);
-    }, true);
-    // ...
-
-    // Then the root flow
-    $nodalFlow = new NodalFlow;
-    $result = $nodalFlow->addPayload(('SomeClass::someTraversableMethod', true, true))
-        ->addPayload('intval', true)
-        // or ->add(new CallableNode('intval', false))
-        // or ->add(new PayloadNodeFactory('intval', false))
-        ->addPayload(function($param) {
-            return $param + 1;
-        }, true)
-        ->addPayload(function($param) {
-            for($i = 1; $i < 1024; $i++) {
-                yield $param + $i;
-            }
-        }, true, true)
-        ->addPayload($branchFlow, false)
-        // or ->add(new BranchNode($branchFlow, false))
-        // or ->add(new PayloadNodeFactory($branchFlow, false))
-        ->addPayload([$someObject, 'someMethod'], false)
-        ->exec();
-    ```
+// Then the root flow
+$nodalFlow = new NodalFlow;
+$result = $nodalFlow->addPayload(('SomeClass::someTraversableMethod', true, true))
+    ->addPayload('intval', true)
+    // or ->add(new CallableNode('intval', false))
+    // or ->add(new PayloadNodeFactory('intval', false))
+    ->addPayload(function($param) {
+        return $param + 1;
+    }, true)
+    ->addPayload(function($param) {
+        for($i = 1; $i < 1024; $i++) {
+            yield $param + $i;
+        }
+    }, true, true)
+    ->addPayload($branchFlow, false)
+    // or ->add(new BranchNode($branchFlow, false))
+    // or ->add(new PayloadNodeFactory($branchFlow, false))
+    ->addPayload([$someObject, 'someMethod'], false)
+    ->exec();
+```
 
 As you can see, it is possible to dynamically generate and organize tasks which may or may not be linked together by their argument and return values
 
