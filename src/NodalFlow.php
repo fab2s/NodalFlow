@@ -469,16 +469,16 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * kiss helper
+     * KISS helper
      *
-     * @param string $which
-     *
+     * @param type $which
+     * @param NodeInterface $node
      * @return $this
      */
-    protected function triggerCallback($which)
+    protected function triggerCallback($which, NodeInterface $node = null)
     {
         if (null !== $this->callBack) {
-            $this->callBack->$which($this);
+            $this->callBack->$which($this, $node);
         }
 
         return $this;
