@@ -302,6 +302,16 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     *
+     * @return array
+     */
+    public function getStats()
+    {
+        $this->stats['nodes'] = $this->getNodeStats();
+        return $this->stats;
+    }
+
+    /**
      * @return array
      */
     public function getNodes()
@@ -445,6 +455,7 @@ class NodalFlow implements FlowInterface
 
                 return $param;
             }
+
             $value = $node->exec($param);
             ++$nodeStat['num_exec'];
             ++$this->numActions;
