@@ -10,6 +10,7 @@
 namespace fab2s\NodalFlow\Callbacks;
 
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\Nodes\NodeInterface;
 
 /**
  * Abstract Class CallbackAbstract
