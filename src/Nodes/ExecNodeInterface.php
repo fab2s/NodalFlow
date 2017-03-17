@@ -18,9 +18,9 @@ interface ExecNodeInterface extends NodeInterface
 {
     /**
      * @param mixed
-     * @param null|mixed $param
+     * @param mixed $param
      *
      * @return mixed
      */
-    public function exec($param = null);
+    public function exec($param);
 }

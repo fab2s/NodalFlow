@@ -45,11 +45,11 @@ class BranchNode extends PayloadNodeAbstract implements ExecNodeInterface
 
     /**
      * @param mixed
-     * @param null|mixed $param
+     * @param mixed $param
      *
      * @return mixed
      */
-    public function exec($param = null)
+    public function exec($param)
     {
         // in the branch case, we actually exec a Flow
         return $this->payload->exec($param);

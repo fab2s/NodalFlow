@@ -64,7 +64,7 @@ class DummyClass
     {
         $i      = 1;
         $result = true;
-        foreach ($node->getTraversable() as $value) {
+        foreach ($node->getTraversable(null) as $value) {
             $result = $result && $i === $value;
             ++$i;
         }

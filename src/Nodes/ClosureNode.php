@@ -32,11 +32,11 @@ class ClosureNode extends PayloadNodeAbstract implements TraversableNodeInterfac
 
     /**
      * @param mixed
-     * @param null|mixed $param
+     * @param mixed $param
      *
      * @return \Generator
      */
-    public function getTraversable($param = null)
+    public function getTraversable($param)
     {
         $callable = $this->payload;
         foreach ($callable($param) as $value) {
@@ -46,11 +46,11 @@ class ClosureNode extends PayloadNodeAbstract implements TraversableNodeInterfac
 
     /**
      * @param mixed
-     * @param null|mixed $param
+     * @param mixed $param
      *
      * @return mixed
      */
-    public function exec($param = null)
+    public function exec($param)
     {
         $callable = $this->payload;
 

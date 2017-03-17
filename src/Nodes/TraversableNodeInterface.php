@@ -24,5 +24,5 @@ interface TraversableNodeInterface extends NodeInterface
      *
      * @return \Traversable
      */
-    public function getTraversable($param = null);
+    public function getTraversable($param);
 }

@@ -32,22 +32,22 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
 
     /**
      * @param mixed
-     * @param null|mixed $param
+     * @param mixed $param
      *
      * @return mixed|void|yield
      */
-    public function exec($param = null)
+    public function exec($param)
     {
         return \call_user_func($this->payload, $param);
     }
 
     /**
      * @param mixed
-     * @param null|mixed $param
+     * @param mixed $param
      *
      * @return \Generator
      */
-    public function getTraversable($param = null)
+    public function getTraversable($param)
     {
         foreach (\call_user_func($this->payload, $param) as $value) {
             yield $value;

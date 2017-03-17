@@ -41,7 +41,7 @@ class NodeTest extends \TestCase
                     'isAReturningVal'   => true,
                     'isATraversable'    => false,
                     'closureAssertTrue' => function ($node) {
-                        return $node->exec() === 42;
+                        return $node->exec(null) === 42;
                     },
                 ],
                 [
@@ -62,7 +62,7 @@ class NodeTest extends \TestCase
                     'isAReturningVal'   => true,
                     'isATraversable'    => false,
                     'closureAssertTrue' => function ($node) use ($use) {
-                        return $node->exec() === $use;
+                        return $node->exec(null) === $use;
                     },
                 ],
                 $function,
@@ -74,7 +74,7 @@ class NodeTest extends \TestCase
                     'isAReturningVal'   => true,
                     'isATraversable'    => false,
                     'closureAssertTrue' => function ($node) {
-                        return $node->exec() === 'dummyMethod';
+                        return $node->exec(null) === 'dummyMethod';
                     },
                 ],
                 [
