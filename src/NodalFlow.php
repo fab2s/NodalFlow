@@ -290,6 +290,34 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     *
+     * @param float $seconds
+     * @return array
+     */
+    public function duration($seconds)
+    {
+        $result = [
+            'hour'     => (int) \floor($seconds / 3600),
+            'min'      => (int) \floor(($seconds / 60) % 60),
+            'sec'      => $seconds % 60,
+            'ms'       => (int) \round(\fmod($seconds, 1) * 1000),
+        ];
+
+        $durationStr = '';
+        foreach ($result as $unit => $value) {
+            if (!empty($value)) {
+                $durationStr .= $value . "$unit ";
+            }
+        }
+
+        $durationStr = \trim($durationStr, ' ');
+
+        $result['durationStr'] = $durationStr;
+
+        return $result;
+    }
+
+    /**
      * @return $this
      */
     public function resetNodeStats()
