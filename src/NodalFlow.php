@@ -246,11 +246,11 @@ class NodalFlow implements FlowInterface
             $result = $this->rewind()
                     ->flowStart()
                     ->recurse($param);
-            $this->flowEnd();
+            $this->flowEnd(true);
 
             return $result;
         } catch (\Exception $e) {
-            $this->triggerCallback(static::FLOW_FAIL);
+            $this->flowEnd(false);
             throw $e;
         }
     }
@@ -260,7 +260,7 @@ class NodalFlow implements FlowInterface
      *
      * @return $this
      */
-    public function flowStart()
+    protected function flowStart()
     {
         ++$this->numExec;
         $this->triggerCallback(static::FLOW_START);
@@ -273,9 +273,10 @@ class NodalFlow implements FlowInterface
     /**
      * Triggered right after the flow stops
      *
+     * @param bool $success
      * @return $this
      */
-    public function flowEnd()
+    protected function flowEnd($success)
     {
         $this->stats['end']                                     = \microtime(true);
         $this->stats['invocations'][$this->numExec]['end']      = $this->stats['end'];
@@ -284,14 +285,14 @@ class NodalFlow implements FlowInterface
         $this->stats['memory']                                  = \memory_get_peak_usage(true) / 1048576;
         $this->stats['invocations'][$this->numExec]['memory']   = $this->stats['memory'];
 
-        $this->triggerCallback(static::FLOW_SUCCESS);
+        $this->triggerCallback($success ? static::FLOW_SUCCESS : static::FLOW_FAIL);
 
         return $this;
     }
 
     /**
-     *
      * @param float $seconds
+     *
      * @return array
      */
     public function duration($seconds)
@@ -330,12 +331,10 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     *
      * @return array
      */
     public function getStats()
     {
-        $this->stats['nodes'] = $this->getNodeStats();
         return $this->stats;
     }
 
@@ -510,8 +509,9 @@ class NodalFlow implements FlowInterface
     /**
      * KISS helper
      *
-     * @param type $which
+     * @param type          $which
      * @param NodeInterface $node
+     *
      * @return $this
      */
     protected function triggerCallback($which, NodeInterface $node = null)

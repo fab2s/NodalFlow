@@ -62,12 +62,14 @@ Each PayloadNode share the same constructor signature :
 
 Each Node may issue interruptions that will act similarly to `continue` and `break` as if the whole branch was a single loop. This means that `continue` will only skip current action in chain and the flow will continue with the first upstream traversable next value (if any), while `break` will terminate the whole workflow.
 
-Each nodes is filled with it's carrier flow when it is attached to it. Using the provided `NodeAbtract` you can do :
+Each nodes is filled with it's carrier flow when it is attached to it. Extending the provided `NodeAbtract` you can do :
 ```php
+// skip this very action
 $this->carrier->continueFlow();
 ```
 or
 ```php
+// stop the whole flow right here
 $this->carrier->breackFlow();
 ```
 
@@ -184,6 +186,17 @@ $result = $nodalFlow->addPayload(('SomeClass::someTraversableMethod', true, true
 ```
 
 As you can see, it is possible to dynamically generate and organize tasks which may or may not be linked together by their argument and return values
+
+## Callbacks
+
+NodalFlow implements a KISS callback interface you can use to trigger callback events in various steps of the process.
+
+- the `start()` method is triggered when the Flow starts
+- the `progress()` method is triggered each time a full Flow loop was performed
+- the `success()` method is triggered when the Flow completes successfully
+- the `fail()` method is triggered when an exception was raised during the Flow's execution. The exception is caught to perform few operations and rethrown as is.
+
+NodalFlow also implements two method that will be triggered just before and after the flow execution, `flowStrat()` and `flowEnd($success)` which you can override to add more logic. These are not treated as events as they are always used by NodalFlow to provide with basic statistics.
 
 ## Serialization
 

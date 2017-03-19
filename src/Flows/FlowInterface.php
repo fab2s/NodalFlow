@@ -49,20 +49,6 @@ interface FlowInterface
     public function getNodes();
 
     /**
-     * Triggered just before the flow starts
-     *
-     * @return $this
-     */
-    public function flowStart();
-
-    /**
-     * Triggered right after the flow stops
-     *
-     * @return $this
-     */
-    public function flowEnd();
-
-    /**
      * Nodes may call breakFlow() on their carrier to
      * break the flow
      *
