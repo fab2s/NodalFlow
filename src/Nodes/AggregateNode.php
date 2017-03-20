@@ -30,7 +30,6 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
     protected $nodeCollection = [];
 
     /**
-     *
      * @param bool $isAReturningVal
      */
     public function __construct($isAReturningVal)

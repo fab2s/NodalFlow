@@ -478,6 +478,7 @@ class NodalFlow implements FlowInterface
                         break;
                     }
                 }
+
                 // we reached the end of the flow
                 ++$nodeStat['num_exec'];
 
@@ -497,7 +498,7 @@ class NodalFlow implements FlowInterface
 
             if ($returnVal) {
                 // pass current $value as next param
-                    $param = $value;
+                $param = $value;
             }
 
             ++$nodeIdx;
