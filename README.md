@@ -21,15 +21,19 @@ Upon each iteration, the remaining Nodes in the chain will be recursed on. This 
 
 ## NodalFlow Citizens
 
-A Flow is an executable workflow composed of a set of executable Nodes. They all carry a somehow executable logic and can be of four kinds :
+A Flow is an executable workflow composed of a set of executable Nodes. They all carry a somehow executable logic and can be of several kinds :
 
 * Exec Nodes:
 
-    An Exec Node is a Node that exposes an exec method accepting one parameter and eventually returning one value that may or may not be used as argument to the next node in the flow. The value eventually returned usage is defined when creating a Node, which means that a Node that returns a value may still be used as if if was not.
+    An Exec Node is a node that exposes an exec method accepting one parameter and eventually returning one value that may or may not be used as argument to the next node in the flow. The value eventually returned usage is defined when creating a Node, which means that a Node that returns a value may still be used as if if was not.
 
 * Traversable Node:
 
-    A Traversable Node is a not that exposes a `getTraversable` method one parameter and returns with a Traversable which may or may not spit values that may or may not be used as argument to the next node in the flow.
+    A Traversable Node is a node that exposes a `getTraversable` method one parameter and returns with a Traversable which may or may not spit values that may or may not be used as argument to the next node in the flow.
+
+* Aggregate Node:
+
+    An Aggregate Node is a node that will aggregate several Traversable Node as if it was a single Traversable. Each Traversable Node in the Aggregate may or may not spit values that may or may not be used as argument to the next node in the Aggregate and the Aggregate may also do the same with next nodes in the Flow.
 
 * Payload Nodes:
 
@@ -116,6 +120,28 @@ The current version comes with three directly usable Payload Nodes, which are al
 
     $rootFlow->addNode(new BranchNode($flow, false));
     ```
+
+* AggregateNode
+
+    ```php
+    use fab2s\NodalFlow\Nodes\AggregateNode;
+
+    $firstTraversable = new ClassImplementingTraversableInterface;
+    // ...
+    $nthTraversable = new ClassImplementingTraversableInterface;
+
+    // aggregate node may or may not return a value
+    // but is always a TraversableNode
+    $isAReturningVal = true;
+    $aggregateNode = new AggregateNode($isAReturningVal);
+    $aggregateNode->addTraversable($firstTraversable)
+        //...
+        ->addTraversable($nthTraversable);
+
+    // attach to a Flow
+    $flow->add($aggregateNode);
+    ```
+
 
 * ClosureNode
 
