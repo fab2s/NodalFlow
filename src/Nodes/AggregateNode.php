@@ -77,16 +77,19 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
             $returnVal = $node->isReturningVal();
             foreach ($node->getTraversable($param) as $value) {
                 if ($returnVal) {
-                    // since this node is returning somehting
-                    // we will pass its last vield to the next
-                    // traversable. It will be up to him to
-                    // do whatever is necessary with it, including
-                    // nothing
-                    $param = $value;
                     yield $value;
                 } else {
                     yield $param;
                 }
+            }
+
+            if ($returnVal) {
+                // since this node is returning somehting
+                // we will pass its last vield to the next
+                // traversable. It will be up to him to
+                // do whatever is necessary with it, including
+                // nothing
+                $param = $value;
             }
         }
     }
