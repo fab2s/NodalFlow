@@ -13,8 +13,6 @@ use fab2s\NodalFlow\Flows\FlowInterface;
 
 /**
  * abstract Class NodeAbstract
- * Dummily implementing methods saves a lot of interfaces,
- * KISS wins again ^^
  */
 abstract class NodeAbstract implements NodeInterface
 {

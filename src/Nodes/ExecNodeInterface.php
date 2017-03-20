@@ -10,14 +10,11 @@
 namespace fab2s\NodalFlow\Nodes;
 
 /**
- * Interface NodeInterface
- * Stuffing every exec combo here saves a lot of interfaces,
- * KISS wins ^^
+ * Interface ExecNodeInterface
  */
 interface ExecNodeInterface extends NodeInterface
 {
     /**
-     * @param mixed
      * @param mixed $param
      *
      * @return mixed

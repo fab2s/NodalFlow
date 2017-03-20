@@ -256,41 +256,6 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * Triggered just before the flow starts
-     *
-     * @return $this
-     */
-    protected function flowStart()
-    {
-        ++$this->numExec;
-        $this->triggerCallback(static::FLOW_START);
-        $this->stats['start']                                = \microtime(true);
-        $this->stats['invocations'][$this->numExec]['start'] = $this->stats['start'];
-
-        return $this;
-    }
-
-    /**
-     * Triggered right after the flow stops
-     *
-     * @param bool $success
-     * @return $this
-     */
-    protected function flowEnd($success)
-    {
-        $this->stats['end']                                     = \microtime(true);
-        $this->stats['invocations'][$this->numExec]['end']      = $this->stats['end'];
-        $this->stats['duration']                                = $this->stats['end'] - $this->stats['start'];
-        $this->stats['invocations'][$this->numExec]['duration'] = $this->stats['duration'];
-        $this->stats['memory']                                  = \memory_get_peak_usage(true) / 1048576;
-        $this->stats['invocations'][$this->numExec]['memory']   = $this->stats['memory'];
-
-        $this->triggerCallback($success ? static::FLOW_SUCCESS : static::FLOW_FAIL);
-
-        return $this;
-    }
-
-    /**
      * @param float $seconds
      *
      * @return array
@@ -414,6 +379,42 @@ class NodalFlow implements FlowInterface
     public function continueFlow()
     {
         $this->continue = true;
+
+        return $this;
+    }
+
+    /**
+     * Triggered just before the flow starts
+     *
+     * @return $this
+     */
+    protected function flowStart()
+    {
+        ++$this->numExec;
+        $this->triggerCallback(static::FLOW_START);
+        $this->stats['start']                                = \microtime(true);
+        $this->stats['invocations'][$this->numExec]['start'] = $this->stats['start'];
+
+        return $this;
+    }
+
+    /**
+     * Triggered right after the flow stops
+     *
+     * @param bool $success
+     *
+     * @return $this
+     */
+    protected function flowEnd($success)
+    {
+        $this->stats['end']                                     = \microtime(true);
+        $this->stats['invocations'][$this->numExec]['end']      = $this->stats['end'];
+        $this->stats['duration']                                = $this->stats['end'] - $this->stats['start'];
+        $this->stats['invocations'][$this->numExec]['duration'] = $this->stats['duration'];
+        $this->stats['memory']                                  = \memory_get_peak_usage(true) / 1048576;
+        $this->stats['invocations'][$this->numExec]['memory']   = $this->stats['memory'];
+
+        $this->triggerCallback($success ? static::FLOW_SUCCESS : static::FLOW_FAIL);
 
         return $this;
     }

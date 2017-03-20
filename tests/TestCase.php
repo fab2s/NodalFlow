@@ -8,8 +8,11 @@
  */
 
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\Nodes\AggregateNode;
 use fab2s\NodalFlow\Nodes\BranchNode;
+use fab2s\NodalFlow\Nodes\CallableNode;
 use fab2s\NodalFlow\Nodes\NodeInterface;
+use fab2s\NodalFlow\Nodes\PayloadNodeInterface;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
@@ -92,12 +95,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     public function validateNode(NodeInterface $node, $isAReturningVal, $isATraversable, $closureAssertTrue = null)
     {
-        $payload = $node->getPayload();
         $this->assertEquals($isAReturningVal, $node->isReturningVal(), 'isReturningVal for: ' . get_class($node));
         $this->assertEquals($node->isFlow() ? false : $isATraversable, $node->isTraversable(), 'isTraversable Val for: ' . get_class($node));
 
         $this->assertEquals($node->isFlow(), is_a($node, BranchNode::class), 'BranchNode isFlow for: ' . get_class($node));
-        $this->assertEquals($node->isFlow(), $payload instanceof FlowInterface, 'FlowInterface isFlow for: ' . get_class($node));
+
+        if ($node instanceof PayloadNodeInterface) {
+            $this->assertEquals($node->isFlow(), $node->getPayload() instanceof FlowInterface, 'FlowInterface isFlow for: ' . get_class($node));
+        }
 
         if ($closureAssertTrue !== null) {
             $this->assertTrue($closureAssertTrue($node), 'Node failling: ' . get_class($node));
@@ -109,9 +114,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     public function getExecInstance()
     {
-        $stub = $this->getMock(
-          'ExecInstance', ['exec']
+        static $nonce = 0;
+        $class        = 'ExecInstance' . $nonce++;
+        $stub         = $this->getMock(
+          $class, ['exec']
         );
+
         $ExecConst = $this->ExecConst;
         $stub->expects($spy = $this->any())
             ->method('exec')
@@ -129,9 +137,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     public function getTraversableInstance()
     {
-        $stub = $this->getMock(
-          'TraversableInstance', ['exec']
+        static $nonce = 0;
+        $class        = 'TraversableInstance' . $nonce++;
+        $stub         = $this->getMock(
+          $class, ['exec']
         );
+
         $traversableIterations = $this->traversableIterations;
         $stub->expects($spy = $this->any())
             ->method('exec')
@@ -175,8 +186,28 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                     $entry         = $entryDefault;
                     $entry['case'] = $expectationCase;
                     $entry['flow'] = $this->getFlow($flowName);
+
                     foreach ($case['nodes'] as $idx => $nodeName) {
-                        $nodeSetup                    = $testNodes[$nodeName];
+                        if (is_array($nodeName)) {
+                            $nodeSetup = $nodeName;
+                            if (empty($nodeSetup['aggregate'])) {
+                                continue;
+                            }
+
+                            $aggregateNode = new AggregateNode($expectation['isAReturningVal'][$idx]);
+                            foreach ($nodeSetup['nodes'] as $subIdx => $payloadGenerator) {
+                                $isAReturningVal         = $nodeSetup['nodeIsAReturningVal'][$subIdx];
+                                $payloadSetup            = $this->$payloadGenerator();
+                                $nodeSetup['payloads'][] = $payloadSetup;
+
+                                $aggregateNode->addTraversable(new CallableNode($payloadSetup['callable'], $isAReturningVal, true));
+                            }
+
+                            $nodeSetup['aggregate'] = $aggregateNode;
+                        } else {
+                            $nodeSetup = $testNodes[$nodeName];
+                        }
+
                         $nodeSetup['isAReturningVal'] = $expectation['isAReturningVal'][$idx];
                         if (isset($expectationCase['expected_exec'])) {
                             $nodeSetup['expected_iteration'] = $expectationCase['expected_exec'][$idx]['iterations'];
