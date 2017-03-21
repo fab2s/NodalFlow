@@ -31,10 +31,9 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
     }
 
     /**
-     * @param mixed
      * @param mixed $param
      *
-     * @return mixed|void|yield
+     * @return mixed
      */
     public function exec($param)
     {
@@ -42,7 +41,6 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
     }
 
     /**
-     * @param mixed
      * @param mixed $param
      *
      * @return \Generator

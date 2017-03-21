@@ -47,50 +47,6 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
-     * @param type $isATraversable
-     *
-     * @throws \Exception
-     */
-    public function enforceIsATraversable()
-    {
-        if ($this->isFlow()) {
-            if ($this->isATraversable) {
-                throw new \Exception('Cannot Traverse a Branch');
-            }
-        } else {
-            if ($this->isATraversable && !($this instanceof TraversableNodeInterface)) {
-                throw new \Exception('Cannot Traverse a Node that does not implement TraversableNodeInterface');
-            }
-
-            if (!$this->isATraversable && !$this->isFlow() && !($this instanceof ExecNodeInterface)) {
-                throw new \Exception('Cannot Exec a Node that does not implement ExecNodeInterface');
-            }
-        }
-    }
-
-    /**
-     * check is this very instance did implement
-     * NodeInterface::getTraversable() itself
-     * (and not heritated it from NodeAbstract)
-     *
-     * @return bool
-     */
-    public function canBeTraversed()
-    {
-        $reflexion = new ReflectionClass(static::class);
-        foreach ($reflexion->getMethods() as $method) {
-            if (
-                $method->class === static::class &&
-                $method->name === 'getTraversable'
-            ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * @return bool
      */
     public function isTraversable()
@@ -99,7 +55,7 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
-     * @return bool true if payload instanceof FlowInterface
+     * @return bool true if this node instanceof FlowInterface
      */
     public function isFlow()
     {
@@ -107,7 +63,7 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
-     * @return bool true if payload is expected to return
+     * @return bool true if this node is expected to return
      *              something to pass on next node as param.
      *              If nothing is returned, the previously
      *              returned value will be use as param
@@ -131,7 +87,7 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
-     * @return string
+     * @return FlowInterface
      */
     public function getCarrier()
     {
@@ -139,7 +95,7 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
-     * @param mixed $nodeHash
+     * @param string $nodeHash
      *
      * @return $this
      */
@@ -151,10 +107,32 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getNodeHash()
     {
         return $this->nodeHash;
+    }
+
+    /**
+     * @param type $isATraversable
+     *
+     * @throws \Exception
+     */
+    protected function enforceIsATraversable()
+    {
+        if ($this->isFlow()) {
+            if ($this->isATraversable) {
+                throw new \Exception('Cannot Traverse a Branch');
+            }
+        } else {
+            if ($this->isATraversable && !($this instanceof TraversableNodeInterface)) {
+                throw new \Exception('Cannot Traverse a Node that does not implement TraversableNodeInterface');
+            }
+
+            if (!$this->isATraversable && !$this->isFlow() && !($this instanceof ExecNodeInterface)) {
+                throw new \Exception('Cannot Exec a Node that does not implement ExecNodeInterface');
+            }
+        }
     }
 }

@@ -109,10 +109,10 @@ class NodalFlow implements FlowInterface
      * @var array
      */
     protected $statsDefault = [
-        'start'           => null,
-        'end'             => null,
-        'duration'        => null,
-        'memory'          => null,
+        'start'    => null,
+        'end'      => null,
+        'duration' => null,
+        'mib'      => null,
     ];
 
     /**
@@ -411,8 +411,8 @@ class NodalFlow implements FlowInterface
         $this->stats['invocations'][$this->numExec]['end']      = $this->stats['end'];
         $this->stats['duration']                                = $this->stats['end'] - $this->stats['start'];
         $this->stats['invocations'][$this->numExec]['duration'] = $this->stats['duration'];
-        $this->stats['memory']                                  = \memory_get_peak_usage(true) / 1048576;
-        $this->stats['invocations'][$this->numExec]['memory']   = $this->stats['memory'];
+        $this->stats['mib']                                     = \memory_get_peak_usage(true) / 1048576;
+        $this->stats['invocations'][$this->numExec]['mib']      = $this->stats['mib'];
 
         $this->triggerCallback($success ? static::FLOW_SUCCESS : static::FLOW_FAIL);
 

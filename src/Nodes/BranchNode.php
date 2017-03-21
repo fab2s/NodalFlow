@@ -32,19 +32,11 @@ class BranchNode extends PayloadNodeAbstract implements ExecNodeInterface
             throw new \Exception('Payload does not implement FlowInterface : ' . (is_object($payload) ? get_class($payload) : gettype($payload)));
         }
 
-        /*if ($isATraversable) {
-            $nodes    = $payload->getNodes();
-            $lastNode = end($nodes);
-            if (!($lastNode instanceof TraversableNodeInterface)) {
-                throw new \Exception('Last node of a Traversable Branch must be Travsersable in branch Flow : ' . get_class($payload));
-            }
-        }*/
-
-        parent::__construct($payload, $isAReturningVal, $isATraversable);
+        // branch Node currently do not support traversing
+        parent::__construct($payload, $isAReturningVal, false);
     }
 
     /**
-     * @param mixed
      * @param mixed $param
      *
      * @return mixed

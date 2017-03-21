@@ -31,7 +31,6 @@ class ClosureNode extends PayloadNodeAbstract implements TraversableNodeInterfac
     }
 
     /**
-     * @param mixed
      * @param mixed $param
      *
      * @return \Generator
@@ -45,7 +44,6 @@ class ClosureNode extends PayloadNodeAbstract implements TraversableNodeInterfac
     }
 
     /**
-     * @param mixed
      * @param mixed $param
      *
      * @return mixed

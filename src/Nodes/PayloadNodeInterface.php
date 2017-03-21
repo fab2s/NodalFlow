@@ -20,9 +20,9 @@ interface PayloadNodeInterface extends NodeInterface
      * we enforce the constructor's signature in this interface
      * One can of course still add defaulting param in extend
      *
-     * @param mixed $payload
-     * @param bool  $isAReturningVal
-     * @param bool  $isATraversable
+     * @param object|callable $payload
+     * @param bool            $isAReturningVal
+     * @param bool            $isATraversable
      *
      * @throws \Exception
      */

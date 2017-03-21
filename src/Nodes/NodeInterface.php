@@ -22,12 +22,12 @@ interface NodeInterface
     public function isTraversable();
 
     /**
-     * @return bool true if payload is an instanceof FlowInterface
+     * @return bool true if this node is an instanceof FlowInterface
      */
     public function isFlow();
 
     /**
-     * @return bool true if payload is expected to return
+     * @return bool true if this node is expected to return
      *              something to pass to the next node as param.
      *              If nothing is returned, the previously
      *              returned value will be use as param
@@ -43,19 +43,19 @@ interface NodeInterface
     public function setCarrier(FlowInterface $flow);
 
     /**
-     * @return mixed
+     * @return FlowInterface
      */
     public function getCarrier();
 
     /**
-     * @param mixed $nodeHash
+     * @param string $nodeHash
      *
      * @return $this
      */
     public function setNodeHash($nodeHash);
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getNodeHash();
 }
