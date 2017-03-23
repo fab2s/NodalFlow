@@ -5,7 +5,7 @@
 NodalFlow is a generic Workflow that can execute chained tasks. It is designed around simple interfaces that specifies a flow composed of executable nodes and flows. Nodes can be executed or traversed. They accept a single parameter as argument and can be set to pass their result as an argument for the next node.
 Flows also accept one argument and may be set to pass their result to be used as an argument for the next node.
 
-NodalFlow aims at organizing and simplifying data processing workflows where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. It makes it possible to dynamically configure and execute complex scenario in a repeatable manner. And even more important, to write Nodes that will be reusable in any other workflow you may use.
+NodalFlow aims at organizing and simplifying data processing workflows where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. It makes it possible to dynamically configure and execute complex scenario in an organised and repeatable manner. And even more important, to write Nodes that will be reusable in any other workflow you may think of.
 
 NodalFlow enforces minimalistic requirements upon nodes. This means that in most cases, you should extend `NodalFlow` to implement the required constraints and grammar for your use case.
 
@@ -15,7 +15,7 @@ NodalFlow shares conceptual similarities with [Transduction](https://en.wikipedi
 
 ## Traversability
 
-A Traversable Node is a node that implement the `getTraversable` method as defined in `TraversableNodeInterface`. The `getTraversable` method returns a `Traversable` that will be iterated over during the Flow execution. In other words, a Traversable Node is a node that provides many values at once, with each values being fed as argument to the remaining nodes in the chain. This would be exactly what occurs if the `Traversable` is an array, but you can also use a `Generator` and `yield` results one by one or whatever `Traversable`.
+A Traversable Node is a node that implement the `getTraversable` method as defined in `TraversableNodeInterface`. The `getTraversable` method returns a `Traversable` that will be iterated over during the Flows execution. In other words, a Traversable Node is a node that provides many values per invocation, with each values being fed as argument to the remaining nodes in the chain. This would be exactly what occurs if the `Traversable` where to be an array, but you can also use a `Generator` and `yield` results one by one, or whatever `Traversable`.
 
 Upon each iteration, the remaining Nodes in the chain will be recursed on. This is for example useful when a data generator needs some kind of manipulation(s) and / or actions on each of his "records".
 
@@ -25,15 +25,15 @@ A Flow is an executable workflow composed of a set of executable Nodes. They all
 
 * Exec Nodes:
 
-    An Exec Node is a node that exposes an exec method accepting one parameter and eventually returning one value that may or may not be used as argument to the next node in the flow. The value eventually returned usage is defined when creating a Node, which means that a Node that returns a value may still be used as if if was not.
+    An Exec Node is a node that exposes an `exec()` method accepting one parameter and eventually returning one value that may or may not be used as argument to the next node in the flow. The eventual return value usage is defined when creating the Node, which means that a Node that returns a value may still be used as if if was not.
 
 * Traversable Node:
 
-    A Traversable Node is a node that exposes a `getTraversable` method one parameter and returns with a Traversable which may or may not spit values that may or may not be used as argument to the next node in the flow.
+    A Traversable Node is a node that exposes a `getTraversable()` method accepting one parameter and returning with a `Traversable` which may or may not spit values that may or may not be used as argument to the next node in the flow.
 
 * Aggregate Node:
 
-    An Aggregate Node is a node that will aggregate several Traversable Node as if it was a single Traversable. Each Traversable Node in the Aggregate may or may not spit values that may or may not be used as argument to the next node in the Aggregate and the Aggregate may also do the same with next nodes in the Flow.
+    An Aggregate Node is a node that will aggregate several Traversable Node as if it was a single Node. Each Traversable Node in the Aggregate may or may not spit values that may or may not be used as argument to the next node in the Aggregate and the Aggregate itself may also do the same with next nodes in the Flow.
 
 * Payload Nodes:
 
