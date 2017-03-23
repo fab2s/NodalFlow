@@ -435,7 +435,8 @@ class NodalFlow implements FlowInterface
      * @param mixed $param
      * @param int   $nodeIdx
      *
-     * @return mixed, the last value returned in the chain
+     * @return mixed  the last value returned by the last
+     *                returning value Node in the flow
      */
     protected function recurse($param = null, $nodeIdx = 0)
     {
