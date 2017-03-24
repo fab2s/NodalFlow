@@ -314,7 +314,6 @@ class NodalFlowInstanceTest extends \TestCase
             ],
             'single5' => [
                 'flowName'     => 'NodalFlow',
-                //                          +4                      +4                 +1
                 'nodes'        => ['traversableInstance', 'traversableInstance', 'execInstance'],
                 'expectations' => [
                     [
@@ -386,7 +385,6 @@ class NodalFlowInstanceTest extends \TestCase
             ],
             'single6' => [
                 'flowName'     => 'NodalFlow',
-                //                          +4                   +1                 +4
                 'nodes'        => ['traversableInstance', 'execInstance', 'traversableInstance'],
                 'expectations' => [
                     [
@@ -458,7 +456,6 @@ class NodalFlowInstanceTest extends \TestCase
             ],
             'single7' => [
                 'flowName'     => 'NodalFlow',
-                //                       +1                  +4                   +4
                 'nodes'        => ['execInstance', 'traversableInstance', 'traversableInstance'],
                 'expectations' => [
                     [
@@ -466,12 +463,10 @@ class NodalFlowInstanceTest extends \TestCase
                         'cases'           => [
                             [
                                 'param'    => null,
-                                // 1 + 4 + 4 last exec
                                 'expected' => $this->traversableIterations * 2 + $this->ExecConst,
                             ],
                             [
-                                'param' => $this->flowParam,
-                                // 3 + 4 + 4 last exec
+                                'param'    => $this->flowParam,
                                 'expected' => $this->traversableIterations * 2 + $this->ExecConst + $this->flowParam,
                             ],
                         ],
@@ -481,12 +476,10 @@ class NodalFlowInstanceTest extends \TestCase
                         'cases'           => [
                             [
                                 'param'    => null,
-                                // 4 + 4 last exec
                                 'expected' => $this->traversableIterations * 2,
                             ],
                             [
-                                'param' => $this->flowParam,
-                                // 2 + 4 + 4 last exec
+                                'param'    => $this->flowParam,
                                 'expected' => $this->traversableIterations * 2 + $this->flowParam,
                             ],
                         ],
@@ -496,12 +489,10 @@ class NodalFlowInstanceTest extends \TestCase
                         'cases'           => [
                             [
                                 'param'    => null,
-                                // 5 x 4
                                 'expected' => $this->traversableIterations * $this->traversableIterations,
                             ],
                             [
-                                'param' => $this->flowParam,
-                                // 5 x 4 + 2
+                                'param'    => $this->flowParam,
                                 'expected' => $this->traversableIterations * $this->traversableIterations + $this->flowParam,
                             ],
                         ],

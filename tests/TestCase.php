@@ -8,6 +8,7 @@
  */
 
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\NodalFlow;
 use fab2s\NodalFlow\Nodes\AggregateNode;
 use fab2s\NodalFlow\Nodes\BranchNode;
 use fab2s\NodalFlow\Nodes\CallableNode;
@@ -190,20 +191,31 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                     foreach ($case['nodes'] as $idx => $nodeName) {
                         if (is_array($nodeName)) {
                             $nodeSetup = $nodeName;
-                            if (empty($nodeSetup['aggregate'])) {
-                                continue;
+                            if (!empty($nodeSetup['aggregate'])) {
+                                $aggregateNode = new AggregateNode($expectation['isAReturningVal'][$idx]);
+                                foreach ($nodeSetup['nodes'] as $subIdx => $payloadGenerator) {
+                                    $isAReturningVal         = $nodeSetup['nodeIsAReturningVal'][$subIdx];
+                                    $payloadSetup            = $this->$payloadGenerator();
+                                    $nodeSetup['payloads'][] = $payloadSetup;
+
+                                    $aggregateNode->addTraversable(new CallableNode($payloadSetup['callable'], $isAReturningVal, true));
+                                }
+
+                                $nodeSetup['aggregate'] = $aggregateNode;
                             }
 
-                            $aggregateNode = new AggregateNode($expectation['isAReturningVal'][$idx]);
-                            foreach ($nodeSetup['nodes'] as $subIdx => $payloadGenerator) {
-                                $isAReturningVal         = $nodeSetup['nodeIsAReturningVal'][$subIdx];
-                                $payloadSetup            = $this->$payloadGenerator();
-                                $nodeSetup['payloads'][] = $payloadSetup;
+                            if (!empty($nodeSetup['branch'])) {
+                                $flow = new NodalFlow;
+                                foreach ($nodeSetup['nodes'] as $subIdx => $payloadGenerator) {
+                                    // in the branch case, we only test returning val case
+                                    // as returning is already thouroughtly tested with flows
+                                    $payloadSetup            = $this->$payloadGenerator();
+                                    $nodeSetup['payloads'][] = $payloadSetup;
+                                    $flow->add(new CallableNode($payloadSetup['callable'], true, $payloadGenerator === 'getTraversableInstance'));
+                                }
 
-                                $aggregateNode->addTraversable(new CallableNode($payloadSetup['callable'], $isAReturningVal, true));
+                                $nodeSetup['branch'] = new BranchNode($flow, $expectation['isAReturningVal'][$idx]);
                             }
-
-                            $nodeSetup['aggregate'] = $aggregateNode;
                         } else {
                             $nodeSetup = $testNodes[$nodeName];
                         }
