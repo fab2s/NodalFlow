@@ -167,13 +167,9 @@ class NodalFlow implements FlowInterface
             'index'    => $this->nodeIdx,
         ]);
 
-        // regsiter references to nodeStats to increment faster
-        foreach ($this->nodeStatsDefault as $incrementKey => $ignore) {
-            $this->nodeStats[$this->nodeIdx][$incrementKey] = &$this->nodeMap[$nodeHash][$incrementKey];
-        }
-
-        // expose node hash to also use nodeStat as a reverse lookup table
-        $this->nodeStats[$this->nodeIdx]['hash'] = $nodeHash;
+        // register references to nodeStats to increment faster
+        // nodeStats can also be used as reverse lookup table
+        $this->nodeStats[$this->nodeIdx] = &$this->nodeMap[$nodeHash];
 
         ++$this->nodeIdx;
 
