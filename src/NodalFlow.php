@@ -11,6 +11,7 @@ namespace fab2s\NodalFlow;
 
 use fab2s\NodalFlow\Callbacks\CallbackInterface;
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\Nodes\BranchNode;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 
 /**
@@ -29,7 +30,7 @@ class NodalFlow implements FlowInterface
     /**
      * @var string
      */
-    public $branchId;
+    public $flowId;
 
     /**
      * @var array
@@ -144,7 +145,7 @@ class NodalFlow implements FlowInterface
 
     public function __construct()
     {
-        $this->branchId = $this->uniqId();
+        $this->flowId = $this->uniqId();
         $this->stats += $this->statsDefault;
     }
 
@@ -161,7 +162,7 @@ class NodalFlow implements FlowInterface
         $this->nodes[$this->nodeIdx] = $node;
         $this->nodeMap[$nodeHash]    = array_replace($this->nodeMapDefault, [
             'class'    => get_class($node),
-            'branchId' => $this->branchId,
+            'branchId' => $this->flowId,
             'hash'     => $nodeHash,
             'index'    => $this->nodeIdx,
         ]);
@@ -300,7 +301,21 @@ class NodalFlow implements FlowInterface
      */
     public function getStats()
     {
+        foreach ($this->nodes as $nodeIdx => $node) {
+            if (is_a($node, BranchNode::class)) {
+                $this->stats['branches'][$node->getPayload()->getFlowId()] = $node->getPayload()->getStats();
+            }
+        }
+
         return $this->stats;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFlowId()
+    {
+        return $this->flowId;
     }
 
     /**
@@ -316,6 +331,12 @@ class NodalFlow implements FlowInterface
      */
     public function getNodeMap()
     {
+        foreach ($this->nodes as $nodeIdx => $node) {
+            if (is_a($node, BranchNode::class)) {
+                $this->nodeMap[$node->getNodeHash()]['nodes'] = $node->getPayload()->getNodeMap();
+            }
+        }
+
         return $this->nodeMap;
     }
 
@@ -324,6 +345,12 @@ class NodalFlow implements FlowInterface
      */
     public function getNodeStats()
     {
+        foreach ($this->nodes as $nodeIdx => $node) {
+            if (is_a($node, BranchNode::class)) {
+                $this->nodeStats[$nodeIdx]['nodes'] = $node->getPayload()->getNodeStats();
+            }
+        }
+
         return $this->nodeStats;
     }
 
