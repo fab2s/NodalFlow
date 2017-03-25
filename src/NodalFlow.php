@@ -160,6 +160,16 @@ class NodalFlow implements FlowInterface
         $nodeHash = $this->objectHash($node);
         $node->setCarrier($this)->setNodeHash($nodeHash);
 
+        if ($node instanceof AggregateNodeInterface) {
+            foreach ($node->getNodeCollection() as $aggregatedNode) {
+                // if you where to later alter this AggregateNode, adding more
+                // nodes into it before flow execution, you would need to
+                // make sure you set carrier and hash if you want to be able to
+                // interrupt the flow and gather proper node map
+                $aggregatedNode->setCarrier($this)->setNodeHash($this->objectHash($aggregatedNode));
+            }
+        }
+
         $this->nodes[$this->nodeIdx] = $node;
         $this->nodeMap[$nodeHash]    = array_replace($this->nodeMapDefault, [
             'class'    => get_class($node),
