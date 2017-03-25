@@ -9,6 +9,8 @@
 
 namespace fab2s\NodalFlow\Nodes;
 
+use fab2s\NodalFlow\Flows\FlowInterface;
+
 /**
  * class AggregateNode
  */
@@ -48,10 +50,32 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
      */
     public function addTraversable(TraversableNodeInterface $node)
     {
+        if ($this->carrier) {
+            $node->setCarrier($this->carrier)->setNodeHash($this->carrier->objectHash($node));
+        }
+
         $this->nodeCollection[] = $node;
 
         return $this;
     }
+
+    /**
+     * @param FlowInterface $flow
+     *
+     * @return $this
+     */
+    public function setCarrier(FlowInterface $flow)
+    {
+        // maintain carrier among aggregated nodes
+        foreach ($this->nodeCollection as $node) {
+            $node->setCarrier($flow)->setNodeHash($flow->objectHash($node));
+        }
+
+        parent::setCarrier($flow);
+
+        return $this;
+    }
+
 
     /**
      * @return array
