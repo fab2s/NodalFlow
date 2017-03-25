@@ -11,6 +11,7 @@ namespace fab2s\NodalFlow;
 
 use fab2s\NodalFlow\Callbacks\CallbackInterface;
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\Nodes\AggregateNodeInterface;
 use fab2s\NodalFlow\Nodes\BranchNode;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 
@@ -330,6 +331,13 @@ class NodalFlow implements FlowInterface
         foreach ($this->nodes as $nodeIdx => $node) {
             if (is_a($node, BranchNode::class)) {
                 $this->nodeMap[$node->getNodeHash()]['nodes'] = $node->getPayload()->getNodeMap();
+            } elseif ($node instanceof AggregateNodeInterface) {
+                foreach ($node->getNodeCollection() as $aggregatedNode) {
+                    $this->nodeMap[$node->getNodeHash()]['nodes'][$aggregatedNode->getNodeHash()] = [
+                    'class' => get_class($aggregatedNode),
+                    'hash'  => $aggregatedNode->getNodeHash(),
+                ];
+                }
             }
         }
 
