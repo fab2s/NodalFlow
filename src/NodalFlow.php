@@ -511,13 +511,9 @@ class NodalFlow implements FlowInterface
 
             $value = $node->exec($param);
             ++$nodeStat['num_exec'];
-            ++$this->numActions;
+
             if ($this->continue || $this->break) {
                 return $param;
-            }
-
-            if (!($this->numActions % $this->progressMod)) {
-                $this->triggerCallback(static::FLOW_PROGRESS, $node);
             }
 
             if ($returnVal) {
