@@ -76,7 +76,6 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
         return $this;
     }
 
-
     /**
      * @return array
      */
