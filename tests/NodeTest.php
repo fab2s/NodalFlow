@@ -12,6 +12,9 @@ use fab2s\NodalFlow\Nodes\BranchNode;
 
 class NodeTest extends \TestCase
 {
+    /**
+     * @return array
+     */
     public function nodePovider()
     {
         $use                 = 'use';

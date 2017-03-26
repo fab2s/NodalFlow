@@ -14,8 +14,10 @@ class NodalFlowBranchTest extends \TestCase
     /**
      * @dataProvider flowCasesPovider
      *
-     * @param mixed $param
-     * @param mixed $expected
+     * @param FlowInterface $flow
+     * @param array         $nodes
+     * @param mixed         $param
+     * @param mixed         $expected
      */
     public function testFlows(FlowInterface $flow, array $nodes, $param, $expected)
     {

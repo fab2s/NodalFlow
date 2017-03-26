@@ -14,9 +14,11 @@ class NodalFlowInterruptTest extends \TestCase
     /**
      * @dataProvider flowCasesPovider
      *
-     * @param mixed $param
-     * @param mixed $expected
-     * @param mixed $case
+     * @param FlowInterface $flow
+     * @param array         $nodes
+     * @param mixed         $param
+     * @param mixed         $expected
+     * @param array         $case
      */
     public function testInterruptFlows(FlowInterface $flow, array $nodes, $param, $expected, $case)
     {
