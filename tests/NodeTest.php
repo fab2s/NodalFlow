@@ -15,7 +15,7 @@ class NodeTest extends \TestCase
     /**
      * @return array
      */
-    public function nodePovider()
+    public function nodeProvider()
     {
         $use                 = 'use';
         $lambda              = function () {
@@ -140,7 +140,7 @@ class NodeTest extends \TestCase
     }
 
     /**
-     * @dataProvider nodePovider
+     * @dataProvider nodeProvider
      *
      * @param string     $class
      * @param mixed      $payload

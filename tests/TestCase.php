@@ -165,7 +165,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function flowCasesPovider()
+    public function flowCasesProvider()
     {
         $testNodes = $this->getTestnodes();
         $cases     = $this->getFlowCases();

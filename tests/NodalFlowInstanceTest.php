@@ -12,7 +12,7 @@ use fab2s\NodalFlow\Flows\FlowInterface;
 class NodalFlowInstanceTest extends \TestCase
 {
     /**
-     * @dataProvider flowCasesPovider
+     * @dataProvider flowCasesProvider
      *
      * @param FlowInterface $flow
      * @param array         $nodes
