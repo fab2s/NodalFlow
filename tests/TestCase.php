@@ -398,13 +398,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $type
-     * @param object $payloadMock
-     * @param mixed  $spy
+     * @param string                                                $type
+     * @param object                                                $payloadMock
+     * @param \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount $spy
      *
      * @return array
      */
-    protected function registerPayloadMock($type, $payloadMock, $spy)
+    protected function registerPayloadMock($type, $payloadMock, \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount $spy)
     {
         $hash                  = $this->getObjectHash($payloadMock);
         $this->payloads[$hash] = [
