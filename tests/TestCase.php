@@ -117,9 +117,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         static $nonce = 0;
         $class        = 'ExecInstance' . $nonce++;
-        $stub         = $this->getMock(
-          $class, ['exec']
-        );
+        $stub         = $this->getMockBuilder($class)
+                ->setMethods(['exec'])
+                ->getMock();
 
         $ExecConst = $this->ExecConst;
         $stub->expects($spy = $this->any())
@@ -140,9 +140,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         static $nonce = 0;
         $class        = 'TraversableInstance' . $nonce++;
-        $stub         = $this->getMock(
-          $class, ['exec']
-        );
+        $stub         = $this->getMockBuilder($class)
+                ->setMethods(['exec'])
+                ->getMock();
 
         $traversableIterations = $this->traversableIterations;
         $stub->expects($spy = $this->any())
