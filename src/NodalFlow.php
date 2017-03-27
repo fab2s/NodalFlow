@@ -56,7 +56,7 @@ class NodalFlow implements FlowInterface
     /**
      * @var int
      */
-    protected $numActions = 0;
+    protected $numIterate = 0;
 
     /**
      * @var CallbackInterface
@@ -66,7 +66,7 @@ class NodalFlow implements FlowInterface
     /**
      * Progress modulo to apply
      * Set to x if you want to trigger
-     * progress every x action in flow
+     * progress every x iterations in flow
      *
      * @var int
      */
@@ -487,8 +487,8 @@ class NodalFlow implements FlowInterface
                     }
 
                     ++$nodeStat['num_iterate'];
-                    ++$this->numActions;
-                    if (!($this->numActions % $this->progressMod)) {
+                    ++$this->numIterate;
+                    if (!($this->numIterate % $this->progressMod)) {
                         $this->triggerCallback(static::FLOW_PROGRESS, $node);
                     }
 
@@ -499,14 +499,14 @@ class NodalFlow implements FlowInterface
                     // input param.
                     $param = $this->recurse($param, $nodeIdx + 1);
                     if ($this->continue) {
-                        // we drop one action
+                        // we drop one iteration
                         // could be because there is no matching join record from somewhere
                         $this->continue = false;
                         continue;
                     }
 
                     if ($this->break) {
-                        // we drop all subsequent actions
+                        // we drop all subsequent iterations
                         break;
                     }
                 }
