@@ -4,6 +4,7 @@
 
 NodalFlow is a generic Workflow that can execute chained tasks. It is designed around simple interfaces that specifies a flow composed of executable nodes and flows. Nodes can be executed or traversed. They accept a single parameter as argument and can be set to pass or not their result as an argument for the next node.
 Flows also accept one argument and may be set to pass their result to be used or not as an argument for the next node.
+If a node does not pass it's result as parameter to the next node, the current parameter will be used for the next node, and so on until one node returns a result intended to be used as argument to the next node.
 
 NodalFlow aims at organizing and simplifying data processing workflows where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. It makes it possible to dynamically configure and execute complex scenario in an organised and repeatable manner. And even more important, to write Nodes that will be reusable in any other workflow you may think of.
 
@@ -20,6 +21,14 @@ A Traversable Node is a node that implement the `getTraversable` method as defin
 NodalFlow as a whole can be seen as a kind of dismantled "meta" loop upon each of its `Traversable` nodes with linear nodes in between, aka the Exec Nodes. Traversable Nodes can be aggregated, which results in all of them being looped upon as if they where a single data generator, or chained, which result in each of them being recursively iterated over (1st traversable 1st record -> 2nd traversable 1st records -> last traversable every records ...).
 
 Upon each iteration, the remaining Nodes in the flow will be recursed on. This is for example useful when a data generator needs some kind of manipulation(s) and / or actions on each of his "records".
+
+## Installation
+
+NodalFlow can be installed using composer :
+
+``` shell
+composer require "fab2s/NodalFlow"
+```
 
 ## NodalFlow Citizens
 
@@ -76,7 +85,7 @@ $this->carrier->continueFlow();
 or
 ```php
 // stop the whole flow right here
-$this->carrier->breackFlow();
+$this->carrier->breakFlow();
 ```
 
 whenever you need to in the `getTraversable()` and / or `exec()` methods to `continue` or `break` the flow.
