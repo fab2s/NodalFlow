@@ -89,7 +89,7 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
      *
      * @param mixed $param
      *
-     * @return \Traversable
+     * @return \Generator
      */
     public function getTraversable($param)
     {
