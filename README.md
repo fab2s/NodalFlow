@@ -15,7 +15,7 @@ NodalFlow shares conceptual similarities with [Transduction](https://en.wikipedi
 
 ## Traversability
 
-A Traversable Node is a node that implement the `getTraversable` method as defined in `TraversableNodeInterface`. The `getTraversable` method returns a `Traversable` that will be iterated over during the Flows execution. In other words, a Traversable Node is a node that provides many values when invoked, with each values being fed as argument to the remaining nodes in the chain. This would be exactly what occurs if the `Traversable` where to be an array, but you can also use a `Generator` and `yield` results one by one, or whatever `Traversable`.
+A Traversable Node is a node that implement the `getTraversable` method as defined in `TraversableNodeInterface`. The `getTraversable` method returns a `Traversable` that will be iterated over during the flow's execution. In other words, a Traversable Node is a node that provides many values when invoked, with each values being fed as argument to the remaining nodes in the chain. This would be exactly what occurs if the `Traversable` where to be an array, but you can also use a `Generator` and `yield` results one by one, or whatever `Traversable`.
 
 NodalFlow as a whole can be seen as a kind of dismantled "meta" loop upon each of its `Traversable` nodes with linear nodes in between, aka the Exec Nodes. Traversable Nodes can be aggregated, which results in all of them being looped upon as if they where a single data generator, or chained, which result in each of them being recursively iterated over (1st traversable 1st record -> 2nd traversable 1st records -> last traversable every records ...).
 
@@ -222,11 +222,12 @@ NodalFlow implements a KISS callback interface you can use to trigger callback e
 - the `start($flow)` method is triggered when the Flow starts
 - the `progress($flow, $node)` method is triggered each `$progressMod` time a full Flow iterates, which may occur whenever a `Traversable` node iterates.
 - the `success($flow)` method is triggered when the Flow completes successfully
-- the `fail($flow)` method is triggered when an exception was raised during the Flow's execution. The exception is caught to perform few operations and rethrown as is.
+- the `fail($flow)` method is triggered when an exception was raised during the flow's execution. The exception is caught to perform few operations and rethrown as is.
 
-Each of these trigger slots takes current flow as first argument, for each slot to be able to control the carrying flow. Please note that the flow provided may be a branch in some upstream flow. `progress($flow, $node)` additionnaly gets the current node as second argument whihc allows you to eventually get more report upon it. Please note that there is no guarantee that you will see each node in `progress()` as this method is only triggered each `$progressMod` time the flow iterates, and this can occur in any `Traversable` node.
+Each of these trigger slots takes current flow as first argument, for each slot to allow control of the carrying flow. Please note that the flow provided may be a branch in some upstream flow. `progress($flow, $node)` additionnaly gets the current node as second argument which allows you to eventually get more insights about what is going on.
+Please note that there is no guarantee that you will see each node in `progress()` as this method is only triggered each `$progressMod` time the flow iterates, and this can occur in any `Traversable` node.
 
-NodalFlow also implements two method that will be triggered just before and after the flow execution, `flowStrat()` and `flowEnd($success)` which you can override to add more logic. These are not treated as events as they are always used by NodalFlow to provide with basic statistics.
+NodalFlow also implements two protected method that will be triggered just before and after the flow's execution, `flowStrat()` and `flowEnd($success)` which you can override to add more logic. These are not treated as events as they are always used by NodalFlow to provide with basic statistics.
 
 ## Serialization
 
