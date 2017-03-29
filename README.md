@@ -7,7 +7,7 @@ Flows also accept one argument and may be set to pass their result to be used or
 If a node does not pass it's result as parameter to the next node, the current parameter will be used for the next node, and so on until one node returns a result intended to be used as argument to the next node.
 In other words, NodalFlow implements a directed graph structure in the form of a tree composed of nodes that can, but not always are, branches or leaves.
 
-NodalFlow aims at organizing and simplifying data processing workflows where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. It makes it possible to dynamically configure and execute complex scenario in an organised and repeatable manner. And even more important, to write Nodes that will be reusable in any other workflow you may think of.
+NodalFlow aims at organizing and simplifying data processing workflows where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. It makes it possible to dynamically configure and execute complex scenario in an organized and repeatable manner. And even more important, to write Nodes that will be reusable in any other workflow you may think of.
 
 NodalFlow enforces minimalistic requirements upon nodes. This means that in most cases, you should extend `NodalFlow` to implement the required constraints and grammar for your use case.
 
@@ -91,6 +91,28 @@ $this->carrier->breakFlow();
 
 whenever you need to in the `getTraversable()` and / or `exec()` methods to `continue` or `break` the flow.
 
+## Code reusability
+
+NodalFlow allows vast possibilities to reuse the code once written for any workflow. You can for example use an Exec Node logic in any other context:
+```php
+$node->exec($param);
+```
+ or wrapped in a flow:
+```php
+(new NodalFlow)->add($node)->exec($param);
+```
+
+And the same goes with Traversable Nodes:
+```php
+foreach ($traversableNode->getTraversable($param) as $value) {
+    // do something with $value
+}
+```
+
+All this means that while implementing flows, you create other opportunities either withing or outside the flow which will save more and more time over time, as long as you need some sort of flows.
+
+And in fact, the overhead of doing so is very small, especially if your Traversable Node is a [`Generator`](http://php.net/Generator) yielding values.
+
 ## Usage
 The current version comes with three directly usable Payload Nodes, which are also used to build tests :
 
@@ -114,8 +136,8 @@ The current version comes with three directly usable Payload Nodes, which are al
     }, true, true);
 
     // which allows us to call the closure using
-    foreach ($callableTraversableNode->getTraversable() as $result) {
-        // do somtehing
+    foreach ($callableTraversableNode->getTraversable(null) as $result) {
+        // do something
     }
     ```
 
@@ -143,7 +165,7 @@ The current version comes with three directly usable Payload Nodes, which are al
     $nthTraversable = new ClassImplementingTraversableNodeInterface;
 
     // aggregate node may or may not return a value
-    // but is always a TraversableNode
+    // but is always a Traversable Node
     $isAReturningVal = true;
     $aggregateNode = new AggregateNode($isAReturningVal);
     $aggregateNode->addTraversable($firstTraversable)
@@ -232,12 +254,22 @@ NodalFlow implements a KISS callback interface you can use to trigger callback e
 - the `start($flow)` method is triggered when the Flow starts
 - the `progress($flow, $node)` method is triggered each `$progressMod` time a full Flow iterates, which may occur whenever a `Traversable` node iterates.
 - the `success($flow)` method is triggered when the Flow completes successfully
-- the `fail($flow)` method is triggered when an exception was raised during the flow's execution. The exception is caught to perform few operations and rethrown as is.
+- the `fail($flow)` method is triggered when an exception was raised during the flow's execution. The exception is caught to perform few operations and re-thrown as is.
 
-Each of these trigger slots takes current flow as first argument, for each slot to allow control of the carrying flow. Please note that the flow provided may be a branch in some upstream flow. `progress($flow, $node)` additionnaly gets the current node as second argument which allows you to eventually get more insights about what is going on.
+Each of these trigger slots takes current flow as first argument, for each slot to allow control of the carrying flow. Please note that the flow provided may be a branch in some upstream flow. `progress($flow, $node)` additionally gets the current node as second argument which allows you to eventually get more insights about what is going on.
 Please note that there is no guarantee that you will see each node in `progress()` as this method is only triggered each `$progressMod` time the flow iterates, and this can occur in any `Traversable` node.
 
 NodalFlow also implements two protected method that will be triggered just before and after the flow's execution, `flowStrat()` and `flowEnd($success)`. You can override them to add more logic. These are not treated as events as they are always used by NodalFlow to provide with basic statistics.
+
+To use a callback, just implement `CallbackInterface` and inject it in the flow.
+```php
+$flow = new NodalFlow;
+$callback = new ClassImplementingCallbackInterface;
+
+$flow->setCallBack($callback);
+```
+
+A `CallbackAbstract` providing with a NoOp implementation of `CallbackInterface` was added in case you only need to override few of the interface methods without implementing the others.
 
 ## Serialization
 
@@ -248,6 +280,10 @@ As the workflow became an object, it became serializable, but this is unless it 
 
 NodalFlow is tested against php 5.6, 7.0, 7.1 and hhvm, but it may run bellow that (might up to 5.3).
 
+## Contributing
+
+Contributions are welcome. A great way to give back would be to share the generic extractors (Redis, RedShift, LDAP etc ...) you may write while using YaEtl as it would direclty benefit to everybody.
+In all cases, do not hesitate to open issues and submit pull requests.
 
 ## License
 
