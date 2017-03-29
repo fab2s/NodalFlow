@@ -282,8 +282,7 @@ NodalFlow is tested against php 5.6, 7.0, 7.1 and hhvm, but it may run bellow th
 
 ## Contributing
 
-Contributions are welcome. A great way to give back would be to share the generic extractors (Redis, RedShift, LDAP etc ...) you may write while using YaEtl as it would direclty benefit to everybody.
-In all cases, do not hesitate to open issues and submit pull requests.
+Contributions are welcome, do not hesitate to open issues and submit pull requests.
 
 ## License
 
