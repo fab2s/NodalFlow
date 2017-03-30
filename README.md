@@ -56,14 +56,12 @@ A Flow is an executable workflow composed of a set of executable Nodes. They all
     Branch Node is a Payload Node where the payload is a Flow. It will be treated as an exec node which may return a value that may (which results in executing the branch within the parent's Flow's flow, as if it was part of it) or may not (which result in a true branch which starts from a specific location in the parent's Flow's flow) be used as argument to the next node in the flow.
     Branch Nodes cannot be traversed. It is not a technical limitation, but rather something that requires further thinking and may be later implemented.
 
-Each PayloadNode share the same constructor signature (the branch node currently forces `$isATraversable` to `false`):
+Payload Nodes are supposed to be immutable, and thus have no setters on $isAReturningVal and $isATraversable. Each usable Payload Nodes in NodalFlow extends from `PayloadNodeAbstract` using this constructor(the branch node currently forces `$isATraversable` to `false`):
 
 ```php
     /**
-     * As a Payload Node is supposed to be immutable, and thus
+     * A Payload Node is supposed to be immutable, and thus
      * have no setters on $isAReturningVal and $isATraversable
-     * we enforce the constructor's signature in this interface
-     * One can of course still add defaulting param in extend
      *
      * @param mixed $payload
      * @param bool  $isAReturningVal

@@ -11,23 +11,12 @@ namespace fab2s\NodalFlow\Nodes;
 
 /**
  * Interface PayloadNodeInterface
+ * 
+ * A Payload Node is supposed to be immutable, and thus
+ * have no setters on $isAReturningVal and $isATraversable
  */
 interface PayloadNodeInterface extends NodeInterface
 {
-    /**
-     * As a Payload Node is supposed to be immutable, and thus
-     * have no setters on $isAReturningVal and $isATraversable
-     * we enforce the constructor's signature in this interface
-     * One can of course still add defaulting param in extend
-     *
-     * @param object|callable $payload
-     * @param bool            $isAReturningVal
-     * @param bool            $isATraversable
-     *
-     * @throws \Exception
-     */
-    public function __construct($payload, $isAReturningVal, $isATraversable = false);
-
     /**
      * @return object|callable
      */

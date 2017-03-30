@@ -22,10 +22,8 @@ abstract class PayloadNodeAbstract extends NodeAbstract implements PayloadNodeIn
     protected $payload;
 
     /**
-     * As a Payload Node is supposed to be immutable, and thus
+     * A Payload Node is supposed to be immutable, and thus
      * have no setters on $isAReturningVal and $isATraversable
-     * we enforce the constructor's signature in this interface
-     * One can of course still add defaulting param in extend
      *
      * @param mixed $payload
      * @param bool  $isAReturningVal
