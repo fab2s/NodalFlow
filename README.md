@@ -243,7 +243,24 @@ $result = $nodalFlow->addPayload(('SomeClass::someTraversableMethod', true, true
     ->exec();
 ```
 
-As you can see, it is possible to dynamically generate and organize tasks which may or may not be linked together by their argument and return values
+As you can see, it is possible to dynamically generate and organize tasks which may or may not be linked together by their argument and return values.
+
+NodalFlow uses a `FlowStatusInterface` to expose its exec state. The FlowStatus object is maintained at all time by the flow and can be used to find out if:
+* The flow is clean, that is if everything went well up to this point:
+    ```php
+    $isClean = $flow->getFlowStatus()->isClean();
+    ```
+* The flow is dirty, that is if the flow was broken by a node:
+    ```php
+    $isDirty = $flow->getFlowStatus()->isDirty();
+    ```
+* The flow is exception, that is if a node raised an excpetion during the execution:
+    ```php
+    $isDirty = $flow->getFlowStatus()->isException();
+    ```
+
+This can be usefull to find out what is going on within callbacks.
+
 
 ## Callbacks
 
