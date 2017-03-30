@@ -30,7 +30,7 @@ class PayloadNodeFactory implements PayloadNodeFactoryInterface
      */
     public static function create($payload, $isAReturningVal, $isATraversable = false)
     {
-        if (is_array($payload) || is_string($payload)) {
+        if (\is_array($payload) || \is_string($payload)) {
             return new CallableNode($payload, $isAReturningVal, $isATraversable);
         } elseif ($payload instanceof \Closure) {
             // distinguishing Closures actually is surrealistic

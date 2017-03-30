@@ -42,6 +42,16 @@ interface FlowInterface
     public function rewind();
 
     /**
+     * The Flow status can either indicate be:
+     *      - clean (isClean()): everything went well
+     *      - dirty (isDirty()): one Node broke the flow
+     *      - exception (isException()): an exception was raised during the flow
+     *
+     * @return FlowStatusInterface
+     */
+    public function getFlowStatus();
+
+    /**
      * get the underlying node array
      *
      * @return array

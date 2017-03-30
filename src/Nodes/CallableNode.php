@@ -23,7 +23,7 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
      */
     public function __construct($payload, $isAReturningVal, $isATraversable = false)
     {
-        if (!is_callable($payload)) {
+        if (!\is_callable($payload)) {
             throw new \Exception('Payload is not callable');
         }
 

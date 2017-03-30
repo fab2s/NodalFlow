@@ -34,7 +34,7 @@ interface CallbackInterface
     public function progress(FlowInterface $flow, NodeInterface $node);
 
     /**
-     * Triggered when a Flow succeeds
+     * Triggered when a Flow completes without exceptions
      *
      * @param FlowInterface $flow
      */

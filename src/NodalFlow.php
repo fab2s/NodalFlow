@@ -11,6 +11,8 @@ namespace fab2s\NodalFlow;
 
 use fab2s\NodalFlow\Callbacks\CallbackInterface;
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\Flows\FlowStatus;
+use fab2s\NodalFlow\Flows\FlowStatusInterface;
 use fab2s\NodalFlow\Nodes\AggregateNodeInterface;
 use fab2s\NodalFlow\Nodes\BranchNode;
 use fab2s\NodalFlow\Nodes\NodeInterface;
@@ -140,6 +142,11 @@ class NodalFlow implements FlowInterface
     protected $break = false;
 
     /**
+     * @var FlowStatusInterface
+     */
+    protected $flowStatus;
+
+    /**
      * @var int
      */
     private static $nonce = 0;
@@ -161,8 +168,8 @@ class NodalFlow implements FlowInterface
         $node->setCarrier($this)->setNodeHash($nodeHash);
 
         $this->nodes[$this->nodeIdx] = $node;
-        $this->nodeMap[$nodeHash]    = array_replace($this->nodeMapDefault, [
-            'class'    => get_class($node),
+        $this->nodeMap[$nodeHash]    = \array_replace($this->nodeMapDefault, [
+            'class'    => \get_class($node),
             'branchId' => $this->flowId,
             'hash'     => $nodeHash,
             'index'    => $this->nodeIdx,
@@ -244,11 +251,12 @@ class NodalFlow implements FlowInterface
             $result = $this->rewind()
                     ->flowStart()
                     ->recurse($param);
-            $this->flowEnd(true);
+            $this->flowEnd();
 
             return $result;
         } catch (\Exception $e) {
-            $this->flowEnd(false);
+            $this->flowStatus = new FlowStatus(FlowStatus::FLOW_EXCEPTION);
+            $this->flowEnd();
             throw $e;
         }
     }
@@ -287,7 +295,7 @@ class NodalFlow implements FlowInterface
     public function resetNodeStats()
     {
         foreach ($this->nodeStats as &$nodeStat) {
-            $nodeStat = array_replace($nodeStat, $this->nodeStatDefault);
+            $nodeStat = \array_replace($nodeStat, $this->nodeStatDefault);
         }
 
         return $this;
@@ -299,7 +307,7 @@ class NodalFlow implements FlowInterface
     public function getStats()
     {
         foreach ($this->nodes as $nodeIdx => $node) {
-            if (is_a($node, BranchNode::class)) {
+            if (\is_a($node, BranchNode::class)) {
                 $this->stats['branches'][$node->getPayload()->getFlowId()] = $node->getPayload()->getStats();
             }
         }
@@ -329,12 +337,12 @@ class NodalFlow implements FlowInterface
     public function getNodeMap()
     {
         foreach ($this->nodes as $nodeIdx => $node) {
-            if (is_a($node, BranchNode::class)) {
+            if (\is_a($node, BranchNode::class)) {
                 $this->nodeMap[$node->getNodeHash()]['nodes'] = $node->getPayload()->getNodeMap();
             } elseif ($node instanceof AggregateNodeInterface) {
                 foreach ($node->getNodeCollection() as $aggregatedNode) {
                     $this->nodeMap[$node->getNodeHash()]['nodes'][$aggregatedNode->getNodeHash()] = [
-                    'class' => get_class($aggregatedNode),
+                    'class' => \get_class($aggregatedNode),
                     'hash'  => $aggregatedNode->getNodeHash(),
                 ];
                 }
@@ -350,7 +358,7 @@ class NodalFlow implements FlowInterface
     public function getNodeStats()
     {
         foreach ($this->nodes as $nodeIdx => $node) {
-            if (is_a($node, BranchNode::class)) {
+            if (\is_a($node, BranchNode::class)) {
                 $this->nodeStats[$nodeIdx]['nodes'] = $node->getPayload()->getNodeStats();
             }
         }
@@ -393,10 +401,25 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * The Flow status can either indicate be:
+     *      - clean (isClean()): everything went well
+     *      - dirty (isDirty()): one Node broke the flow
+     *      - exception (isException()): an exception was raised during the flow
+     *
+     * @return FlowStatusInterface
+     */
+    public function getFlowStatus()
+    {
+        return $this->flowStatus;
+    }
+
+    /**
      * @return $this
      */
     public function breakFlow()
     {
+        $this->flowStatus = new FlowStatus(FlowStatus::FLOW_DIRTY);
+
         $this->break = true;
 
         return $this;
@@ -425,6 +448,8 @@ class NodalFlow implements FlowInterface
         $this->triggerCallback(static::FLOW_START);
         $this->stats['start']                                = \microtime(true);
         $this->stats['invocations'][$this->numExec]['start'] = $this->stats['start'];
+        // each start is clean
+        $this->flowStatus = new FlowStatus(FlowStatus::FLOW_CLEAN);
 
         return $this;
     }
@@ -432,11 +457,11 @@ class NodalFlow implements FlowInterface
     /**
      * Triggered right after the flow stops
      *
-     * @param bool $success
+     * @param FlowStatusInterface $flowStatus
      *
      * @return $this
      */
-    protected function flowEnd($success)
+    protected function flowEnd()
     {
         $this->stats['end']                                     = \microtime(true);
         $this->stats['invocations'][$this->numExec]['end']      = $this->stats['end'];
@@ -445,7 +470,7 @@ class NodalFlow implements FlowInterface
         $this->stats['mib']                                     = \memory_get_peak_usage(true) / 1048576;
         $this->stats['invocations'][$this->numExec]['mib']      = $this->stats['mib'];
 
-        $this->triggerCallback($success ? static::FLOW_SUCCESS : static::FLOW_FAIL);
+        $this->triggerCallback($this->flowStatus->isException() ? static::FLOW_FAIL : static::FLOW_SUCCESS);
 
         return $this;
     }

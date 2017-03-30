@@ -29,7 +29,7 @@ class BranchNode extends PayloadNodeAbstract implements ExecNodeInterface
     public function __construct($payload, $isAReturningVal, $isATraversable = false)
     {
         if (!($payload instanceof FlowInterface)) {
-            throw new \Exception('Payload does not implement FlowInterface : ' . (is_object($payload) ? get_class($payload) : gettype($payload)));
+            throw new \Exception('Payload does not implement FlowInterface : ' . (\is_object($payload) ? \get_class($payload) : \gettype($payload)));
         }
 
         // branch Node currently do not support traversing

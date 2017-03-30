@@ -40,12 +40,17 @@ abstract class CallbackAbstract implements CallbackInterface
     }
 
     /**
-     * Triggered when a Flow succeeds
+     * Triggered when a Flow completes without exceptions
      *
      * @param FlowInterface $flow
      */
     public function success(FlowInterface $flow)
     {
+        /*
+         * if ($flow->getFlowStatus()->isDirty()) {
+         *      // a node broke the flow
+         * }
+         */
     }
 
     /**
