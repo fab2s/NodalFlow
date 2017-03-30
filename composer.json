@@ -1,6 +1,6 @@
 {
     "name" : "fab2s/nodalflow",
-    "description" : "A PHP Nodal (work)Flow",
+    "description" : "A PHP Nodal WorkFlow",
     "type" : "library",
     "authors" : [{
         "name" : "Fabrice de Stefanis"
