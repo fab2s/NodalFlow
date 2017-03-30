@@ -11,7 +11,7 @@ namespace fab2s\NodalFlow\Nodes;
 
 /**
  * Interface PayloadNodeInterface
- * 
+ *
  * A Payload Node is supposed to be immutable, and thus
  * have no setters on $isAReturningVal and $isATraversable
  */
