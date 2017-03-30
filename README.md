@@ -76,7 +76,7 @@ Payload Nodes are supposed to be immutable, and thus have no setters on $isARetu
 
 Each Node may issue interruptions that will act similarly to `continue` and `break` as if the whole branch was a single loop. This means that `continue` will only skip current action in chain and the flow will continue with the first upstream traversable next value (if any), while `break` will terminate the whole workflow.
 
-Each nodes is filled with it's carrier flow when it is attached to it. Extending the provided `NodeAbtract` you can do :
+Each nodes is filled with it's carrier flow when it is attached to it. Extending the provided `NodeAbstract` you can do :
 ```php
 // skip this very action
 $this->carrier->continueFlow();
@@ -254,12 +254,12 @@ NodalFlow uses a `FlowStatusInterface` to expose its exec state. The FlowStatus 
     ```php
     $isDirty = $flow->getFlowStatus()->isDirty();
     ```
-* The flow is exception, that is if a node raised an excpetion during the execution:
+* The flow is exception, that is if a node raised an exception during the execution:
     ```php
     $isDirty = $flow->getFlowStatus()->isException();
     ```
 
-This can be usefull to find out what is going on within callbacks.
+This can be useful to find out what is going on within callbacks.
 
 
 ## Callbacks
