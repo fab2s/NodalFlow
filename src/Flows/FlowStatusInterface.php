@@ -15,9 +15,9 @@ namespace fab2s\NodalFlow\Flows;
 interface FlowStatusInterface
 {
     /**
-     * @param string $flowStatus The flow status
+     * @param string $status The flow status
      */
-    public function __construct($flowStatus);
+    public function __construct($status);
 
     /**
      * @return string The flow status
@@ -42,5 +42,5 @@ interface FlowStatusInterface
     /**
      * @return string The flow status
      */
-    public function getFlowStatus();
+    public function getStatus();
 }

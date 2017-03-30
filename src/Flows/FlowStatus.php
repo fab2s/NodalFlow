@@ -21,7 +21,7 @@ class FlowStatus implements FlowStatusInterface
     /**
      * @var string
      */
-    protected $flowStatus;
+    protected $status;
 
     /**
      * @var array
@@ -33,15 +33,15 @@ class FlowStatus implements FlowStatusInterface
     ];
 
     /**
-     * @param string $flowStatus The flow status
+     * @param string $status The flow status
      */
-    public function __construct($flowStatus)
+    public function __construct($status)
     {
-        if (!isset($this->flowStatuses[$flowStatus])) {
-            throw new \InvalidArgumentException('[NodalFlow] $flowStatus must be one of :' . \implode(', ', $this->flowStatuses));
+        if (!isset($this->flowStatuses[$status])) {
+            throw new \InvalidArgumentException('[NodalFlow] $status must be one of :' . \implode(', ', $this->flowStatuses));
         }
 
-        $this->flowStatus = \trim($flowStatus);
+        $this->status = \trim($status);
     }
 
     /**
@@ -57,7 +57,7 @@ class FlowStatus implements FlowStatusInterface
      */
     public function isClean()
     {
-        return $this->flowStatus === static::FLOW_CLEAN;
+        return $this->status === static::FLOW_CLEAN;
     }
 
     /**
@@ -65,7 +65,7 @@ class FlowStatus implements FlowStatusInterface
      */
     public function isDirty()
     {
-        return $this->flowStatus === static::FLOW_DIRTY;
+        return $this->status === static::FLOW_DIRTY;
     }
 
     /**
@@ -73,14 +73,14 @@ class FlowStatus implements FlowStatusInterface
      */
     public function isException()
     {
-        return $this->flowStatus === static::FLOW_EXCEPTION;
+        return $this->status === static::FLOW_EXCEPTION;
     }
 
     /**
      * @return string The flow status
      */
-    public function getFlowStatus()
+    public function getStatus()
     {
-        return $this->flowStatus;
+        return $this->status;
     }
 }
