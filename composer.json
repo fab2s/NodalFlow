@@ -1,12 +1,12 @@
 {
     "name" : "fab2s/nodalflow",
-    "description" : "A PHP Nodal (work) Flow",
+    "description" : "A PHP Nodal (work)Flow",
     "type" : "library",
     "authors" : [{
         "name" : "Fabrice de Stefanis"
     }],
     "keywords" : [
-        "PHP NodalFlow WorkFlow Nodal Node"
+        "PHP, NodalFlow, WorkFlow, Nodal, Node"
     ],
     "license" : [
         "MIT"
