@@ -293,7 +293,7 @@ class NodalFlow implements FlowInterface
     public function resetNodeStats()
     {
         foreach ($this->nodeStats as &$nodeStat) {
-            $nodeStat = \array_replace($nodeStat, $this->nodeStatDefault);
+            $nodeStat = \array_replace($nodeStat, $this->nodeStatsDefault);
         }
 
         return $this;

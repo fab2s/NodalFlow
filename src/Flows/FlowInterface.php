@@ -30,7 +30,7 @@ interface FlowInterface
      *                     usefull for branches when values have
      *                     already been generated
      *
-     * @return mixed, the last value returned in the chain
+     * @return mixed the last value returned in the chain
      */
     public function exec($param = null);
 
