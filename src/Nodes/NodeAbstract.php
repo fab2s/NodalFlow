@@ -115,8 +115,6 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
-     * @param type $isATraversable
-     *
      * @throws \Exception
      */
     protected function enforceIsATraversable()
