@@ -218,8 +218,6 @@ class NodalFlow implements FlowInterface
      * and two object may be reused in a branch at
      * a different location
      *
-     * @param object $object
-     *
      * @return string
      */
     public function uniqId()
@@ -426,8 +424,6 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * @param bool $continue
-     *
      * @return $this
      */
     public function continueFlow()
@@ -456,8 +452,6 @@ class NodalFlow implements FlowInterface
 
     /**
      * Triggered right after the flow stops
-     *
-     * @param FlowStatusInterface $flowStatus
      *
      * @return $this
      */
