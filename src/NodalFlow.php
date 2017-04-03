@@ -564,7 +564,7 @@ class NodalFlow implements FlowInterface
     /**
      * KISS helper
      *
-     * @param type          $which
+     * @param string        $which
      * @param NodeInterface $node
      *
      * @return $this
