@@ -334,16 +334,20 @@ class NodalFlow implements FlowInterface
      */
     public function getNodeMap()
     {
-        foreach ($this->nodes as $nodeIdx => $node) {
+        foreach ($this->nodes as $node) {
             if (\is_a($node, BranchNode::class)) {
                 $this->nodeMap[$node->getNodeHash()]['nodes'] = $node->getPayload()->getNodeMap();
-            } elseif ($node instanceof AggregateNodeInterface) {
+                continue;
+            }
+
+            if ($node instanceof AggregateNodeInterface) {
                 foreach ($node->getNodeCollection() as $aggregatedNode) {
                     $this->nodeMap[$node->getNodeHash()]['nodes'][$aggregatedNode->getNodeHash()] = [
-                    'class' => \get_class($aggregatedNode),
-                    'hash'  => $aggregatedNode->getNodeHash(),
-                ];
+                        'class' => \get_class($aggregatedNode),
+                        'hash'  => $aggregatedNode->getNodeHash(),
+                    ];
                 }
+                continue;
             }
         }
 
