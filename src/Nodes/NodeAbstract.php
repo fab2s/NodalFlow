@@ -116,6 +116,8 @@ abstract class NodeAbstract implements NodeInterface
 
     /**
      * @throws \Exception
+     *
+     * @return $this
      */
     protected function enforceIsATraversable()
     {
@@ -123,14 +125,18 @@ abstract class NodeAbstract implements NodeInterface
             if ($this->isATraversable) {
                 throw new \Exception('Cannot Traverse a Branch');
             }
-        } else {
-            if ($this->isATraversable && !($this instanceof TraversableNodeInterface)) {
-                throw new \Exception('Cannot Traverse a Node that does not implement TraversableNodeInterface');
-            }
 
-            if (!$this->isATraversable && !$this->isFlow() && !($this instanceof ExecNodeInterface)) {
-                throw new \Exception('Cannot Exec a Node that does not implement ExecNodeInterface');
-            }
+            return $this;
         }
+
+        if ($this->isATraversable && !($this instanceof TraversableNodeInterface)) {
+            throw new \Exception('Cannot Traverse a Node that does not implement TraversableNodeInterface');
+        }
+
+        if (!$this->isATraversable && !$this->isFlow() && !($this instanceof ExecNodeInterface)) {
+            throw new \Exception('Cannot Exec a Node that does not implement ExecNodeInterface');
+        }
+
+        return $this;
     }
 }

@@ -94,15 +94,15 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
     public function getTraversable($param)
     {
         $value = null;
-
         foreach ($this->nodeCollection as $node) {
             $returnVal = $node->isReturningVal();
             foreach ($node->getTraversable($param) as $value) {
                 if ($returnVal) {
                     yield $value;
-                } else {
-                    yield $param;
+                    continue;
                 }
+
+                yield $param;
             }
 
             if ($returnVal) {

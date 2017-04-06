@@ -32,10 +32,14 @@ class PayloadNodeFactory implements PayloadNodeFactoryInterface
     {
         if (\is_array($payload) || \is_string($payload)) {
             return new CallableNode($payload, $isAReturningVal, $isATraversable);
-        } elseif ($payload instanceof \Closure) {
+        }
+
+        if ($payload instanceof \Closure) {
             // distinguishing Closures actually is surrealistic
             return new ClosureNode($payload, $isAReturningVal, $isATraversable);
-        } elseif ($payload instanceof FlowInterface) {
+        }
+
+        if ($payload instanceof FlowInterface) {
             return new BranchNode($payload, $isAReturningVal, $isATraversable);
         }
 
