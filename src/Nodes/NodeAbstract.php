@@ -129,11 +129,15 @@ abstract class NodeAbstract implements NodeInterface
             return $this;
         }
 
-        if ($this->isATraversable && !($this instanceof TraversableNodeInterface)) {
-            throw new \Exception('Cannot Traverse a Node that does not implement TraversableNodeInterface');
+        if ($this->isATraversable) {
+            if (!($this instanceof TraversableNodeInterface)) {
+                throw new \Exception('Cannot Traverse a Node that does not implement TraversableNodeInterface');
+            }
+
+            return $this;
         }
 
-        if (!$this->isATraversable && !$this->isFlow() && !($this instanceof ExecNodeInterface)) {
+        if (!($this instanceof ExecNodeInterface)) {
             throw new \Exception('Cannot Exec a Node that does not implement ExecNodeInterface');
         }
 
