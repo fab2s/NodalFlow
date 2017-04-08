@@ -33,7 +33,7 @@ class NodalFlow implements FlowInterface
     /**
      * @var string
      */
-    public $flowId;
+    protected $flowId;
 
     /**
      * @var array
@@ -213,10 +213,7 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * spl_object_hash seems tempting here, but we
-     * want to garanty both this and the position
-     * and two object may be reused in a branch at
-     * a different location
+     * We need to uniquely identify each flow in constructor
      *
      * @return string
      */
