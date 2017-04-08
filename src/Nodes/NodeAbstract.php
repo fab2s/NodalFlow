@@ -10,6 +10,7 @@
 namespace fab2s\NodalFlow\Nodes;
 
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\NodalFlowException;
 
 /**
  * abstract Class NodeAbstract
@@ -115,7 +116,7 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws NodalFlowException
      *
      * @return $this
      */
@@ -123,7 +124,7 @@ abstract class NodeAbstract implements NodeInterface
     {
         if ($this->isFlow()) {
             if ($this->isATraversable) {
-                throw new \Exception('Cannot Traverse a Branch');
+                throw new NodalFlowException('Cannot Traverse a Branch');
             }
 
             return $this;
@@ -131,14 +132,14 @@ abstract class NodeAbstract implements NodeInterface
 
         if ($this->isATraversable) {
             if (!($this instanceof TraversableNodeInterface)) {
-                throw new \Exception('Cannot Traverse a Node that does not implement TraversableNodeInterface');
+                throw new NodalFlowException('Cannot Traverse a Node that does not implement TraversableNodeInterface');
             }
 
             return $this;
         }
 
         if (!($this instanceof ExecNodeInterface)) {
-            throw new \Exception('Cannot Exec a Node that does not implement ExecNodeInterface');
+            throw new NodalFlowException('Cannot Exec a Node that does not implement ExecNodeInterface');
         }
 
         return $this;

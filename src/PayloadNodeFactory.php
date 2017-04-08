@@ -26,6 +26,8 @@ class PayloadNodeFactory implements PayloadNodeFactoryInterface
      * @param bool  $isAReturningVal
      * @param bool  $isATraversable
      *
+     * @throws NodalFlowException
+     *
      * @return PayloadNodeInterface
      */
     public static function create($payload, $isAReturningVal, $isATraversable = false)
@@ -43,6 +45,6 @@ class PayloadNodeFactory implements PayloadNodeFactoryInterface
             return new BranchNode($payload, $isAReturningVal, $isATraversable);
         }
 
-        throw new \Exception('Payload not supported, must be Callable');
+        throw new NodalFlowException('Payload not supported, must be Callable or Flow');
     }
 }

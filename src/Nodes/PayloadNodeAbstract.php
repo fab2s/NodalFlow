@@ -28,8 +28,6 @@ abstract class PayloadNodeAbstract extends NodeAbstract implements PayloadNodeIn
      * @param mixed $payload
      * @param bool  $isAReturningVal
      * @param bool  $isATraversable
-     *
-     * @throws \Exception
      */
     public function __construct($payload, $isAReturningVal, $isATraversable = false)
     {

@@ -10,6 +10,7 @@
 namespace fab2s\NodalFlow\Nodes;
 
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\NodalFlowException;
 
 /**
  * Class BranchNode
@@ -25,11 +26,13 @@ class BranchNode extends PayloadNodeAbstract implements ExecNodeInterface
      * @param FlowInterface $payload
      * @param bool          $isAReturningVal
      * @param bool          $isATraversable
+     *
+     * @throws NodalFlowException
      */
     public function __construct($payload, $isAReturningVal, $isATraversable = false)
     {
         if (!($payload instanceof FlowInterface)) {
-            throw new \Exception('Payload does not implement FlowInterface : ' . (\is_object($payload) ? \get_class($payload) : \gettype($payload)));
+            throw new NodalFlowException('Payload does not implement FlowInterface : ' . (\is_object($payload) ? \get_class($payload) : \gettype($payload)));
         }
 
         // branch Node currently do not support traversing

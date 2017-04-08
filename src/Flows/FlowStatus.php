@@ -9,6 +9,8 @@
 
 namespace fab2s\NodalFlow\Flows;
 
+use fab2s\NodalFlow\NodalFlowException;
+
 /**
  * class FlowStatus
  */
@@ -34,11 +36,13 @@ class FlowStatus implements FlowStatusInterface
 
     /**
      * @param string $status The flow status
+     *
+     * @throws NodalFlowException
      */
     public function __construct($status)
     {
         if (!isset($this->flowStatuses[$status])) {
-            throw new \InvalidArgumentException('[NodalFlow] $status must be one of :' . \implode(', ', $this->flowStatuses));
+            throw new NodalFlowException('$status must be one of :' . \implode(', ', $this->flowStatuses));
         }
 
         $this->status = \trim($status);

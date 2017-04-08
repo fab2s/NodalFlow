@@ -252,7 +252,13 @@ class NodalFlow implements FlowInterface
         } catch (\Exception $e) {
             $this->flowStatus = new FlowStatus(FlowStatus::FLOW_EXCEPTION);
             $this->flowEnd();
-            throw $e;
+            if ($e instanceof NodalFlowException) {
+                throw $e;
+            }
+
+            throw new NodalFlowException('Flow execution failed', 0, $e, [
+                'nodeMap' => $this->getNodeMap(),
+            ]);
         }
     }
 
@@ -299,7 +305,7 @@ class NodalFlow implements FlowInterface
      */
     public function getStats()
     {
-        foreach ($this->nodes as $nodeIdx => $node) {
+        foreach ($this->nodes as $node) {
             if (\is_a($node, BranchNode::class)) {
                 $this->stats['branches'][$node->getPayload()->getFlowId()] = $node->getPayload()->getStats();
             }
