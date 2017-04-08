@@ -277,9 +277,7 @@ class NodalFlow implements FlowInterface
             }
         }
 
-        $durationStr = \trim($durationStr, ' ');
-
-        $result['durationStr'] = $durationStr;
+        $result['durationStr'] = \trim($durationStr);
 
         return $result;
     }
