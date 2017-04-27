@@ -1,72 +1,73 @@
 # Usage
 The current version comes with three directly usable Payload Nodes, which are also used to build tests :
 
-* CallableNode
+## CallableNode
 
-    For convenience, `CallableNode` implements both `ExecNodeInterface` and `TraversableNodeInterface`. It's thus up to you to use a suitable Callable for each case.
-    ```php
-    use fab2s\NodalFlow\Nodes\CallableNode;
+For convenience, `CallableNode` implements both `ExecNodeInterface` and `TraversableNodeInterface`. It's thus up to you to use a suitable Callable for each case.
 
-    $callableExecNode = new CallableNode(function($param) {
-        return $param + 1;
-    }, true);
+```php
+use fab2s\NodalFlow\Nodes\CallableNode;
 
-    // which allows us to call the closure using
-    $result = $callableExecNode->exec($param);
+$callableExecNode = new CallableNode(function($param) {
+    return $param + 1;
+}, true);
 
-    $callableTraversableNode = new CallableNode(function($param) {
-        for($i = 1; $i < 1024; $i++) {
-            yield $param + $i;
-        }
-    }, true, true);
+// which allows us to call the closure using
+$result = $callableExecNode->exec($param);
 
-    // which allows us to call the closure using
-    foreach ($callableTraversableNode->getTraversable(null) as $result) {
-        // do something
+$callableTraversableNode = new CallableNode(function($param) {
+    for($i = 1; $i < 1024; $i++) {
+        yield $param + $i;
     }
-    ```
+}, true, true);
 
-* BranchNode
+// which allows us to call the closure using
+foreach ($callableTraversableNode->getTraversable(null) as $result) {
+    // do something
+}
+```
 
-    ```php
-    use fab2s\NodalFlow\Nodes\BranchNode;
+## BranchNode
 
-    $rootFlow = new ClassImplementingFlwoInterface;
+```php
+use fab2s\NodalFlow\Nodes\BranchNode;
 
-    $branchFlow = new ClassImplementingFlwoInterface;
-    // feed the flow
-    // ...
+$rootFlow = new ClassImplementingFlwoInterface;
 
-    $rootFlow->addNode(new BranchNode($flow, false));
-    ```
+$branchFlow = new ClassImplementingFlwoInterface;
+// feed the flow
+// ...
 
-* AggregateNode
+$rootFlow->addNode(new BranchNode($flow, false));
+```
 
-    ```php
-    use fab2s\NodalFlow\Nodes\AggregateNode;
+## AggregateNode
 
-    $firstTraversable = new ClassImplementingTraversableNodeInterface;
-    // ...
-    $nthTraversable = new ClassImplementingTraversableNodeInterface;
+```php
+use fab2s\NodalFlow\Nodes\AggregateNode;
 
-    // aggregate node may or may not return a value
-    // but is always a Traversable Node
-    $isAReturningVal = true;
-    $aggregateNode = new AggregateNode($isAReturningVal);
-    $aggregateNode->addTraversable($firstTraversable)
-        //...
-        ->addTraversable($nthTraversable);
+$firstTraversable = new ClassImplementingTraversableNodeInterface;
+// ...
+$nthTraversable = new ClassImplementingTraversableNodeInterface;
 
-    // attach to a Flow
-    $flow->add($aggregateNode);
-    ```
+// aggregate node may or may not return a value
+// but is always a Traversable Node
+$isAReturningVal = true;
+$aggregateNode = new AggregateNode($isAReturningVal);
+$aggregateNode->addTraversable($firstTraversable)
+    //...
+    ->addTraversable($nthTraversable);
 
+// attach to a Flow
+$flow->add($aggregateNode);
+```
 
-* ClosureNode
+## ClosureNode
 
-    ClosureNode is not bringing anything really other than providing with another example. It is very similar to CallableNode except it will only accept a strict Closure as payload.
+ClosureNode is not bringing anything really other than providing with another example. It is very similar to CallableNode except it will only accept a strict Closure as payload.
 
 NodalFlow also comes with a PayloadNodeFactory to ease Payload Node usage :
+
 ```php
 use fab2s\NodalFlow\PayloadNodeFactory;
 
@@ -90,7 +91,7 @@ $node = new PayloadNodeFactory($branchFlow, true);
 // ..
 ```
 
-And the Flow, NodalFlow:
+## The Flow
 
 ```php
 use fab2s\NodalFlow\NodalFlow;
@@ -132,18 +133,24 @@ $result = $nodalFlow->addPayload(('SomeClass::someTraversableMethod', true, true
 
 As you can see, it is possible to dynamically generate and organize tasks which may or may not be linked together by their argument and return values.
 
-NodalFlow uses a `FlowStatusInterface` to expose its exec state. The FlowStatus object is maintained at all time by the flow and can be used to find out if:
-* The flow is clean, that is if everything went well up to this point:
-    ```php
-    $isClean = $flow->getFlowStatus()->isClean();
-    ```
-* The flow is dirty, that is if the flow was broken by a node:
-    ```php
-    $isDirty = $flow->getFlowStatus()->isDirty();
-    ```
-* The flow is exception, that is if a node raised an exception during the execution:
-    ```php
-    $isDirty = $flow->getFlowStatus()->isException();
-    ```
+## Flow Status
+
+NodalFlow uses a `FlowStatusInterface` to expose its exec state. The FlowStatus object is maintained at all time by the flow and can be used to find out how things went. The status can reflect three states :
+### Clean
+That is if everything went well up to this point:
+```php
+$isClean = $flow->getFlowStatus()->isClean();
+```
+
+### Dirty
+That is if the flow was broken by a node:
+```php
+$isDirty = $flow->getFlowStatus()->isDirty();
+```
+### Exception
+That is if a node raised an exception during the execution:
+```php
+$isDirty = $flow->getFlowStatus()->isException();
+```
 
 This can be useful to find out what is going on within callbacks.
