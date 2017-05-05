@@ -31,37 +31,51 @@ class NodalFlow implements FlowInterface
     const FLOW_FAIL     = 'fail';
 
     /**
+     * This Flow id
+     *
      * @var string
      */
     protected $flowId;
 
     /**
+     * The underlying node structure
+     *
      * @var array
      */
     protected $nodes = [];
 
     /**
+     * The current Node index
+     *
      * @var int
      */
     protected $nodeIdx = 0;
 
     /**
+     * The last index value
+     *
      * @var int
      */
     protected $lastIdx = 0;
 
     /**
+     * The number of Node in this Flow
+     *
      * @var int
      */
     protected $nodeCount = 0;
 
     /**
+     * The number of iteration within this Flow
+     *
      * @var int
      */
     protected $numIterate = 0;
 
     /**
-     * @var CallbackInterface
+     * The current registered Callback class if any
+     *
+     * @var CallbackInterface|null
      */
     protected $callBack;
 
@@ -75,6 +89,8 @@ class NodalFlow implements FlowInterface
     protected $progressMod = 1024;
 
     /**
+     * The default Node Map values
+     *
      * @var array
      */
     protected $nodeMapDefault = [
@@ -87,6 +103,8 @@ class NodalFlow implements FlowInterface
     ];
 
     /**
+     * The default Node stats values
+     *
      * @var array
      */
     protected $nodeStatsDefault = [
@@ -95,21 +113,29 @@ class NodalFlow implements FlowInterface
     ];
 
     /**
+     * Node stats values
+     *
      * @var array
      */
     protected $nodeStats = [];
 
     /**
+     * The object map, used to enforce object unicity within the Flow
+     *
      * @var array
      */
     protected $objectMap = [];
 
     /**
+     * The Node Map
+     *
      * @var array
      */
     protected $nodeMap = [];
 
     /**
+     * The Flow stats default values
+     *
      * @var array
      */
     protected $statsDefault = [
@@ -120,6 +146,8 @@ class NodalFlow implements FlowInterface
     ];
 
     /**
+     * The Flow Stats
+     *
      * @var array
      */
     protected $stats = [
@@ -127,30 +155,43 @@ class NodalFlow implements FlowInterface
     ];
 
     /**
+     * Number of exec calls in thhis Flow
+     *
      * @var int
      */
     protected $numExec = 0;
 
     /**
+     * Continue flag
+     *
      * @var bool
      */
     protected $continue = false;
 
     /**
+     * Break Flag
+     *
      * @var bool
      */
     protected $break = false;
 
     /**
+     * Current Flow Status
+     *
      * @var FlowStatusInterface
      */
     protected $flowStatus;
 
     /**
+     * Current nonce
+     *
      * @var int
      */
     private static $nonce = 0;
 
+    /**
+     * Instantiate a Flow
+     */
     public function __construct()
     {
         $this->flowId = $this->uniqId();
@@ -158,6 +199,8 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Adds a Node to the flow
+     *
      * @param NodeInterface $node
      *
      * @return $this
@@ -185,6 +228,8 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Adds a Payload Node to the Flow
+     *
      * @param callable $payload
      * @param mixed    $isAReturningVal
      * @param mixed    $isATraversable
@@ -201,6 +246,8 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Register callback class
+     *
      * @param CallbackInterface $callBack
      *
      * @return $this
@@ -213,7 +260,7 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * We need to uniquely identify each flow in constructor
+     * Generates a truely unique id for the Flow context
      *
      * @return string
      */
@@ -225,6 +272,8 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Generate a friendly (read humanly distinguishable) object hash
+     *
      * @param object $object
      *
      * @return string
@@ -235,10 +284,14 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * @param null|mixed $param
+     * Execute the flow
+     *
+     * @param null|mixed $param The eventual init argument to the first node
+     *                          or, in case of a branch, the last relevant
+     *                          argument from upstream Flow
      *
      * @return mixed the last result of the
-     *               last returing value node
+     *               last returning value node
      */
     public function exec($param = null)
     {
@@ -263,6 +316,8 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Computes a human readable duration string from floating seconds
+     *
      * @param float $seconds
      *
      * @return array
@@ -289,6 +344,8 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Resets Nodes stats, used prior to Flow's re-exec
+     *
      * @return $this
      */
     public function resetNodeStats()
@@ -301,6 +358,8 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Get the stats array with latest Node stats
+     *
      * @return array
      */
     public function getStats()
@@ -315,6 +374,8 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Return the Flow id as set during instantiation
+     *
      * @return string
      */
     public function getFlowId()
@@ -323,6 +384,8 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Get the Node array
+     *
      * @return array
      */
     public function getNodes()
@@ -331,6 +394,8 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Generate Node Map
+     *
      * @return array
      */
     public function getNodeMap()
@@ -356,6 +421,8 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Get the Node stats
+     *
      * @return array
      */
     public function getNodeStats()
@@ -384,6 +451,9 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Define the progress modulo, Progress Callback will be
+     * triggered upon each iteration in the flow modulo $progressMod
+     *
      * @param int $progressMod
      *
      * @return $this
@@ -396,6 +466,8 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Get current $progressMod
+     *
      * @return int
      */
     public function getProgressMod()
@@ -417,6 +489,9 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Break the flow's execution, conceptuially similar to breaking
+     * a regular loop
+     *
      * @return $this
      */
     public function breakFlow()
@@ -429,6 +504,9 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Continue the flow's execution, conceptuially similar to continuing
+     * a regular loop
+     *
      * @return $this
      */
     public function continueFlow()
@@ -475,6 +553,8 @@ class NodalFlow implements FlowInterface
     }
 
     /**
+     * Return a simple nonce, fully valid within each flow
+     *
      * @return int
      */
     protected function getNonce()
@@ -561,7 +641,7 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * KISS helper
+     * KISS helper to trigger Callback slots
      *
      * @param string             $which
      * @param null|NodeInterface $node

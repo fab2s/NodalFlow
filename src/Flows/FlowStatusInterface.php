@@ -15,31 +15,43 @@ namespace fab2s\NodalFlow\Flows;
 interface FlowStatusInterface
 {
     /**
+     * Instantiate a Flow status
+     *
      * @param string $status The flow status
      */
     public function __construct($status);
 
     /**
+     * Get a string representation of the Flow status
+     *
      * @return string The flow status
      */
     public function __toString();
 
     /**
+     * Tells if the Flow went smoothely
+     *
      * @return bool True If everything went well during the flow
      */
     public function isClean();
 
     /**
+     * Indicate that the flow was interrupted by a Node
+     *
      * @return bool True If the flow was interrupted without exception
      */
     public function isDirty();
 
     /**
+     * Indicate that an exception was raised during the Flow execution
+     *
      * @return bool True If the flow was interrupted with exception
      */
     public function isException();
 
     /**
+     * Return the Flow status
+     *
      * @return string The flow status
      */
     public function getStatus();

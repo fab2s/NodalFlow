@@ -15,6 +15,8 @@ namespace fab2s\NodalFlow\Nodes;
 interface PayloadNodeFactoryInterface
 {
     /**
+     * Instantiate the proper Payload Node for the payload
+     *
      * @param object|callable $payload
      * @param bool            $isAReturningVal
      * @param bool            $isATraversable

@@ -17,6 +17,8 @@ use fab2s\NodalFlow\Nodes\NodeInterface;
 interface FlowInterface
 {
     /**
+     * Adds a Node to the Flow
+     *
      * @param NodeInterface $node
      *
      * @return $this
@@ -52,7 +54,7 @@ interface FlowInterface
     public function getFlowStatus();
 
     /**
-     * get the underlying node array
+     * Get the underlying node array
      *
      * @return array
      */

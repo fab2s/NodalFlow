@@ -18,6 +18,8 @@ namespace fab2s\NodalFlow\Nodes;
 interface PayloadNodeInterface extends NodeInterface
 {
     /**
+     * Get this Node's Payload
+     *
      * @return object|callable
      */
     public function getPayload();

@@ -15,6 +15,8 @@ namespace fab2s\NodalFlow\Nodes;
 interface ExecNodeInterface extends NodeInterface
 {
     /**
+     * Execute this Node
+     *
      * @param mixed $param
      *
      * @return mixed The result of this node

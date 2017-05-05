@@ -17,6 +17,8 @@ use fab2s\NodalFlow\NodalFlowException;
 class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterface, ExecNodeInterface
 {
     /**
+     * Instantiate a Callable Node
+     *
      * @param callable $payload
      * @param bool     $isAReturningVal
      * @param bool     $isATraversable
@@ -33,6 +35,8 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
     }
 
     /**
+     * Execute this node
+     *
      * @param mixed $param
      *
      * @return mixed
@@ -43,6 +47,8 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
     }
 
     /**
+     * Get this Node's Traversable
+     *
      * @param mixed $param
      *
      * @return \Generator

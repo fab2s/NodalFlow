@@ -17,16 +17,22 @@ use fab2s\NodalFlow\Flows\FlowInterface;
 interface NodeInterface
 {
     /**
+     * Indicate if the Node is Traversable
+     *
      * @return bool
      */
     public function isTraversable();
 
     /**
+     * Indicate if the Node is a Flow (branch)
+     *
      * @return bool true if this node is an instanceof FlowInterface
      */
     public function isFlow();
 
     /**
+     * Indicate if the Node is returning a value
+     *
      * @return bool true if this node is expected to return
      *              something to pass to the next node as param.
      *              If nothing is returned, the previously
@@ -36,6 +42,8 @@ interface NodeInterface
     public function isReturningVal();
 
     /**
+     * Set carrying Flow
+     *
      * @param FlowInterface $flow
      *
      * @return $this
@@ -43,11 +51,15 @@ interface NodeInterface
     public function setCarrier(FlowInterface $flow);
 
     /**
+     * Return the carrying Flow
+     *
      * @return FlowInterface
      */
     public function getCarrier();
 
     /**
+     * Set this Node's hash
+     *
      * @param string $nodeHash
      *
      * @return $this
@@ -55,6 +67,8 @@ interface NodeInterface
     public function setNodeHash($nodeHash);
 
     /**
+     * Get this Node's hash
+     *
      * @return string
      */
     public function getNodeHash();

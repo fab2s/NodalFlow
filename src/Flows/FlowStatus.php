@@ -16,16 +16,23 @@ use fab2s\NodalFlow\NodalFlowException;
  */
 class FlowStatus implements FlowStatusInterface
 {
+    /**
+     * Flow statuses
+     */
     const FLOW_CLEAN     = 'clean';
     const FLOW_DIRTY     = 'dirty';
     const FLOW_EXCEPTION = 'exception';
 
     /**
+     * Flow status
+     *
      * @var string
      */
     protected $status;
 
     /**
+     * Flow statuses
+     *
      * @var array
      */
     protected $flowStatuses = [
@@ -35,6 +42,8 @@ class FlowStatus implements FlowStatusInterface
     ];
 
     /**
+     * Instantiate a Flow Status
+     *
      * @param string $status The flow status
      *
      * @throws NodalFlowException
@@ -49,6 +58,8 @@ class FlowStatus implements FlowStatusInterface
     }
 
     /**
+     * Get a string representation of the Flow status
+     *
      * @return string The flow status
      */
     public function __toString()
@@ -57,6 +68,8 @@ class FlowStatus implements FlowStatusInterface
     }
 
     /**
+     * Tells if the Flow went smoothely
+     *
      * @return bool True If everything went well during the flow
      */
     public function isClean()
@@ -65,6 +78,9 @@ class FlowStatus implements FlowStatusInterface
     }
 
     /**
+     * Indicate that the flow was interrupted by a Node
+     * s
+     *
      * @return bool True If the flow was interrupted without exception
      */
     public function isDirty()
@@ -73,6 +89,8 @@ class FlowStatus implements FlowStatusInterface
     }
 
     /**
+     * Indicate that an exception was raised during the Flow execution
+     *
      * @return bool True If the flow was interrupted with exception
      */
     public function isException()
@@ -81,6 +99,8 @@ class FlowStatus implements FlowStatusInterface
     }
 
     /**
+     * Return the Flow status
+
      * @return string The flow status
      */
     public function getStatus()

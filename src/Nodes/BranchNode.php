@@ -18,11 +18,15 @@ use fab2s\NodalFlow\NodalFlowException;
 class BranchNode extends PayloadNodeAbstract implements ExecNodeInterface
 {
     /**
+     * This Node is a Branch
+     *
      * @var bool
      */
     protected $isAFlow = true;
 
     /**
+     * Instantiate the BranchNode
+     *
      * @param FlowInterface $payload
      * @param bool          $isAReturningVal
      * @param bool          $isATraversable
@@ -40,6 +44,8 @@ class BranchNode extends PayloadNodeAbstract implements ExecNodeInterface
     }
 
     /**
+     * Execute the BranchNode
+     *
      * @param mixed $param
      *
      * @return mixed

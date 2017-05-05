@@ -22,6 +22,8 @@ use fab2s\NodalFlow\Nodes\PayloadNodeInterface;
 class PayloadNodeFactory implements PayloadNodeFactoryInterface
 {
     /**
+     * Instantiate the proper Payload Node for the payload
+     *
      * @param mixed $payload
      * @param bool  $isAReturningVal
      * @param bool  $isATraversable

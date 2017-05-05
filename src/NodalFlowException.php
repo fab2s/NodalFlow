@@ -15,11 +15,15 @@ namespace fab2s\NodalFlow;
 class NodalFlowException extends \Exception
 {
     /**
+     * Exception context
+     *
      * @var array
      */
     protected $context = [];
 
     /**
+     * Instantiate an exception
+     *
      * @param string          $message
      * @param int             $code
      * @param null|\Exception $previous
@@ -33,6 +37,8 @@ class NodalFlowException extends \Exception
     }
 
     /**
+     * Get current exception context, useful for logging
+     *
      * @return array
      */
     public function getContext()

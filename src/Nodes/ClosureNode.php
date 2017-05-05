@@ -17,6 +17,8 @@ use fab2s\NodalFlow\NodalFlowException;
 class ClosureNode extends PayloadNodeAbstract implements TraversableNodeInterface, ExecNodeInterface
 {
     /**
+     * Instantiate a Closure Node
+     *
      * @param \Closure $payload
      * @param bool     $isAReturningVal
      * @param bool     $isATraversable
@@ -33,6 +35,8 @@ class ClosureNode extends PayloadNodeAbstract implements TraversableNodeInterfac
     }
 
     /**
+     * Get this Node's Traversable (payload mmust be consistant for the usage)
+     *
      * @param mixed $param
      *
      * @return \Generator
@@ -46,6 +50,8 @@ class ClosureNode extends PayloadNodeAbstract implements TraversableNodeInterfac
     }
 
     /**
+     * Execute this Node (payload mmust be consistant for the usage)
+     *
      * @param mixed $param
      *
      * @return mixed

@@ -17,21 +17,29 @@ use fab2s\NodalFlow\Flows\FlowInterface;
 class AggregateNode extends NodeAbstract implements AggregateNodeInterface
 {
     /**
+     * Returning val status
+     *
      * @var bool
      */
     protected $isAReturningVal = true;
 
     /**
+     * Traversable status
+     *
      * @var bool
      */
     protected $isATraversable = true;
 
     /**
+     * The underlying Node structure
+     *
      * @var array
      */
     protected $nodeCollection = [];
 
     /**
+     * Instantiate an Aggregate Node
+     *
      * @param bool $isAReturningVal
      */
     public function __construct($isAReturningVal)
@@ -42,9 +50,9 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
     }
 
     /**
-     * get the traversable to traverse within the Flow
+     * Get the traversable to traverse within the Flow
      *
-     * TraversableNodeInterface $node
+     * @param TraversableNodeInterface $node
      *
      * @return $this
      */
@@ -60,6 +68,8 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
     }
 
     /**
+     * Set carrier (eg the Flow this Node is attached to)
+     *
      * @param FlowInterface $flow
      *
      * @return $this
@@ -77,6 +87,8 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
     }
 
     /**
+     * Return the underlying Node collection
+     *
      * @return array
      */
     public function getNodeCollection()
@@ -85,7 +97,7 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
     }
 
     /**
-     * get the traversable to traverse within the Flow
+     * Get the traversable to traverse within the Flow
      *
      * @param mixed $param
      *

@@ -17,6 +17,8 @@ use fab2s\NodalFlow\Flows\FlowInterface;
 abstract class PayloadNodeAbstract extends NodeAbstract implements PayloadNodeInterface
 {
     /**
+     * The underlying executable or traversable Payload
+     *
      * @var object|callable
      */
     protected $payload;
@@ -41,6 +43,8 @@ abstract class PayloadNodeAbstract extends NodeAbstract implements PayloadNodeIn
     }
 
     /**
+     * Get this Node's Payload
+     *
      * @return object|callable
      */
     public function getPayload()

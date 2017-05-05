@@ -18,36 +18,51 @@ use fab2s\NodalFlow\NodalFlowException;
 abstract class NodeAbstract implements NodeInterface
 {
     /**
+     * Te carrying Flow
+     *
      * @var FlowInterface
      */
     public $carrier;
 
     /**
+     * This Node's hash
+     *
      * @var string
      */
     public $nodeHash;
 
     /**
+     * Indicate if this Node is traversable
+     *
      * @var bool
      */
     protected $isATraversable;
 
     /**
+     * Indicate if this Node is returning a value
+     *
      * @var bool
      */
     protected $isAReturningVal;
 
     /**
+     * Indicate if this Node is a Flow (Branch)
+     *
      * @var bool
      */
     protected $isAFlow;
 
+    /**
+     * Instantiate a Node
+     */
     public function __construct()
     {
         $this->enforceIsATraversable();
     }
 
     /**
+     * Indicate if this Node is Traversable
+     *
      * @return bool
      */
     public function isTraversable()
@@ -56,6 +71,8 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
+     * Indicate if this Node is a Flow (Branch)
+     *
      * @return bool true if this node instanceof FlowInterface
      */
     public function isFlow()
@@ -64,6 +81,8 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
+     * Indicate if this Node is returning a value
+     *
      * @return bool true if this node is expected to return
      *              something to pass on next node as param.
      *              If nothing is returned, the previously
@@ -76,6 +95,8 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
+     * Set carrying Flow
+     *
      * @param FlowInterface $flow
      *
      * @return $this
@@ -88,6 +109,8 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
+     * Get carrying Flow
+     *
      * @return FlowInterface
      */
     public function getCarrier()
@@ -96,6 +119,8 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
+     * Set this Node's hash
+     *
      * @param string $nodeHash
      *
      * @return $this
@@ -108,6 +133,8 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
+     * Get this Node's hash
+     *
      * @return string
      */
     public function getNodeHash()
@@ -116,6 +143,8 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
+     * Make sure this Node is consistant
+     *
      * @throws NodalFlowException
      *
      * @return $this
