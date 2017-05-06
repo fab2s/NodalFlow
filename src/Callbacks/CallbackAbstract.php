@@ -47,9 +47,9 @@ abstract class CallbackAbstract implements CallbackInterface
     public function success(FlowInterface $flow)
     {
         /*
-         * if ($flow->getFlowStatus()->isDirty()) {
+         * `if ($flow->getFlowStatus()->isDirty()) {
          *      // a node broke the flow
-         * }
+         * }`
          */
     }
 
