@@ -4,7 +4,42 @@
 
 NodalFlow is a generic Workflow that can execute chained tasks. It is designed around simple interfaces that specifies a flow composed of executable nodes and flows. Nodes can be executed or traversed. They accept a single parameter as argument and can be set to pass or not their result as an argument for the next node.
 Flows also accept one argument and may be set to pass their result to be used or not as an argument for the next node.
-If a node does not pass it's result as parameter to the next node, the current parameter will be used for the next node, and so on until one node returns a result intended to be used as argument to the next node.
+
+```bash
++--------------------------+Flow Execution+----------------------------->
+
++-----------------+        +------------------+         +---------------+
+|   scalar node   +--------> trarersable node +--------->   next node   +-------->...
++-----------------+        +------------------+         +---------------+
+                                              |
+                                              |         +---------------+
+                                              +--------->   next node   +-------->...
+                                              |         +---------------+
+                                              |
+                                              |         +---------------+
+                                              +--------->   next node   +-------->...
+                                              |         +---------------+
+                                              |
+                                              +--------->...
+
+```
+
+Nodes are linked together by the fact they return a value or not. When a node is returning a value (by declaration), it will be used as argument to the next node (but not necessarily used by it). When it doesn't, the current parameter (if any) will be used as argument by the next node, and so on until one node returns a result intended to be used as argument to the next node.
+
+```bash
++--------+ Result 1 +--------+ Result 3
+| Node 1 +----+-----> Node 3 +--------->...
++--------+    |     +--------+
+              |
+              |
+         +----v---+
+         | Node 2 |
+         +--------+
+
+```
+
+In this flow, as node 2 (which may as well be a whole flow or branch) is not returning a value, it is executed "outside" of the main execline.
+
 In other words, NodalFlow implements a directed graph structure in the form of a tree composed of nodes that can, but not always are, branches or leaves.
 
 NodalFlow aims at organizing and simplifying data processing workflows where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. It makes it possible to dynamically configure and execute complex scenario in an organized and repeatable manner. And even more important, to write Nodes that will be reusable in any other workflow you may think of.
@@ -14,6 +49,8 @@ NodalFlow enforces minimalistic requirements upon nodes. This means that in most
 [YaEtl](https://github.com/fab2s/YaEtl) is an example of a more specified workflow build upon [NodalFlow](https://github.com/fab2s/NodalFlow).
 
 NodalFlow shares conceptual similarities with [Transduction](https://en.wikipedia.org/wiki/Transduction) as it allow basic interaction chaining, especially when dealing with `ExecNodes`, but the comparison diverges quickly.
+
+
 
 ## NodalFlow Documentation
 [![Documentation Status](https://readthedocs.org/projects/nodalflow/badge/?version=latest)](http://nodalflow.readthedocs.io/en/latest/?badge=latest) Documentation can be found at [ReadTheDocs](http://nodalflow.readthedocs.io/en/latest/?badge=latest)
