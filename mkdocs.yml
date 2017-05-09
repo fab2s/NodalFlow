@@ -1,0 +1,10 @@
+pages:
+    - 'NodalFlow Documentation': 'index.md'
+    - 'Usage': 'usage.md'
+    - 'NodalFlow Citizen': 'citizen.md'
+    - 'Traversability': 'traversability.md'
+    - 'Interruptions': 'interruptions.md'
+    - 'Callbacks': 'callbacks.md'
+    - 'Exceptions': 'exceptions.md'
+    - 'Reusability': 'reusability.md'
+
