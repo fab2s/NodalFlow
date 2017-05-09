@@ -1,3 +1,4 @@
+site_name: 'NodalFlow'
 pages:
     - 'NodalFlow Documentation': 'index.md'
     - 'Usage': 'usage.md'
@@ -7,4 +8,3 @@ pages:
     - 'Callbacks': 'callbacks.md'
     - 'Exceptions': 'exceptions.md'
     - 'Reusability': 'reusability.md'
-
