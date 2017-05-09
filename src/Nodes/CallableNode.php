@@ -25,12 +25,8 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
      *
      * @throws NodalFlowException
      */
-    public function __construct($payload, $isAReturningVal, $isATraversable = false)
+    public function __construct(callable $payload, $isAReturningVal, $isATraversable = false)
     {
-        if (!\is_callable($payload)) {
-            throw new NodalFlowException('Payload is not callable');
-        }
-
         parent::__construct($payload, $isAReturningVal, $isATraversable);
     }
 

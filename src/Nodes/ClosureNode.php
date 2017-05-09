@@ -14,7 +14,7 @@ use fab2s\NodalFlow\NodalFlowException;
 /**
  * Class ClosureNode
  */
-class ClosureNode extends PayloadNodeAbstract implements TraversableNodeInterface, ExecNodeInterface
+class ClosureNode extends CallableNode
 {
     /**
      * Instantiate a Closure Node
@@ -25,12 +25,8 @@ class ClosureNode extends PayloadNodeAbstract implements TraversableNodeInterfac
      *
      * @throws NodalFlowException
      */
-    public function __construct($payload, $isAReturningVal, $isATraversable = false)
+    public function __construct(\Closure $payload, $isAReturningVal, $isATraversable = false)
     {
-        if (!($payload instanceof \Closure)) {
-            throw new NodalFlowException('Payload is not a Closure');
-        }
-
         parent::__construct($payload, $isAReturningVal, $isATraversable);
     }
 
