@@ -31,6 +31,13 @@ class NodalFlow implements FlowInterface
     const FLOW_FAIL     = 'fail';
 
     /**
+     * The parent Flow, only set when branched
+     *
+     * @var FlowInterface
+     */
+    public $parent;
+
+    /**
      * This Flow id
      *
      * @var string
@@ -208,6 +215,12 @@ class NodalFlow implements FlowInterface
     public function add(NodeInterface $node)
     {
         $nodeHash = $this->objectHash($node);
+
+        if ($node instanceof BranchNode) {
+            // this node is a branch, set it's parent
+            $node->getPayload()->setParent($this);
+        }
+
         $node->setCarrier($this)->setNodeHash($nodeHash);
 
         $this->nodes[$this->nodeIdx] = $node;
@@ -240,7 +253,7 @@ class NodalFlow implements FlowInterface
     {
         $node = PayloadNodeFactory::create($payload, $isAReturningVal, $isATraversable);
 
-        parent::add($node);
+        $this->add($node);
 
         return $this;
     }
@@ -257,6 +270,40 @@ class NodalFlow implements FlowInterface
         $this->callBack = $callBack;
 
         return $this;
+    }
+
+    /**
+     * Set parent Flow, happens only when branched
+     *
+     * @param FlowInterface $flow
+     *
+     * @return $this
+     */
+    public function setParent(FlowInterface $flow)
+    {
+        $this->parent = $flow;
+
+        return $this;
+    }
+
+    /**
+     * Get eventual parent Flow
+     *
+     * @return FlowInterface
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Tells if this flow has a parent
+     *
+     * @return bool
+     */
+    public function hasParent()
+    {
+        return !empty($this->parent);
     }
 
     /**
@@ -299,6 +346,13 @@ class NodalFlow implements FlowInterface
             $result = $this->rewind()
                     ->flowStart()
                     ->recurse($param);
+            // set flowStatus to make sure that we have the proper
+            // value in flowEnd even when overridden without (or when
+            // improperly) calling parent
+            if ($this->flowStatus->isRunning()) {
+                $this->flowStatus = new FlowStatus(FlowStatus::FLOW_CLEAN);
+            }
+
             $this->flowEnd();
 
             return $result;
@@ -527,8 +581,8 @@ class NodalFlow implements FlowInterface
         $this->triggerCallback(static::FLOW_START);
         $this->stats['start']                                = \microtime(true);
         $this->stats['invocations'][$this->numExec]['start'] = $this->stats['start'];
-        // each start is clean
-        $this->flowStatus = new FlowStatus(FlowStatus::FLOW_CLEAN);
+        // flow is started
+        $this->flowStatus = new FlowStatus(FlowStatus::FLOW_RUNNING);
 
         return $this;
     }

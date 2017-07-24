@@ -19,6 +19,7 @@ class FlowStatus implements FlowStatusInterface
     /**
      * Flow statuses
      */
+    const FLOW_RUNNING   = 'running';
     const FLOW_CLEAN     = 'clean';
     const FLOW_DIRTY     = 'dirty';
     const FLOW_EXCEPTION = 'exception';
@@ -36,6 +37,7 @@ class FlowStatus implements FlowStatusInterface
      * @var array
      */
     protected $flowStatuses = [
+        self::FLOW_RUNNING   => self::FLOW_RUNNING,
         self::FLOW_CLEAN     => self::FLOW_CLEAN,
         self::FLOW_DIRTY     => self::FLOW_DIRTY,
         self::FLOW_EXCEPTION => self::FLOW_EXCEPTION,
@@ -54,7 +56,7 @@ class FlowStatus implements FlowStatusInterface
             throw new NodalFlowException('$status must be one of :' . \implode(', ', $this->flowStatuses));
         }
 
-        $this->status = \trim($status);
+        $this->status = $status;
     }
 
     /**
@@ -65,6 +67,19 @@ class FlowStatus implements FlowStatusInterface
     public function __toString()
     {
         return $this->getStatus();
+    }
+
+    /**
+     * Indicate that the flow is currently running
+     * usefull for branched flow to find out what is
+     * their parent up to and distinguish between top
+     * parent end and branch end
+     *
+     * @return bool True If the flow is currently running
+     */
+    public function isRunning()
+    {
+        return $this->status === static::FLOW_RUNNING;
     }
 
     /**

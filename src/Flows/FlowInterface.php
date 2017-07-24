@@ -44,6 +44,29 @@ interface FlowInterface
     public function rewind();
 
     /**
+     * Set parent Flow, happens only when branched
+     *
+     * @param FlowInterface $flow
+     *
+     * @return $this
+     */
+    public function setParent(FlowInterface $flow);
+
+    /**
+     * Get eventual parent Flow
+     *
+     * @return FlowInterface
+     */
+    public function getParent();
+
+    /**
+     * Tells if this flow has a parent
+     *
+     * @return bool
+     */
+    public function hasParent();
+
+    /**
      * The Flow status can either indicate be:
      *      - clean (isClean()): everything went well
      *      - dirty (isDirty()): one Node broke the flow

@@ -29,6 +29,16 @@ interface FlowStatusInterface
     public function __toString();
 
     /**
+     * Indicate that the flow is currently running
+     * usefull for branched flow to find out what is
+     * their parent up to and distinguish between top
+     * parent end and branch end
+     *
+     * @return bool True If the flow is currently running
+     */
+    public function isRunning();
+
+    /**
      * Tells if the Flow went smoothely
      *
      * @return bool True If everything went well during the flow

@@ -18,7 +18,7 @@ use fab2s\NodalFlow\NodalFlowException;
 abstract class NodeAbstract implements NodeInterface
 {
     /**
-     * Te carrying Flow
+     * The carrying Flow
      *
      * @var FlowInterface
      */
