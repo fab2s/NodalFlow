@@ -80,6 +80,20 @@ class NodalFlow implements FlowInterface
     protected $numIterate = 0;
 
     /**
+     * The number of break within this Flow
+     *
+     * @var int
+     */
+    protected $numBreak = 0;
+
+    /**
+     * The number of continue within this Flow
+     *
+     * @var int
+     */
+    protected $numContinue = 0;
+
+    /**
      * The current registered Callback class if any
      *
      * @var CallbackInterface|null
@@ -107,6 +121,8 @@ class NodalFlow implements FlowInterface
         'index'        => 0,
         'num_exec'     => 0,
         'num_iterate'  => 0,
+        'num_break'    => 0,
+        'num_continue' => 0,
     ];
 
     /**
@@ -117,6 +133,8 @@ class NodalFlow implements FlowInterface
     protected $nodeStatsDefault = [
         'num_exec'     => 0,
         'num_iterate'  => 0,
+        'num_break'    => 0,
+        'num_continue' => 0,
     ];
 
     /**
@@ -551,8 +569,8 @@ class NodalFlow implements FlowInterface
     public function breakFlow()
     {
         $this->flowStatus = new FlowStatus(FlowStatus::FLOW_DIRTY);
-
-        $this->break = true;
+        $this->break      = true;
+        ++$this->numBreak;
 
         return $this;
     }
@@ -566,6 +584,7 @@ class NodalFlow implements FlowInterface
     public function continueFlow()
     {
         $this->continue = true;
+        ++$this->numContinue;
 
         return $this;
     }
@@ -594,12 +613,15 @@ class NodalFlow implements FlowInterface
      */
     protected function flowEnd()
     {
-        $this->stats['end']                                     = \microtime(true);
-        $this->stats['invocations'][$this->numExec]['end']      = $this->stats['end'];
-        $this->stats['duration']                                = $this->stats['end'] - $this->stats['start'];
-        $this->stats['invocations'][$this->numExec]['duration'] = $this->stats['duration'];
-        $this->stats['mib']                                     = \memory_get_peak_usage(true) / 1048576;
-        $this->stats['invocations'][$this->numExec]['mib']      = $this->stats['mib'];
+        $this->stats['end']      = \microtime(true);
+        $this->stats['mib']      = \memory_get_peak_usage(true) / 1048576;
+        $this->stats['duration'] = $this->stats['end'] - $this->stats['start'];
+
+        if (!$this->hasParent()) {
+            $this->stats['invocations'][$this->numExec]['end']      = $this->stats['end'];
+            $this->stats['invocations'][$this->numExec]['duration'] = $this->stats['duration'];
+            $this->stats['invocations'][$this->numExec]['mib']      = $this->stats['mib'];
+        }
 
         $this->triggerCallback($this->flowStatus->isException() ? static::FLOW_FAIL : static::FLOW_SUCCESS);
 
@@ -659,12 +681,14 @@ class NodalFlow implements FlowInterface
                     if ($this->continue) {
                         // we drop one iteration
                         // could be because there is no matching join record from somewhere
+                        ++$nodeStat['num_continue'];
                         $this->continue = false;
                         continue;
                     }
 
                     if ($this->break) {
                         // we drop all subsequent iterations
+                        ++$nodeStat['num_break'];
                         break;
                     }
                 }
@@ -678,7 +702,15 @@ class NodalFlow implements FlowInterface
             $value = $node->exec($param);
             ++$nodeStat['num_exec'];
 
-            if ($this->continue || $this->break) {
+            if ($this->continue) {
+                ++$nodeStat['num_continue'];
+
+                return $param;
+            }
+
+            if ($this->break) {
+                ++$nodeStat['num_break'];
+
                 return $param;
             }
 
