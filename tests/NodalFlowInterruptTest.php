@@ -30,8 +30,9 @@ class NodalFlowInterruptTest extends \TestCase
             $nodes[$key]['hash'] = $node->getNodeHash();
         }
 
-        $result  = $flow->exec($param);
-        $nodeMap = $flow->getNodeMap();
+        $result    = $flow->exec($param);
+        $nodeMap   = $flow->getNodeMap();
+        $flowStats = $flow->getStats();
 
         foreach ($nodes as $nodeSetup) {
             if (isset($nodeSetup['payloadSetup'])) {
@@ -55,6 +56,17 @@ class NodalFlowInterruptTest extends \TestCase
                 // val combos and the result is pretty unique for
                 // each combo
                 $this->assertSame($spyInvocations, $nodeStats['num_exec'], "Node num_exec {$nodeStats['num_exec']} does not match spy's invocation $spyInvocations");
+
+                if ($case['interrupt']) {
+                    $interruptType = $case['interrupt'];
+                    $nodeCnt       = $nodeStats['num_' . $interruptType];
+                    if ($nodeCnt) {
+                        // this is not ideal, but is a quick way to
+                        // catch the interrupting node
+                        $flowCnt = $flowStats['num_' . $interruptType];
+                        $this->assertSame($flowCnt, $nodeCnt, "Node num_$interruptType $nodeCnt does not match flow's $flowCnt");
+                    }
+                }
 
                 if (isset($nodeSetup['expected_exec'])) {
                     $this->assertSame($nodeStats['num_exec'], $nodeSetup['expected_exec'], "Node num_exec {$nodeStats['num_exec']} does not match expected: {$nodeSetup['expected_exec']}");

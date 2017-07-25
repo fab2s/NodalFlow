@@ -416,7 +416,7 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * Resets Nodes stats, used prior to Flow's re-exec
+     * Resets Nodes stats, can be used prior to Flow's re-exec
      *
      * @return $this
      */
@@ -613,9 +613,11 @@ class NodalFlow implements FlowInterface
      */
     protected function flowEnd()
     {
-        $this->stats['end']      = \microtime(true);
-        $this->stats['mib']      = \memory_get_peak_usage(true) / 1048576;
-        $this->stats['duration'] = $this->stats['end'] - $this->stats['start'];
+        $this->stats['end']          = \microtime(true);
+        $this->stats['mib']          = \memory_get_peak_usage(true) / 1048576;
+        $this->stats['duration']     = $this->stats['end'] - $this->stats['start'];
+        $this->stats['num_break']    = $this->numBreak;
+        $this->stats['num_continue'] = $this->numContinue;
 
         if (!$this->hasParent()) {
             $this->stats['invocations'][$this->numExec]['end']      = $this->stats['end'];
