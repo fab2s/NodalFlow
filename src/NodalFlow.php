@@ -597,8 +597,13 @@ class NodalFlow implements FlowInterface
     protected function flowStart()
     {
         ++$this->numExec;
+        $this->stats['start'] = \microtime(true);
         $this->triggerCallback(static::FLOW_START);
-        $this->stats['start']                                = \microtime(true);
+
+        if (!$this->hasParent()) {
+            $this->stats['invocations'][$this->numExec]['start'] = $this->stats['start'];
+        }
+
         $this->stats['invocations'][$this->numExec]['start'] = $this->stats['start'];
         // flow is started
         $this->flowStatus = new FlowStatus(FlowStatus::FLOW_RUNNING);
