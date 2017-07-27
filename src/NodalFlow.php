@@ -604,7 +604,6 @@ class NodalFlow implements FlowInterface
             $this->stats['invocations'][$this->numExec]['start'] = $this->stats['start'];
         }
 
-        $this->stats['invocations'][$this->numExec]['start'] = $this->stats['start'];
         // flow is started
         $this->flowStatus = new FlowStatus(FlowStatus::FLOW_RUNNING);
 
