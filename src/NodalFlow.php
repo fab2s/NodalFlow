@@ -710,6 +710,7 @@ class NodalFlow implements FlowInterface
 
             if ($this->continue) {
                 ++$nodeStat['num_continue'];
+                $this->continue = false;
 
                 return $param;
             }
