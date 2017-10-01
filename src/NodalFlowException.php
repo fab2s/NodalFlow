@@ -9,40 +9,11 @@
 
 namespace fab2s\NodalFlow;
 
+use fab2s\ContextException\ContextException;
+
 /**
  * Class NodalFlowException
  */
-class NodalFlowException extends \Exception
+class NodalFlowException extends ContextException
 {
-    /**
-     * Exception context
-     *
-     * @var array
-     */
-    protected $context = [];
-
-    /**
-     * Instantiate an exception
-     *
-     * @param string          $message
-     * @param int             $code
-     * @param null|\Exception $previous
-     * @param array           $context
-     */
-    public function __construct($message, $code = 0, \Exception $previous = null, array $context = [])
-    {
-        $this->context = $context;
-
-        parent::__construct($message, $code, $previous);
-    }
-
-    /**
-     * Get current exception context, useful for logging
-     *
-     * @return array
-     */
-    public function getContext()
-    {
-        return $this->context;
-    }
 }

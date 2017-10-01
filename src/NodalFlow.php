@@ -180,7 +180,7 @@ class NodalFlow implements FlowInterface
     ];
 
     /**
-     * Number of exec calls in thhis Flow
+     * Number of exec calls in this Flow
      *
      * @var int
      */
@@ -325,7 +325,7 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * Generates a truely unique id for the Flow context
+     * Generates a truly unique id for the Flow context
      *
      * @return string
      */
@@ -354,6 +354,8 @@ class NodalFlow implements FlowInterface
      * @param null|mixed $param The eventual init argument to the first node
      *                          or, in case of a branch, the last relevant
      *                          argument from upstream Flow
+     *
+     * @throws NodalFlowException
      *
      * @return mixed the last result of the
      *               last returning value node
@@ -561,7 +563,7 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * Break the flow's execution, conceptuially similar to breaking
+     * Break the flow's execution, conceptually similar to breaking
      * a regular loop
      *
      * @return $this
@@ -576,7 +578,7 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * Continue the flow's execution, conceptuially similar to continuing
+     * Continue the flow's execution, conceptually similar to continuing
      * a regular loop
      *
      * @return $this
