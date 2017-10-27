@@ -681,7 +681,7 @@ class NodalFlow implements FlowInterface
                     }
 
                     // here this means that if a deeper child does return something
-                    // its result will buble up to the first node as param in case
+                    // its result will bubble up to the first node as param in case
                     // one of the previous node is a Traversable
                     // It's of course up to each node to decide what to do with the
                     // input param.
