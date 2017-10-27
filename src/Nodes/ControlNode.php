@@ -12,9 +12,9 @@ namespace fab2s\NodalFlow\Nodes;
 use fab2s\NodalFlow\NodalFlowException;
 
 /**
- * Class QualifierNode
+ * Class ControlNode
  */
-class QualifierNode extends PayloadNodeAbstract implements ExecNodeInterface
+class ControlNode extends PayloadNodeAbstract implements ExecNodeInterface
 {
     /**
      * Instantiate a Callable Node
@@ -33,7 +33,7 @@ class QualifierNode extends PayloadNodeAbstract implements ExecNodeInterface
     }
 
     /**
-     * The qualifier's payload interface is simple :
+     * The ControlNode's payload interface is simple :
      *      - return false to break
      *      - return true to continue
      *      - return void|null (whatever) to proceed with the flow
