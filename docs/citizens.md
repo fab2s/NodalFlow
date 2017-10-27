@@ -35,5 +35,28 @@ Payload Nodes are meant to be immutable, and thus have no setters on $isAReturni
 
 ## Branch Node:
 
-Branch Node is a Payload Node where the payload is a Flow. It will be treated as an exec node which may return a value that may (which results in executing the branch within the parent's Flow's flow, as if it was part of it) or may not (which result in a true branch which starts from a specific location in the parent's Flow's flow) be used as argument to the next node in the flow.
+A Branch Node is a Payload Node using a Flow as payload. It will be treated as an exec node which may return a value that may (which results in executing the branch within the parent's Flow's flow, as if it was part of it) or may not (which result in a true branch which starts from a specific location in the parent's Flow's flow) be used as argument to the next node in the flow.
 Branch Nodes cannot be traversed. It is not a technical limitation, but rather something that requires further thinking and may be later implemented.
+
+## Qualifier Node
+
+A Qualifier Node is a Payload Node using a Callable as payload and designed to isolate Flow control condition (continue/break operations). The Callable contract (can't speak of an interface here since it's not actually enforced) is simple, it will be passed with the incoming record as argument and should return :
+
+- `true` to skip the record and continue with the Flow
+- `false` to break the Flow
+- `null` to let the Flow proceed with that particular record (or anything else actually, but `null`, or `void`, it 's php after all, should be _preferred_ as it may be later enforced)
+ 
+ Example :
+ ```php
+ $qualifer = new QualifierNode(function($record) {
+    // assuming that we deal with array in this case
+    if ($record['is_free']) {
+        // hum, not paying, okay, don't send the refund ^^
+        return true;
+    }
+ });
+ ```
+As you can see, it makes it possible for better separation of concerns, especially when it comes to data processing involving transformation and load operations. In this type of cases, it makes it possible significantly reduce the number of conditions that would otherwise stand in transformers and loaders, thus increasing their agnosticism and re-usability. 
+
+Qualifiers can be used within a flow to isolate conditions but may as well be placed at the beginning of a branch which could ease mutualized extraction patterns by holding the condition for each branch to actually accept this particular record (which could for example based on record geo-localization that should be treated differently).
+It also goes a little further towards cleaner design by isolating direct Flow manipulation (through `$this->carrier` to trigger `continueFlow` and `breakFlow`).

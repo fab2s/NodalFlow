@@ -208,7 +208,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                                 $flow = new NodalFlow;
                                 foreach ($nodeSetup['nodes'] as $subIdx => $payloadGenerator) {
                                     // in the branch case, we only test returning val case
-                                    // as returning is already thouroughtly tested with flows
+                                    // as returning is already thoroughly tested with flows
                                     $payloadSetup            = $this->$payloadGenerator();
                                     $nodeSetup['payloads'][] = $payloadSetup;
                                     $flow->add(new CallableNode($payloadSetup['callable'], true, $payloadGenerator === 'getTraversableInstance'));
@@ -229,7 +229,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                         if (isset($nodeSetup['payloadGenerator'])) {
                             if ($nodeSetup['payloadGenerator'] === 'getExecInterruptClosure') {
                                 if (isset($expectationCase['interrupt'], $expectationCase['interruptAt'])) {
-                                    $nodeSetup['payload'] = $this->{$nodeSetup['payloadGenerator']}($expectationCase['interrupt'], $expectationCase['interruptAt'], $entry['flow'], $debug);
+                                    $nodeSetup['payload'] = $this->{$nodeSetup['payloadGenerator']}($expectationCase['interrupt'], $expectationCase['interruptAt'], $entry['flow'], !empty($expectationCase['useQualifier']), $debug);
                                 } else {
                                     continue;
                                 }
@@ -274,6 +274,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 'isATraversable' => false,
             ],
             'execInterruptClosure' => [
+                'nodeName'         => 'CallableNode',
+                'payloadGenerator' => 'getExecInterruptClosure',
+                'isATraversable'   => false,
+            ],
+            'qualifier' => [
                 'nodeName'         => 'CallableNode',
                 'payloadGenerator' => 'getExecInterruptClosure',
                 'isATraversable'   => false,
