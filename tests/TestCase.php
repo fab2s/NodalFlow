@@ -229,7 +229,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                         if (isset($nodeSetup['payloadGenerator'])) {
                             if ($nodeSetup['payloadGenerator'] === 'getExecInterruptClosure') {
                                 if (isset($expectationCase['interrupt'], $expectationCase['interruptAt'])) {
-                                    $nodeSetup['payload'] = $this->{$nodeSetup['payloadGenerator']}($expectationCase['interrupt'], $expectationCase['interruptAt'], $entry['flow'], !empty($expectationCase['useQualifier']), $debug);
+                                    $nodeSetup['payload'] = $this->{$nodeSetup['payloadGenerator']}($expectationCase['interrupt'], $expectationCase['interruptAt'], $entry['flow'], $debug);
                                 } else {
                                     continue;
                                 }
@@ -274,11 +274,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 'isATraversable' => false,
             ],
             'execInterruptClosure' => [
-                'nodeName'         => 'CallableNode',
-                'payloadGenerator' => 'getExecInterruptClosure',
-                'isATraversable'   => false,
-            ],
-            'qualifier' => [
                 'nodeName'         => 'CallableNode',
                 'payloadGenerator' => 'getExecInterruptClosure',
                 'isATraversable'   => false,

@@ -92,83 +92,47 @@ class NodalFlowInterruptTest extends \TestCase
      * @param mixed         $interrupt
      * @param mixed         $interruptAt
      * @param FlowInterface $flow
-     * @param bool          $useQualifier
      * @param bool          $debug
      *
      * @return Closure
      */
-    protected function getExecInterruptClosure($interrupt, $interruptAt, FlowInterface $flow, $useQualifier = false, $debug = false)
+    protected function getExecInterruptClosure($interrupt, $interruptAt, FlowInterface $flow, $debug = false)
     {
         $generationOrder = self::$generationOrder;
         $execConst       = $this->ExecConst;
-        if ($useQualifier) {
-            $closure = function ($param = null) use ($generationOrder, $execConst, $interrupt, $interruptAt, $debug) {
-                static $invocations = 0;
-                ++$invocations;
-                if (
+        $closure         = function ($param = null) use ($generationOrder, $execConst, $interrupt, $interruptAt, $flow, $debug) {
+            static $invocations = 0;
+            ++$invocations;
+            if (
                     $interruptAt &&
                     ((
-                            $interrupt === 'break' &&
-                            $invocations >= $interruptAt
-                        ) ||
-                        (
-                            $interrupt === 'continue' &&
-                            $invocations === $interruptAt
-                        ))
-                ) {
-                    if ($debug) {
-                        echo str_repeat('    ', $generationOrder) . "#$generationOrder execInterruptPayload INTERRUPT. invocations: $invocations, interrupt: $interrupt, interruptAt: $interruptAt,  param: $param result: $param\n";
-                    }
-
-                    $result = $interrupt === 'break' ? false : ($interrupt === 'continue' ? true : null);
-
-                    // return param as it came
-                    return $result;
-                }
-
-                $param  = max(0, (int) $param);
-                $result = $param + $execConst;
+                        $interrupt === 'break' &&
+                        $invocations >= $interruptAt
+                    ) ||
+                    (
+                        $interrupt === 'continue' &&
+                        $invocations === $interruptAt
+                    ))
+            ) {
                 if ($debug) {
-                    echo str_repeat('    ', $generationOrder) . "#$generationOrder execInterruptPayload invocations: $invocations, interrupt: $interrupt, interruptAt: $interruptAt,  param: $param result: $result\n";
+                    echo str_repeat('    ', $generationOrder) . "#$generationOrder execInterruptPayload INTERRUPT. invocations: $invocations, interrupt: $interrupt, interruptAt: $interruptAt,  param: $param result: $param\n";
                 }
 
-                return null;
-            };
-        } else {
-            $closure = function ($param = null) use ($generationOrder, $execConst, $interrupt, $interruptAt, $flow, $debug) {
-                static $invocations = 0;
-                ++$invocations;
-                if (
-                    $interruptAt &&
-                    ((
-                            $interrupt === 'break' &&
-                            $invocations >= $interruptAt
-                        ) ||
-                        (
-                            $interrupt === 'continue' &&
-                            $invocations === $interruptAt
-                        ))
-                ) {
-                    if ($debug) {
-                        echo str_repeat('    ', $generationOrder) . "#$generationOrder execInterruptPayload INTERRUPT. invocations: $invocations, interrupt: $interrupt, interruptAt: $interruptAt,  param: $param result: $param\n";
-                    }
+                $interrupt = $interrupt . 'Flow';
 
-                    $interrupt = $interrupt . 'Flow';
+                $flow->$interrupt();
+                // return param as it came
+                return $param;
+            }
 
-                    $flow->$interrupt();
-                    // return param as it came
-                    return $param;
-                }
+            $param  = max(0, (int) $param);
+            $result = $param + $execConst;
+            if ($debug) {
+                echo str_repeat('    ', $generationOrder) . "#$generationOrder execInterruptPayload invocations: $invocations, interrupt: $interrupt, interruptAt: $interruptAt,  param: $param result: $result\n";
+            }
 
-                $param  = max(0, (int) $param);
-                $result = $param + $execConst;
-                if ($debug) {
-                    echo str_repeat('    ', $generationOrder) . "#$generationOrder execInterruptPayload invocations: $invocations, interrupt: $interrupt, interruptAt: $interruptAt,  param: $param result: $result\n";
-                }
-
-                return $result;
-            };
-        }
+            return $result;
+        };
 
         ++self::$generationOrder;
 
