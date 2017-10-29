@@ -46,7 +46,7 @@ class DummyClass
     /**
      * @param null|mixed $param
      *
-     * @return mixed
+     * @return \Generator
      */
     public static function dummyStaticYielder($param = null)
     {
@@ -56,11 +56,11 @@ class DummyClass
     }
 
     /**
-     * @param \fab2s\NodalFlow\Nodes\NodeInterface $node
+     * @param \fab2s\NodalFlow\Nodes\TraversableNodeInterface $node
      *
      * @return bool
      */
-    public static function dummyYielderValidator(\fab2s\NodalFlow\Nodes\NodeInterface $node)
+    public static function dummyYielderValidator(\fab2s\NodalFlow\Nodes\TraversableNodeInterface $node)
     {
         $i      = 1;
         $result = true;

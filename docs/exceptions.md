@@ -3,7 +3,7 @@
 
 When an `Exception` is thrown during execution, NodalFlow catches it, perform few cleanup operations, including triggering the proper callback and then re-throws it as is if it's a `NodalFlowException` or else throws a `NodalFlowException` with the original exception set as previous. This means that NodalFlow will only throw `NodalFlowException` unless an exception is raised within a callback of yours.
 
-`NodalFlowException` implement the informal and common context exception pattern (as in SymFony for example) to ease logging :
+`NodalFlowException` implement the informal and common context exception pattern (as in Symfony for example) to ease logging :
 ```php
     /**
      * @param string          $message

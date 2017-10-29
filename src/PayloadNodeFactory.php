@@ -44,7 +44,7 @@ class PayloadNodeFactory implements PayloadNodeFactoryInterface
         }
 
         if ($payload instanceof FlowInterface) {
-            return new BranchNode($payload, $isAReturningVal, $isATraversable);
+            return new BranchNode($payload, $isAReturningVal);
         }
 
         throw new NodalFlowException('Payload not supported, must be Callable or Flow');

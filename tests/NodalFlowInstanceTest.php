@@ -48,7 +48,7 @@ class NodalFlowInstanceTest extends \TestCase
                 // assert that each node has effectively been called
                 // as many time as reported internally.
                 // Coupled with overall result provides with a
-                // pretty good garanty about what happened.
+                // pretty good guaranty about what happened.
                 // It is for example making sure that params
                 // where properly passed since we try all return
                 // val combos and the result is pretty unique for
@@ -82,7 +82,7 @@ class NodalFlowInstanceTest extends \TestCase
             'single1' => [
                 'flowName'     => 'NodalFlow',
                 'nodes'        => ['traversableInstance', 'execInstance'],
-                // expectations are seting combos for this flow
+                // expectations are setting combos for this flow
                 'expectations' => [
                     [
                         // will test all nodes with isAReturningVal

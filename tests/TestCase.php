@@ -106,7 +106,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
 
         if ($closureAssertTrue !== null) {
-            $this->assertTrue($closureAssertTrue($node), 'Node failling: ' . get_class($node));
+            $this->assertTrue($closureAssertTrue($node), 'Node failing: ' . get_class($node));
         }
     }
 

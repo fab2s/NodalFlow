@@ -25,13 +25,6 @@ abstract class NodeAbstract implements NodeInterface
     public $carrier;
 
     /**
-     * This Node's hash
-     *
-     * @var string
-     */
-    public $nodeHash;
-
-    /**
      * Indicate if this Node is traversable
      *
      * @var bool
@@ -119,31 +112,27 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
-     * Set this Node's hash
+     * Get this Node's hash, must be deterministic and unique
      *
-     * @param string $nodeHash
-     *
-     * @return $this
-     */
-    public function setNodeHash($nodeHash)
-    {
-        $this->nodeHash = $nodeHash;
-
-        return $this;
-    }
-
-    /**
-     * Get this Node's hash
+     * Caching the result would save a bit of resources
+     * but would require to implement `__clone()` to
+     * make sure we reset the hash should a node be cloned.
+     * Doing this would add the burden to actual Node
+     * implementation to trigger `parent::_clone()`
+     * which is not ideal and impossible to guaranty.
+     * Now since this method is not used in the actual
+     * flow execution loop, but only when an interruption
+     * is raised, it's not a performance issue.
      *
      * @return string
      */
     public function getNodeHash()
     {
-        return $this->nodeHash;
+        return \sha1(\spl_object_hash($this));
     }
 
     /**
-     * Make sure this Node is consistant
+     * Make sure this Node is consistent
      *
      * @throws NodalFlowException
      *

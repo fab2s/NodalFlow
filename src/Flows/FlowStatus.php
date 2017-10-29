@@ -71,7 +71,7 @@ class FlowStatus implements FlowStatusInterface
 
     /**
      * Indicate that the flow is currently running
-     * usefull for branched flow to find out what is
+     * useful for branched flow to find out what is
      * their parent up to and distinguish between top
      * parent end and branch end
      *
@@ -83,7 +83,7 @@ class FlowStatus implements FlowStatusInterface
     }
 
     /**
-     * Tells if the Flow went smoothely
+     * Tells if the Flow went smoothly
      *
      * @return bool True If everything went well during the flow
      */

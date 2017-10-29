@@ -8,16 +8,17 @@
  */
 
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\Nodes\NodeInterface;
 
 class NodalFlowAggregateTest extends \TestCase
 {
     /**
      * @dataProvider flowCasesProvider
      *
-     * @param FlowInterface $flow
-     * @param array         $nodes
-     * @param mixed         $param
-     * @param mixed         $expected
+     * @param FlowInterface   $flow
+     * @param NodeInterface[] $nodes
+     * @param mixed           $param
+     * @param mixed           $expected
      */
     public function testFlows(FlowInterface $flow, array $nodes, $param, $expected)
     {
@@ -43,7 +44,7 @@ class NodalFlowAggregateTest extends \TestCase
             // assert that each node has effectively been called
             // as many time as reported internally.
             // Coupled with overall result provides with a
-            // pretty good garanty about what happened.
+            // pretty good guaranty about what happened.
             // It is for example making sure that params
             // where properly passed since we try all return
             // val combos and the result is pretty unique for
@@ -91,7 +92,7 @@ class NodalFlowAggregateTest extends \TestCase
      */
     protected function getFlowCases()
     {
-        // here we assert that an agggregate node will actually combine
+        // here we assert that an aggregate node will actually combine
         // two traversable and properly pass the param
         $cases = [
             'single1' => [

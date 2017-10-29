@@ -9,6 +9,8 @@
 
 namespace fab2s\NodalFlow\Flows;
 
+use fab2s\NodalFlow\InterrupterInterface;
+use fab2s\NodalFlow\NodalFlowException;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 
 /**
@@ -17,9 +19,18 @@ use fab2s\NodalFlow\Nodes\NodeInterface;
 interface FlowInterface
 {
     /**
+     * Return the Flow id as set during instantiation
+     *
+     * @return string
+     */
+    public function getId();
+
+    /**
      * Adds a Node to the Flow
      *
      * @param NodeInterface $node
+     *
+     * @throws NodalFlowException
      *
      * @return $this
      */
@@ -29,7 +40,7 @@ interface FlowInterface
      * Execute the Flow
      *
      * @param mixed $param The first param to apply, mostly
-     *                     usefull for branches when values have
+     *                     useful for branches when values have
      *                     already been generated
      *
      * @return mixed the last value returned in the chain
@@ -42,6 +53,21 @@ interface FlowInterface
      * @return $this
      */
     public function rewind();
+
+    /**
+     * Used to set the eventual Node Target of an Interrupt signal
+     * set to :
+     * - A node hash to target
+     * - true to interrupt every upstream nodes
+     *     in this Flow
+     * - false to only interrupt up to the first
+     *     upstream Traversable in this Flow
+     *
+     * @param string|bool $interruptNodeId
+     *
+     * @return $this
+     */
+    public function setInterruptNodeId($interruptNodeId);
 
     /**
      * Set parent Flow, happens only when branched
@@ -79,7 +105,7 @@ interface FlowInterface
     /**
      * Get the underlying node array
      *
-     * @return array
+     * @return NodeInterface[]
      */
     public function getNodes();
 
@@ -87,16 +113,28 @@ interface FlowInterface
      * Nodes may call breakFlow() on their carrier to
      * break the flow
      *
+     * @param InterrupterInterface|null $flowInterrupt
+     *
      * @return $this
      */
-    public function breakFlow();
+    public function breakFlow(InterrupterInterface $flowInterrupt = null);
 
     /**
      * Nodes may call breakFlow() on their carrier to
      * skip the rest of the nodes and continue with next
-     * value fromt the first upstram traversable if any
+     * value from the first upstream traversable if any
+     *
+     * @param InterrupterInterface|null $flowInterrupt
      *
      * @return $this
      */
-    public function continueFlow();
+    public function continueFlow(InterrupterInterface $flowInterrupt = null);
+
+    /**
+     * @param string                    $interruptType
+     * @param InterrupterInterface|null $flowInterrupt
+     *
+     * @return $this
+     */
+    public function interruptFlow($interruptType, InterrupterInterface $flowInterrupt = null);
 }

@@ -15,6 +15,7 @@ use fab2s\NodalFlow\Flows\FlowStatus;
 use fab2s\NodalFlow\Flows\FlowStatusInterface;
 use fab2s\NodalFlow\Nodes\AggregateNodeInterface;
 use fab2s\NodalFlow\Nodes\BranchNode;
+use fab2s\NodalFlow\Nodes\BranchNodeInterface;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 
 /**
@@ -42,12 +43,12 @@ class NodalFlow implements FlowInterface
      *
      * @var string
      */
-    protected $flowId;
+    protected $id;
 
     /**
      * The underlying node structure
      *
-     * @var array
+     * @var NodeInterface[]
      */
     protected $nodes = [];
 
@@ -208,6 +209,11 @@ class NodalFlow implements FlowInterface
     protected $flowStatus;
 
     /**
+     * @var string
+     */
+    protected $interruptNodeId;
+
+    /**
      * Current nonce
      *
      * @var int
@@ -219,7 +225,7 @@ class NodalFlow implements FlowInterface
      */
     public function __construct()
     {
-        $this->flowId = $this->uniqId();
+        $this->id = $this->uniqId();
         $this->stats += $this->statsDefault;
     }
 
@@ -228,25 +234,37 @@ class NodalFlow implements FlowInterface
      *
      * @param NodeInterface $node
      *
+     * @throws NodalFlowException
+     *
      * @return $this
      */
     public function add(NodeInterface $node)
     {
-        $nodeHash = $this->objectHash($node);
+        $nodeHash = $node->getNodeHash();
 
-        if ($node instanceof BranchNode) {
+        if (isset($this->nodeMap[$nodeHash])) {
+            throw new NodalFlowException('Cannot reuse Node instances within a Flow', 1, null, [
+                'duplicate_node' => get_class($node),
+                'hash'           => $nodeHash,
+            ]);
+        }
+
+        if ($node instanceof BranchNodeInterface) {
             // this node is a branch, set it's parent
             $node->getPayload()->setParent($this);
         }
 
-        $node->setCarrier($this)->setNodeHash($nodeHash);
+        $node->setCarrier($this);
 
         $this->nodes[$this->nodeIdx] = $node;
         $this->nodeMap[$nodeHash]    = \array_replace($this->nodeMapDefault, [
-            'class'    => \get_class($node),
-            'branchId' => $this->flowId,
-            'hash'     => $nodeHash,
-            'index'    => $this->nodeIdx,
+            'class'           => \get_class($node),
+            'branchId'        => $this->id,
+            'hash'            => $nodeHash,
+            'index'           => $this->nodeIdx,
+            'isATraversable'  => $node->isTraversable(),
+            'isAReturningVal' => $node->isReturningVal(),
+            'isAFlow'         => $node->isFlow(),
         ]);
 
         // register references to nodeStats to increment faster
@@ -286,6 +304,26 @@ class NodalFlow implements FlowInterface
     public function setCallBack(CallbackInterface $callBack)
     {
         $this->callBack = $callBack;
+
+        return $this;
+    }
+
+    /**
+     * Used to set the eventual Node Target of an Interrupt signal
+     * set to :
+     * - A node hash to target
+     * - true to interrupt every upstream nodes
+     *     in this Flow
+     * - false to only interrupt up to the first
+     *     upstream Traversable in this Flow
+     *
+     * @param string|bool $interruptNodeId
+     *
+     * @return $this
+     */
+    public function setInterruptNodeId($interruptNodeId)
+    {
+        $this->interruptNodeId = $interruptNodeId;
 
         return $this;
     }
@@ -334,18 +372,6 @@ class NodalFlow implements FlowInterface
         // while we're at it, drop any doubt about
         // colliding from here
         return \sha1(uniqid() . $this->getNonce());
-    }
-
-    /**
-     * Generate a friendly (read humanly distinguishable) object hash
-     *
-     * @param object $object
-     *
-     * @return string
-     */
-    public function objectHash($object)
-    {
-        return \sha1(\spl_object_hash($object));
     }
 
     /**
@@ -452,15 +478,27 @@ class NodalFlow implements FlowInterface
      *
      * @return string
      */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * getId() alias for backward compatibility
+     *
+     * @deprecated
+     *
+     * @return string
+     */
     public function getFlowId()
     {
-        return $this->flowId;
+        return $this->getId();
     }
 
     /**
      * Get the Node array
      *
-     * @return array
+     * @return NodeInterface[]
      */
     public function getNodes()
     {
@@ -502,8 +540,11 @@ class NodalFlow implements FlowInterface
     public function getNodeStats()
     {
         foreach ($this->nodes as $nodeIdx => $node) {
-            if (\is_a($node, BranchNode::class)) {
-                $this->nodeStats[$nodeIdx]['nodes'] = $node->getPayload()->getNodeStats();
+            if ($node instanceof BranchNodeInterface) {
+                $payload = $node->getPayload();
+                // The plan would be to extract the stat logic from here rather
+                // than adding method to the interface
+                $this->nodeStats[$nodeIdx]['nodes'] = is_callable([$payload, 'getNodeStats']) ? $payload->getNodeStats() : 'N/A';
             }
         }
 
@@ -517,9 +558,12 @@ class NodalFlow implements FlowInterface
      */
     public function rewind()
     {
-        $this->nodeCount = count($this->nodes);
-        $this->lastIdx   = $this->nodeCount - 1;
-        $this->nodeIdx   = 0;
+        $this->nodeCount       = count($this->nodes);
+        $this->lastIdx         = $this->nodeCount - 1;
+        $this->nodeIdx         = 0;
+        $this->break           = false;
+        $this->continue        = false;
+        $this->interruptNodeId = null;
 
         return $this;
     }
@@ -566,29 +610,69 @@ class NodalFlow implements FlowInterface
      * Break the flow's execution, conceptually similar to breaking
      * a regular loop
      *
+     * @param InterrupterInterface|null $flowInterrupt
+     *
      * @return $this
      */
-    public function breakFlow()
+    public function breakFlow(InterrupterInterface $flowInterrupt = null)
     {
-        $this->flowStatus = new FlowStatus(FlowStatus::FLOW_DIRTY);
-        $this->break      = true;
-        ++$this->numBreak;
-
-        return $this;
+        return $this->interruptFlow(InterrupterInterface::TYPE_BREAK, $flowInterrupt);
     }
 
     /**
      * Continue the flow's execution, conceptually similar to continuing
      * a regular loop
      *
+     * @param InterrupterInterface|null $flowInterrupt
+     *
      * @return $this
      */
-    public function continueFlow()
+    public function continueFlow(InterrupterInterface $flowInterrupt = null)
     {
-        $this->continue = true;
-        ++$this->numContinue;
+        return $this->interruptFlow(InterrupterInterface::TYPE_CONTINUE, $flowInterrupt);
+    }
+
+    /**
+     * @param string                    $interruptType
+     * @param InterrupterInterface|null $flowInterrupt
+     *
+     * @throws NodalFlowException
+     *
+     * @return $this
+     */
+    public function interruptFlow($interruptType, InterrupterInterface $flowInterrupt = null)
+    {
+        switch ($interruptType) {
+            case InterrupterInterface::TYPE_CONTINUE:
+                $this->continue = true;
+                ++$this->numContinue;
+                break;
+            case InterrupterInterface::TYPE_BREAK:
+                $this->flowStatus = new FlowStatus(FlowStatus::FLOW_DIRTY);
+                $this->break      = true;
+                ++$this->numBreak;
+                break;
+            default:
+                throw new NodalFlowException('FlowInterrupt Type missing');
+        }
+
+        if ($flowInterrupt) {
+            $flowInterrupt->setType($interruptType)->propagate($this);
+        }
 
         return $this;
+    }
+
+    /**
+     * @param NodeInterface|null $node
+     *
+     * @return bool
+     */
+    protected function interruptNode(NodeInterface $node = null)
+    {
+        // if we have an interruptNodeId, bubble up until we match a node
+        // else stop propagation
+        return $this->interruptNodeId ? $this->interruptNodeId !== $node->getNodeHash() : false;
     }
 
     /**
@@ -637,7 +721,7 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * Return a simple nonce, fully valid within each flow
+     * Return a simple nonce, fully valid within any flow
      *
      * @return int
      */
@@ -647,9 +731,21 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * Recurse over flows and nodes which may
-     * as well be Traversable ...
-     * Welcome to the abysses of recursion ^^
+     * Recurse over nodes which may as well be Flows and
+     * Traversable ...
+     * Welcome to the abysses of recursion or iter-recursion ^^
+     *
+     * `recurse` perform kind of an hybrid recursion as the
+     * Flow is effectively iterating and recurring over its
+     * Nodes, which may as well be seen as over itself
+     *
+     * Iterating tends to limit the amount of recursion levels:
+     * recursion is only triggered when executing a Traversable
+     * Node's downstream Nodes while every consecutive exec
+     * Nodes are executed within a while loop.
+     * And recursion keeps the size of the recursion context
+     * to a minimum as pretty much everything is done by the
+     * iterating instance
      *
      * @param mixed $param
      * @param int   $nodeIdx
@@ -659,8 +755,6 @@ class NodalFlow implements FlowInterface
      */
     protected function recurse($param = null, $nodeIdx = 0)
     {
-        // the while construct here saves as many recursion depth
-        // as there are exec nodes in the flow
         while ($nodeIdx <= $this->lastIdx) {
             $node      = $this->nodes[$nodeIdx];
             $nodeStat  = &$this->nodeStats[$nodeIdx];
@@ -670,7 +764,6 @@ class NodalFlow implements FlowInterface
                 foreach ($node->getTraversable($param) as $value) {
                     if ($returnVal) {
                         // pass current $value as next param
-                        // else keep last $param
                         $param = $value;
                     }
 
@@ -680,28 +773,29 @@ class NodalFlow implements FlowInterface
                         $this->triggerCallback(static::FLOW_PROGRESS, $node);
                     }
 
-                    // here this means that if a deeper child does return something
-                    // its result will bubble up to the first node as param in case
-                    // one of the previous node is a Traversable
-                    // It's of course up to each node to decide what to do with the
-                    // input param.
                     $param = $this->recurse($param, $nodeIdx + 1);
                     if ($this->continue) {
+                        if ($this->continue = $this->interruptNode($node)) {
+                            // since we want to bubble the continue upstream
+                            // we break here waiting for next $param if any
+                            ++$nodeStat['num_break'];
+                            break;
+                        }
+
                         // we drop one iteration
-                        // could be because there is no matching join record from somewhere
                         ++$nodeStat['num_continue'];
-                        $this->continue = false;
                         continue;
                     }
 
                     if ($this->break) {
                         // we drop all subsequent iterations
                         ++$nodeStat['num_break'];
+                        $this->break = $this->interruptNode($node);
                         break;
                     }
                 }
 
-                // we reached the end of the flow
+                // we reached the end of this Traversable and executed all its downstream Nodes
                 ++$nodeStat['num_exec'];
 
                 return $param;
@@ -712,14 +806,17 @@ class NodalFlow implements FlowInterface
 
             if ($this->continue) {
                 ++$nodeStat['num_continue'];
-                $this->continue = false;
+                // a continue does not need to bubble up unless
+                // it specifically targets a node in this flow
+                // or targets an upstream flow
+                $this->continue = $this->interruptNode($node);
 
                 return $param;
             }
 
             if ($this->break) {
                 ++$nodeStat['num_break'];
-
+                // a break always need to bubble up to the first upstream Traversable if any
                 return $param;
             }
 
@@ -731,7 +828,7 @@ class NodalFlow implements FlowInterface
             ++$nodeIdx;
         }
 
-        // we reached the end of the flow
+        // we reached the end of this recursion
         return $param;
     }
 

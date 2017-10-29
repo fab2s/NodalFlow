@@ -26,7 +26,7 @@ interface AggregateNodeInterface extends TraversableNodeInterface
     /**
      * Get the underlying node collection
      *
-     * @return array
+     * @return NodeInterface[]
      */
     public function getNodeCollection();
 }

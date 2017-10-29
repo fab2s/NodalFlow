@@ -59,7 +59,7 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
     public function addTraversable(TraversableNodeInterface $node)
     {
         if ($this->carrier) {
-            $node->setCarrier($this->carrier)->setNodeHash($this->carrier->objectHash($node));
+            $node->setCarrier($this->carrier);
         }
 
         $this->nodeCollection[] = $node;
@@ -78,7 +78,7 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
     {
         // maintain carrier among aggregated nodes
         foreach ($this->nodeCollection as $node) {
-            $node->setCarrier($flow)->setNodeHash($flow->objectHash($node));
+            $node->setCarrier($flow);
         }
 
         parent::setCarrier($flow);
@@ -89,7 +89,7 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
     /**
      * Return the underlying Node collection
      *
-     * @return array
+     * @return NodeInterface[]
      */
     public function getNodeCollection()
     {
@@ -118,8 +118,8 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
             }
 
             if ($returnVal) {
-                // since this node is returning somehting
-                // we will pass its last vield to the next
+                // since this node is returning something
+                // we will pass its last yield to the next
                 // traversable. It will be up to him to
                 // do whatever is necessary with it, including
                 // nothing

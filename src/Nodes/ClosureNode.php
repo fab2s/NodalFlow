@@ -31,7 +31,7 @@ class ClosureNode extends CallableNode
     }
 
     /**
-     * Get this Node's Traversable (payload mmust be consistant for the usage)
+     * Get this Node's Traversable (payload must be consistent for the usage)
      *
      * @param mixed $param
      *
@@ -46,7 +46,7 @@ class ClosureNode extends CallableNode
     }
 
     /**
-     * Execute this Node (payload mmust be consistant for the usage)
+     * Execute this Node (payload must be consistent for the usage)
      *
      * @param mixed $param
      *

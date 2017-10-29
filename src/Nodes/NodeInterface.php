@@ -58,16 +58,7 @@ interface NodeInterface
     public function getCarrier();
 
     /**
-     * Set this Node's hash
-     *
-     * @param string $nodeHash
-     *
-     * @return $this
-     */
-    public function setNodeHash($nodeHash);
-
-    /**
-     * Get this Node's hash
+     * Get this Node's hash, must be deterministic and unique
      *
      * @return string
      */

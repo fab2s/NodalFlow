@@ -8,7 +8,6 @@
  */
 
 use fab2s\NodalFlow\NodalFlow;
-use fab2s\NodalFlow\Nodes\BranchNode;
 
 class NodeTest extends \TestCase
 {
