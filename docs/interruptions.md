@@ -42,10 +42,12 @@ tNode : TraversableNode
 ```
 
 **In this example, RootFlow's iNode can:**
+
 - Trigger a `continue`: The current RootFlow's parameter is skipped for all of iNode's successor nodes, meaning that both branchFlowA and branchFlowB will get the full set, including the record having been skipped, since it occurred after.
 - Trigger a `break`: The signal bubbles up to the first upstream `Traversable` Node, tNode, and `break` its loop, resulting in halting the RootFlow. Like with the `continue` case, both branchFlowA and branchFlowB would still process the $record triggering the break, unlike iNode's successors, as this occurs before the break signal. It is though possible to implement some rollback mechanism based on interrupt signal detection if required by the usage.
 
 **branchFlowA's iNode can:**
+
 - Trigger a _default_ `continue`: The current branchFlowA's parameter is skipped for all of iNode's successor nodes, including branchFlowB
 - Trigger a _targeted_ `continue`:
     - Target branchFlowA (by id or targeting self flow) : same as _default_ `continue`
@@ -58,6 +60,7 @@ tNode : TraversableNode
     - Target RootFlow (by id or targeting root flow) : The signal bubbles up to RootFlow's bNode, being branchFlowA's carrier Node, resulting in halting RootFlow as there are no upstream Traversable left to generate more parameters. If there where more Traversable above bNode in RootFlow, we could target any of them.
 
 **branchFlowB's iNode can:**
+
 - Trigger a _default_ `continue`: The current branchFlowB's parameter is skipped for all of iNode's successor nodes
 - Trigger a _targeted_ `continue`:
     - Target branchFlowB (by id or targeting self flow) : same as _default_ `continue`
