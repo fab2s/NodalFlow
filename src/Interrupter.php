@@ -47,8 +47,8 @@ class Interrupter implements InterrupterInterface
      * Interrupter constructor.
      *
      * @param null|string|FlowInterface $flowTarget , target up to Targeted Flow id or InterrupterInterface::TARGET_TOP to interrupt every parent
-     * @param string|NodeInterface      $nodeTarget
-     * @param string|null               $type
+     * @param null|string|NodeInterface $nodeTarget
+     * @param null|string               $type
      */
     public function __construct($flowTarget = null, $nodeTarget = null, $type = null)
     {
@@ -64,7 +64,7 @@ class Interrupter implements InterrupterInterface
 
         $this->nodeTarget = $nodeTarget;
 
-        if ($type) {
+        if ($type !== null) {
             $this->setType($type);
         }
     }

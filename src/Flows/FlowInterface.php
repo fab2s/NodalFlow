@@ -26,6 +26,13 @@ interface FlowInterface
     public function getId();
 
     /**
+     * get the Node Map
+     *
+     * @return array
+     */
+    public function getNodeMap();
+
+    /**
      * Adds a Node to the Flow
      *
      * @param NodeInterface $node

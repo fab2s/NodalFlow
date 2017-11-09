@@ -58,7 +58,6 @@ abstract class InterruptNodeAbstract extends NodeAbstract implements InterruptNo
             return;
         }
 
-        $flowInterruptType = null;
         if ($flowInterrupt instanceof  InterrupterInterface) {
             $flowInterruptType = $flowInterrupt->getType();
         } elseif ($flowInterrupt) {

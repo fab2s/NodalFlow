@@ -14,7 +14,6 @@ use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\Flows\FlowStatus;
 use fab2s\NodalFlow\Flows\FlowStatusInterface;
 use fab2s\NodalFlow\Nodes\AggregateNodeInterface;
-use fab2s\NodalFlow\Nodes\BranchNode;
 use fab2s\NodalFlow\Nodes\BranchNodeInterface;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 
@@ -209,7 +208,7 @@ class NodalFlow implements FlowInterface
     protected $flowStatus;
 
     /**
-     * @var string
+     * @var string|bool
      */
     protected $interruptNodeId;
 
@@ -465,8 +464,8 @@ class NodalFlow implements FlowInterface
     public function getStats()
     {
         foreach ($this->nodes as $node) {
-            if (\is_a($node, BranchNode::class)) {
-                $this->stats['branches'][$node->getPayload()->getFlowId()] = $node->getPayload()->getStats();
+            if ($node instanceof BranchNodeInterface) {
+                $this->stats['branches'][$node->getPayload()->getId()] = $node->getPayload()->getStats();
             }
         }
 
@@ -506,14 +505,14 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * Generate Node Map
+     * Get/Generate Node Map
      *
      * @return array
      */
     public function getNodeMap()
     {
         foreach ($this->nodes as $node) {
-            if (\is_a($node, BranchNode::class)) {
+            if ($node instanceof BranchNodeInterface) {
                 $this->nodeMap[$node->getNodeHash()]['nodes'] = $node->getPayload()->getNodeMap();
                 continue;
             }
@@ -664,11 +663,11 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * @param NodeInterface|null $node
+     * @param NodeInterface $node
      *
      * @return bool
      */
-    protected function interruptNode(NodeInterface $node = null)
+    protected function interruptNode(NodeInterface $node)
     {
         // if we have an interruptNodeId, bubble up until we match a node
         // else stop propagation
