@@ -8,8 +8,8 @@
  */
 
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\Flows\InterrupterInterface;
 use fab2s\NodalFlow\Interrupter;
-use fab2s\NodalFlow\InterrupterInterface;
 use fab2s\NodalFlow\NodalFlow;
 use fab2s\NodalFlow\Nodes\BranchNode;
 use fab2s\NodalFlow\Nodes\CallableInterruptNode;

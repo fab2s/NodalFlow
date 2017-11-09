@@ -7,9 +7,8 @@
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
  */
 
-namespace fab2s\NodalFlow;
+namespace fab2s\NodalFlow\Flows;
 
-use fab2s\NodalFlow\Flows\FlowInterface;
 use InvalidArgumentException;
 
 /**

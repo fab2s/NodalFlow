@@ -10,6 +10,7 @@
 namespace fab2s\NodalFlow;
 
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\Flows\InterrupterInterface;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 use InvalidArgumentException;
 

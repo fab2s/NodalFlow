@@ -9,7 +9,6 @@
 
 namespace fab2s\NodalFlow\Flows;
 
-use fab2s\NodalFlow\InterrupterInterface;
 use fab2s\NodalFlow\NodalFlowException;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 

@@ -13,6 +13,7 @@ use fab2s\NodalFlow\Callbacks\CallbackInterface;
 use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\Flows\FlowStatus;
 use fab2s\NodalFlow\Flows\FlowStatusInterface;
+use fab2s\NodalFlow\Flows\InterrupterInterface;
 use fab2s\NodalFlow\Nodes\AggregateNodeInterface;
 use fab2s\NodalFlow\Nodes\BranchNodeInterface;
 use fab2s\NodalFlow\Nodes\NodeInterface;

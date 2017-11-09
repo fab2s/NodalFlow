@@ -9,7 +9,7 @@
 
 namespace fab2s\NodalFlow\Nodes;
 
-use fab2s\NodalFlow\InterrupterInterface;
+use fab2s\NodalFlow\Flows\InterrupterInterface;
 
 /**
  * Interface InterruptNodeInterface
