@@ -52,17 +52,8 @@ class Interrupter implements InterrupterInterface
      */
     public function __construct($flowTarget = null, $nodeTarget = null, $type = null)
     {
-        if ($flowTarget instanceof FlowInterface) {
-            $flowTarget = $flowTarget->getId();
-        }
-
-        $this->flowTarget = $flowTarget;
-
-        if ($nodeTarget instanceof NodeInterface) {
-            $nodeTarget = $nodeTarget->getNodeHash();
-        }
-
-        $this->nodeTarget = $nodeTarget;
+        $this->flowTarget = $flowTarget instanceof FlowInterface ? $flowTarget->getId() : $flowTarget;
+        $this->nodeTarget = $nodeTarget instanceof NodeInterface ? $nodeTarget->getNodeHash() : $nodeTarget;
 
         if ($type !== null) {
             $this->setType($type);
@@ -99,6 +90,7 @@ class Interrupter implements InterrupterInterface
      * Trigger the Interrupt of each ancestor Flows up to a specific one, the root one
      * or none if :
      * - No FlowInterrupt is set
+     * - FlowInterrupt is set at InterrupterInterface::TARGET_SELF
      * - FlowInterrupt is set at this Flow's Id
      * - FlowInterrupt is set as InterrupterInterface::TARGET_TOP and this has no parent
      *
@@ -140,34 +132,17 @@ class Interrupter implements InterrupterInterface
         }
 
         do {
-            // keep this for later
             $lastFlowId = $flow->getId();
             if ($this->flowTarget === $lastFlowId) {
                 // interrupting $flow
                 return $flow->setInterruptNodeId($this->nodeTarget)->interruptFlow($this->type);
             }
 
-            // by not bubbling the FlowInterrupt we make sure that each
-            // eventual upstream Flow will only interrupt themselves, the
-            // actual management is performed by this Flow which first
-            // received the interrupt signal
-            // also set interruptNodeId to true in order to make sure
+            // Set interruptNodeId to true in order to make sure
             // we do not match any nodes in this flow (as it is not the target)
             $flow->setInterruptNodeId(true)->interruptFlow($this->type);
         } while ($flow = $flow->getParent());
 
-        // Here the target was either InterrupterInterface::TARGET_TOP or
-        // anything else that did not match any of the Flow ancestor's
-        // ids.
-        // `$lastFlowId` is the root Flow id, which may as well be this
-        // very Flow.
-        // This implies that the only legit value for `$interruptAt` is
-        // `InterrupterInterface::TARGET_TOP` since :
-        // - `$interruptAt` matching this Flow id is caught above
-        //    when triggering `isReached` the first time
-        // - `$interruptAt` being null is also caught above
-        // - `$interruptAt`  matching `InterrupterInterface::TARGET_TOP`
-        //    with this having no parent is also caught above
         if ($this->flowTarget !== InterrupterInterface::TARGET_TOP) {
             throw new NodalFlowException('Interruption target missed', 1, null, [
                 'interruptAt'       => $this->flowTarget,

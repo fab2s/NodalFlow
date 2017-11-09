@@ -419,7 +419,7 @@ class NodalFlow implements FlowInterface
      *
      * @param float $seconds
      *
-     * @return array
+     * @return array[string]string|int
      */
     public function duration($seconds)
     {
