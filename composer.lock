@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "fab2s/context-exception",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fab2s/ContextException.git",
-                "reference": "a2073f15d7b5203b0ea820cc34c97e4f8821b54e"
+                "reference": "a8258dbe7ebb8c1b201e0a1240b5f211006350eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fab2s/ContextException/zipball/a2073f15d7b5203b0ea820cc34c97e4f8821b54e",
-                "reference": "a2073f15d7b5203b0ea820cc34c97e4f8821b54e",
+                "url": "https://api.github.com/repos/fab2s/ContextException/zipball/a8258dbe7ebb8c1b201e0a1240b5f211006350eb",
+                "reference": "a8258dbe7ebb8c1b201e0a1240b5f211006350eb",
                 "shasum": ""
             },
             "require": {
@@ -45,7 +45,7 @@
             "keywords": [
                 "PHP Context Exception"
             ],
-            "time": "2017-10-01T16:34:48+00:00"
+            "time": "2017-11-09T19:55:53+00:00"
         }
     ],
     "packages-dev": [
