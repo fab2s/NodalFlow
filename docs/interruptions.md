@@ -75,6 +75,7 @@ tNode : TraversableNode
 ## Lowest level
 
 Each nodes is filled with it's carrier Flow when it is attached to it. Extending the provided `NodeAbstract` you can use :
+
 ```php
 // skip this very action
 $this->carrier->continueFlow();
@@ -84,7 +85,9 @@ $this->carrier->continueFlow(new FlowInterrupt(FlowInterruptInterface::TARGET_TO
 // propagate skip to Flow id `$targetFlowId`
 $this->carrier->continueFlow(new FlowInterrupt($targetFlowId));
 ```
+
 or
+
 ```php
 // stop the whole flow right here
 $this->carrier->breakFlow();
