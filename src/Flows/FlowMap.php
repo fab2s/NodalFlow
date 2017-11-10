@@ -67,9 +67,12 @@ class FlowMap implements FlowMapInterface
      *
      * @var array
      */
-    protected $loadStatsDefault = [
+    protected $flowStatsDefault = [
+        'class'    => null,
+        'id'       => null,
         'start'    => null,
         'end'      => null,
+        'elapsed'  => null,
         'duration' => null,
         'mib'      => null,
     ];
@@ -95,29 +98,53 @@ class FlowMap implements FlowMapInterface
     protected $flow;
 
     /**
+     * @var bool
+     */
+    protected $hasRun = false;
+
+    /**
      * Instantiate a Flow Status
      *
      * @param FlowInterface $flow
-     *
-     * @throws NodalFlowException
      *
      * @internal param string $status The flow status
      */
     public function __construct(FlowInterface $flow)
     {
         $this->flow             = $flow;
-        $this->defaultFlowStats = array_replace($this->loadStatsDefault, $this->incrementStatsDefault);
+        $this->defaultFlowStats = array_replace($this->flowStatsDefault, $this->incrementStatsDefault, [
+            'class' => get_class($this->flow),
+            'id'    => $this->flow->getId(),
+        ]);
         $this->flowStats        = $this->defaultFlowStats;
+    }
+
+    /**
+     * @param array $flowIncrements
+     *
+     * @throws NodalFlowException
+     *
+     * @return $this
+     */
+    public function setFlowIncrement(array $flowIncrements)
+    {
+        if ($this->hasRun) {
+            throw new NodalFlowException('Cannot set custom increment after Flow started');
+        }
+
+        $this->defaultFlowStats = array_replace($flowIncrements, $this->defaultFlowStats);
+        $this->flowStats        = $this->defaultFlowStats;
+
+        return $this;
     }
 
     /**
      * @param NodeInterface $node
      * @param int           $index
-     * @param array         $incrementAliases
      *
      * @throws NodalFlowException
      */
-    public function register(NodeInterface $node, $index, array $incrementAliases = [])
+    public function register(NodeInterface $node, $index)
     {
         $this->enforceUniqueness($node);
         $nodeHash                      = $node->getNodeHash();
@@ -131,15 +158,9 @@ class FlowMap implements FlowMapInterface
             'isAFlow'         => $node->isFlow(),
         ]);
 
-        foreach ($incrementAliases as $aliasKey => $incKey) {
-            if (!isset($this->incrementStatsDefault[$incKey])) {
-                throw new NodalFlowException('Tried to set an increment alias to an un-registered increment', 1, null, [
-                    'aliasKey'     => $aliasKey,
-                    'incrementKey' => $incKey,
-                ]);
-            }
-
-            $this->nodeMap[$nodeHash][$aliasKey] = &$this->nodeMap[$nodeHash][$incKey];
+        if (isset($this->reverseMap[$index])) {
+            // replacing a note, maintain nodeMap accordingly
+            unset($this->nodeMap[$this->reverseMap[$index]]);
         }
 
         $this->reverseMap[$index] = $nodeHash;
@@ -153,6 +174,7 @@ class FlowMap implements FlowMapInterface
     public function flowStart()
     {
         $this->flowStats['start'] = microtime(true);
+        $this->hasRun             = true;
 
         return $this;
     }
@@ -164,9 +186,12 @@ class FlowMap implements FlowMapInterface
      */
     public function flowEnd()
     {
-        $this->flowStats['end']      = microtime(true);
-        $this->flowStats['mib']      = memory_get_peak_usage(true) / 1048576;
-        $this->flowStats['duration'] = $this->flowStats['end'] - $this->flowStats['start'];
+        $this->flowStats['end']     = microtime(true);
+        $this->flowStats['mib']     = memory_get_peak_usage(true) / 1048576;
+        $this->flowStats['elapsed'] = $this->flowStats['end'] - $this->flowStats['start'];
+
+        $this->flowStats = array_replace($this->flowStats, $this->duration($this->flowStats['elapsed']));
+        //dd($this->duration($this->flowStats['elapsed']),$this->flowStats);
 
         return $this;
     }
@@ -174,11 +199,9 @@ class FlowMap implements FlowMapInterface
     /**
      * Get/Generate Node Map
      *
-     * @param bool $recurse
-     *
      * @return array
      */
-    public function getNodeMap($recurse = true)
+    public function getNodeMap()
     {
         foreach ($this->flow->getNodes() as $node) {
             if ($node instanceof BranchNodeInterface) {
@@ -221,6 +244,30 @@ class FlowMap implements FlowMapInterface
 
     /**
      * @param string $nodeHash
+     * @param array  $incrementAliases
+     *
+     * @throws NodalFlowException
+     *
+     * @return $this
+     */
+    public function setIncrementAlias($nodeHash, array $incrementAliases = [])
+    {
+        foreach ($incrementAliases as $aliasKey => $incKey) {
+            if (!isset($this->incrementStatsDefault[$incKey])) {
+                throw new NodalFlowException('Tried to set an increment alias to an un-registered increment', 1, null, [
+                    'aliasKey'     => $aliasKey,
+                    'incrementKey' => $incKey,
+                ]);
+            }
+
+            $this->nodeMap[$nodeHash][$aliasKey] = &$this->nodeMap[$nodeHash][$incKey];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $nodeHash
      * @param string $key
      *
      * @return $this
@@ -256,6 +303,34 @@ class FlowMap implements FlowMapInterface
         }
 
         return $this;
+    }
+
+    /**
+     * Computes a human readable duration string from floating seconds
+     *
+     * @param float $seconds
+     *
+     * @return array<string,integer|string>
+     */
+    public function duration($seconds)
+    {
+        $result = [
+            'hour'     => (int) floor($seconds / 3600),
+            'min'      => (int) floor(($seconds / 60) % 60),
+            'sec'      => $seconds % 60,
+            'ms'       => (int) round(\fmod($seconds, 1) * 1000),
+        ];
+
+        $duration = '';
+        foreach ($result as $unit => $value) {
+            if (!empty($value) || $unit === 'ms') {
+                $duration .= $value . "$unit ";
+            }
+        }
+
+        $result['duration'] = trim($duration);
+
+        return $result;
     }
 
     /**

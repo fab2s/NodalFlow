@@ -34,11 +34,29 @@ interface FlowMapInterface
     /**
      * @param NodeInterface $node
      * @param int           $index
-     * @param array         $incrementAliases
      *
      * @throws NodalFlowException
      */
-    public function register(NodeInterface $node, $index, array $incrementAliases = []);
+    public function register(NodeInterface $node, $index);
+
+    /**
+     * @param string $nodeHash
+     * @param array  $incrementAliases
+     *
+     * @throws NodalFlowException
+     *
+     * @return $this
+     */
+    public function setIncrementAlias($nodeHash, array $incrementAliases = []);
+
+    /**
+     * @param array $flowIncrements
+     *
+     * @throws NodalFlowException
+     *
+     * @return $this
+     */
+    public function setFlowIncrement(array $flowIncrements);
 
     /**
      * @param string $nodeHash

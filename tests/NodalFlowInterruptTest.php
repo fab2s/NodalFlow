@@ -40,7 +40,6 @@ class NodalFlowInterruptTest extends \TestCase
     public function testInterrupt(FlowInterface $flow, array $expected)
     {
         $flow->exec();
-
         $this->interruptAssertions($flow->getNodeMap(), $expected);
     }
 

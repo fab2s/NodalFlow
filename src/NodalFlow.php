@@ -285,8 +285,6 @@ class NodalFlow implements FlowInterface
             $result = $this->rewind()
                     ->flowStart()
                     ->recurse($param);
-
-            $this->flowMap->flowEnd();
             // set flowStatus to make sure that we have the proper
             // value in flowEnd even when overridden without (or when
             // improperly) calling parent
@@ -299,7 +297,6 @@ class NodalFlow implements FlowInterface
             return $result;
         } catch (\Exception $e) {
             $this->flowStatus = new FlowStatus(FlowStatus::FLOW_EXCEPTION);
-            $this->flowMap->flowEnd();
             $this->flowEnd();
             if ($e instanceof NodalFlowException) {
                 throw $e;
@@ -309,34 +306,6 @@ class NodalFlow implements FlowInterface
                 'nodeMap' => $this->getNodeMap(),
             ]);
         }
-    }
-
-    /**
-     * Computes a human readable duration string from floating seconds
-     *
-     * @param float $seconds
-     *
-     * @return array<string,integer|string>
-     */
-    public function duration($seconds)
-    {
-        $result = [
-            'hour'     => (int) \floor($seconds / 3600),
-            'min'      => (int) \floor(($seconds / 60) % 60),
-            'sec'      => $seconds % 60,
-            'ms'       => (int) \round(\fmod($seconds, 1) * 1000),
-        ];
-
-        $durationStr = '';
-        foreach ($result as $unit => $value) {
-            if (!empty($value)) {
-                $durationStr .= $value . "$unit ";
-            }
-        }
-
-        $result['durationStr'] = \trim($durationStr);
-
-        return $result;
     }
 
     /**
