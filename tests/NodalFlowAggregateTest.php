@@ -39,7 +39,6 @@ class NodalFlowAggregateTest extends \TestCase
         $nodeMap = $flow->getNodeMap();
 
         foreach ($nodes as $nodeSetup) {
-            $spyInvocations = 0;
             $nodeStats      = $nodeMap[$nodeSetup['hash']];
             // assert that each node has effectively been called
             // as many time as reported internally.
@@ -59,8 +58,6 @@ class NodalFlowAggregateTest extends \TestCase
                 }
 
                 $this->assertSame($nodeStats['num_iterate'], $this->traversableIterations * 2 * $nodeStats['num_exec'], "Node num_iterate {$nodeStats['num_iterate']} does not match expected \$this->traversableIterations * 2 * num_exec = $this->traversableIterations * 2 * {$nodeStats['num_exec']}");
-
-                $nodeStats      = $nodeMap[$nodeSetup['hash']];
             } elseif (isset($nodeSetup['payloadSetup'])) {
                 $payloadSetup   = $nodeSetup['payloadSetup'];
                 // get spy's invocations

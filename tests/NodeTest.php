@@ -8,6 +8,7 @@
  */
 
 use fab2s\NodalFlow\NodalFlow;
+use fab2s\NodalFlow\Nodes\ExecNodeInterface;
 
 class NodeTest extends \TestCase
 {
@@ -42,7 +43,7 @@ class NodeTest extends \TestCase
                     // forcing these two will bypass comboing
                     'isAReturningVal'   => true,
                     'isATraversable'    => false,
-                    'closureAssertTrue' => function ($node) {
+                    'closureAssertTrue' => function (ExecNodeInterface $node) {
                         return $node->exec(null) === 42;
                     },
                 ],
@@ -63,7 +64,7 @@ class NodeTest extends \TestCase
                     },
                     'isAReturningVal'   => true,
                     'isATraversable'    => false,
-                    'closureAssertTrue' => function ($node) use ($use) {
+                    'closureAssertTrue' => function (ExecNodeInterface $node) use ($use) {
                         return $node->exec(null) === $use;
                     },
                 ],
@@ -75,7 +76,7 @@ class NodeTest extends \TestCase
                     'payload'           => $callableInstance,
                     'isAReturningVal'   => true,
                     'isATraversable'    => false,
-                    'closureAssertTrue' => function ($node) {
+                    'closureAssertTrue' => function (ExecNodeInterface $node) {
                         return $node->exec(null) === 'dummyMethod';
                     },
                 ],

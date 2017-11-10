@@ -1,0 +1,279 @@
+<?php
+
+/*
+ * This file is part of NodalFlow.
+ *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
+ * This source file is licensed under the MIT license which you will
+ * find in the LICENSE file or at https://opensource.org/licenses/MIT
+ */
+
+namespace fab2s\NodalFlow\Flows;
+
+use fab2s\NodalFlow\NodalFlowException;
+use fab2s\NodalFlow\Nodes\AggregateNodeInterface;
+use fab2s\NodalFlow\Nodes\BranchNodeInterface;
+use fab2s\NodalFlow\Nodes\NodeInterface;
+
+/**
+ * class FlowMap
+ */
+class FlowMap implements FlowMapInterface
+{
+    /**
+     * Flow map
+     *
+     * @var array
+     */
+    protected $nodeMap = [];
+
+    /**
+     * @var array
+     */
+    protected $reverseMap = [];
+
+    /**
+     * The default Node Map values
+     *
+     * @var array
+     */
+    protected $nodeMapDefault = [
+        'class'           => null,
+        'flowId'          => null,
+        'hash'            => null,
+        'index'           => null,
+        'isATraversable'  => null,
+        'isAReturningVal' => null,
+        'isAFlow'         => null,
+        'num_exec'        => 0,
+        'num_iterate'     => 0,
+        'num_break'       => 0,
+        'num_continue'    => 0,
+    ];
+
+    /**
+     * The default Node stats values
+     *
+     * @var array
+     */
+    protected $incrementStatsDefault = [
+        'num_exec'     => 0,
+        'num_iterate'  => 0,
+        'num_break'    => 0,
+        'num_continue' => 0,
+    ];
+
+    /**
+     * The Flow stats default values
+     *
+     * @var array
+     */
+    protected $loadStatsDefault = [
+        'start'    => null,
+        'end'      => null,
+        'duration' => null,
+        'mib'      => null,
+    ];
+
+    /**
+     * @var array
+     */
+    protected $defaultFlowStats;
+
+    /**
+     * @var array
+     */
+    protected $flowStats;
+
+    /**
+     * @var bool
+     */
+    protected $resetOnRestart = false;
+
+    /**
+     * @var FlowInterface
+     */
+    protected $flow;
+
+    /**
+     * Instantiate a Flow Status
+     *
+     * @param FlowInterface $flow
+     *
+     * @throws NodalFlowException
+     *
+     * @internal param string $status The flow status
+     */
+    public function __construct(FlowInterface $flow)
+    {
+        $this->flow             = $flow;
+        $this->defaultFlowStats = array_replace($this->loadStatsDefault, $this->incrementStatsDefault);
+        $this->flowStats        = $this->defaultFlowStats;
+    }
+
+    /**
+     * @param NodeInterface $node
+     * @param int           $index
+     * @param array         $incrementAliases
+     *
+     * @throws NodalFlowException
+     */
+    public function register(NodeInterface $node, $index, array $incrementAliases = [])
+    {
+        $this->enforceUniqueness($node);
+        $nodeHash                      = $node->getNodeHash();
+        $this->nodeMap[$nodeHash]      = array_replace($this->nodeMapDefault, [
+            'class'           => get_class($node),
+            'flowId'          => $node->getCarrier()->getId(),
+            'hash'            => $nodeHash,
+            'index'           => $index,
+            'isATraversable'  => $node->isTraversable(),
+            'isAReturningVal' => $node->isReturningVal(),
+            'isAFlow'         => $node->isFlow(),
+        ]);
+
+        foreach ($incrementAliases as $aliasKey => $incKey) {
+            if (!isset($this->incrementStatsDefault[$incKey])) {
+                throw new NodalFlowException('Tried to set an increment alias to an un-registered increment', 1, null, [
+                    'aliasKey'     => $aliasKey,
+                    'incrementKey' => $incKey,
+                ]);
+            }
+
+            $this->nodeMap[$nodeHash][$aliasKey] = &$this->nodeMap[$nodeHash][$incKey];
+        }
+
+        $this->reverseMap[$index] = $nodeHash;
+    }
+
+    /**
+     * Triggered right before the flow starts
+     *
+     * @return $this
+     */
+    public function flowStart()
+    {
+        $this->flowStats['start'] = microtime(true);
+
+        return $this;
+    }
+
+    /**
+     * Triggered right after the flow stops
+     *
+     * @return $this
+     */
+    public function flowEnd()
+    {
+        $this->flowStats['end']      = microtime(true);
+        $this->flowStats['mib']      = memory_get_peak_usage(true) / 1048576;
+        $this->flowStats['duration'] = $this->flowStats['end'] - $this->flowStats['start'];
+
+        return $this;
+    }
+
+    /**
+     * Get/Generate Node Map
+     *
+     * @param bool $recurse
+     *
+     * @return array
+     */
+    public function getNodeMap($recurse = true)
+    {
+        foreach ($this->flow->getNodes() as $node) {
+            if ($node instanceof BranchNodeInterface) {
+                $this->nodeMap[$node->getNodeHash()]['nodes'] = $node->getPayload()->getNodeMap();
+                continue;
+            }
+
+            if ($node instanceof AggregateNodeInterface) {
+                $flowId = $node->getCarrier()->getId();
+                foreach ($node->getNodeCollection() as $aggregatedNode) {
+                    $this->nodeMap[$node->getNodeHash()]['nodes'][$aggregatedNode->getNodeHash()] = array_replace($this->nodeMapDefault, [
+                        'class'  => get_class($aggregatedNode),
+                        'flowId' => $flowId,
+                        'hash'   => $aggregatedNode->getNodeHash(),
+                    ]);
+                }
+                continue;
+            }
+        }
+
+        return $this->nodeMap;
+    }
+
+    /**
+     * Get the latest Node stats
+     *
+     * @return array
+     */
+    public function getStats()
+    {
+        $result = array_intersect_key($this->flowStats, $this->defaultFlowStats);
+        foreach ($this->flow->getNodes() as $node) {
+            if ($node instanceof BranchNodeInterface) {
+                $result['branches'][$node->getPayload()->getId()] = $node->getPayload()->getStats();
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $nodeHash
+     * @param string $key
+     *
+     * @return $this
+     */
+    public function increment($nodeHash, $key)
+    {
+        ++$this->nodeMap[$nodeHash][$key];
+
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return $this
+     */
+    public function incrementFlow($key)
+    {
+        ++$this->flowStats[$key];
+
+        return $this;
+    }
+
+    /**
+     * Resets Nodes stats, can be used prior to Flow's re-exec
+     *
+     * @return $this
+     */
+    public function resetNodeStats()
+    {
+        foreach ($this->nodeMap as &$nodeStat) {
+            $nodeStat = array_replace($nodeStat, $this->incrementStatsDefault);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param NodeInterface $node
+     *
+     * @throws NodalFlowException
+     *
+     * @return $this
+     */
+    protected function enforceUniqueness(NodeInterface $node)
+    {
+        if (isset($this->nodeMap[$node->getNodeHash()])) {
+            throw new NodalFlowException('Cannot reuse Node instances within a Flow', 1, null, [
+                'duplicate_node' => get_class($node),
+                'hash'           => $node->getNodeHash(),
+            ]);
+        }
+
+        return $this;
+    }
+}

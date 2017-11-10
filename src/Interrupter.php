@@ -106,7 +106,7 @@ class Interrupter implements InterrupterInterface
     public function propagate(FlowInterface $flow)
     {
         $InterrupterFlowId = $flow->getId();
-        // evacuate border cases
+        // evacuate edge cases
         if (
             // no target = InterrupterInterface::TARGET_SELF
             !$this->flowTarget ||

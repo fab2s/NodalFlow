@@ -40,8 +40,7 @@ class NodalFlowBranchTest extends \TestCase
         $nodeMap = $flow->getNodeMap();
 
         foreach ($nodes as $nodeSetup) {
-            $spyInvocations = 0;
-            $nodeStats      = $nodeMap[$nodeSetup['hash']];
+            $nodeStats = $nodeMap[$nodeSetup['hash']];
             // assert that each node has effectively been called
             // as many time as reported internally.
             // Coupled with overall result provides with a

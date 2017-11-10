@@ -9,6 +9,7 @@
 
 namespace fab2s\NodalFlow\Flows;
 
+use fab2s\NodalFlow\NodalFlowException;
 use InvalidArgumentException;
 
 /**

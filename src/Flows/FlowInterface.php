@@ -32,6 +32,13 @@ interface FlowInterface
     public function getNodeMap();
 
     /**
+     * Get the latest Node stats
+     *
+     * @return array
+     */
+    public function getStats();
+
+    /**
      * Adds a Node to the Flow
      *
      * @param NodeInterface $node

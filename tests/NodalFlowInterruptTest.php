@@ -40,7 +40,7 @@ class NodalFlowInterruptTest extends \TestCase
     public function testInterrupt(FlowInterface $flow, array $expected)
     {
         $flow->exec();
-        //dd($flow->getNodeMap());
+
         $this->interruptAssertions($flow->getNodeMap(), $expected);
     }
 
@@ -114,7 +114,7 @@ class NodalFlowInterruptTest extends \TestCase
                         $iterations = $this->traversableIterations;
                     }
 
-                    $this->assertSame($nodeStats['num_iterate'], $nodeSetup['num_iterate'], "Node num_iterate {$nodeStats['num_iterate']} does not match expected: {$nodeSetup['num_iterate']}");
+                    $this->assertSame($iterations, $nodeSetup['num_iterate'], "Node num_iterate {$nodeStats['num_iterate']} does not match expected: {$iterations}");
                 }
             }
         }
@@ -1430,7 +1430,7 @@ class NodalFlowInterruptTest extends \TestCase
      */
     protected function getBreakAt5Closure($return = false)
     {
-        return function ($record) use ($return) {
+        return function () use ($return) {
             static $cnt = 1;
             if ($cnt === 5) {
                 ++$cnt;
@@ -1449,7 +1449,7 @@ class NodalFlowInterruptTest extends \TestCase
      */
     protected function getContinueAt5Closure($return = true)
     {
-        return function ($record) use ($return) {
+        return function () use ($return) {
             static $cnt = 1;
             if ($cnt === 5) {
                 ++$cnt;
@@ -1465,7 +1465,6 @@ class NodalFlowInterruptTest extends \TestCase
     {
         foreach ($nodeMap as $nodeId => $data) {
             $this->assertTrue(isset($expected[$nodeId]));
-
             if (isset($data['nodes'])) {
                 $this->assertTrue(isset($expected[$nodeId]['nodes']));
                 $this->interruptAssertions($data['nodes'], $expected[$nodeId]['nodes']);
