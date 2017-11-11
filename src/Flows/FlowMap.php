@@ -229,6 +229,10 @@ class FlowMap implements FlowMapInterface
     {
         ++$this->nodeMap[$nodeHash][$key];
 
+        if (isset($this->flowStats[$key . '_total'])) {
+            ++$this->flowStats[$key . '_total'];
+        }
+
         return $this;
     }
 
