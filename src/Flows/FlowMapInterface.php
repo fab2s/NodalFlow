@@ -50,6 +50,13 @@ interface FlowMapInterface
     public function setIncrementAlias($nodeHash, array $incrementAliases = []);
 
     /**
+     * Set additional increment keys, use :
+     *      'keyName' => int
+     * to add keyName as increment, starting at int
+     * or :
+     *      'keyName' => 'existingIncrement'
+     * to assign keyName as a reference to existingIncrement
+     *
      * @param array $flowIncrements
      *
      * @throws NodalFlowException

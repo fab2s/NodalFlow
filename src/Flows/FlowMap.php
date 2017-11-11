@@ -120,6 +120,13 @@ class FlowMap implements FlowMapInterface
     }
 
     /**
+     * Set additional increment keys, use :
+     *      'keyName' => int
+     * to add keyName as increment, starting at int
+     * or :
+     *      'keyName' => 'existingIncrement'
+     * to assign keyName as a reference to existingIncrement
+     *
      * @param array $flowIncrements
      *
      * @throws NodalFlowException
@@ -132,8 +139,19 @@ class FlowMap implements FlowMapInterface
             throw new NodalFlowException('Cannot set custom increment after Flow started');
         }
 
-        $this->defaultFlowStats = array_replace($flowIncrements, $this->defaultFlowStats);
-        $this->flowStats        = $this->defaultFlowStats;
+        foreach ($flowIncrements as $incrementKey => $target) {
+            if (is_string($target)) {
+                if (!isset($this->flowStats[$target])) {
+                    throw new NodalFlowException('Cannot set reference on unset target');
+                }
+
+                $this->flowStats[$incrementKey] = &$this->flowStats[$target];
+                continue;
+            }
+
+            $this->defaultFlowStats[$incrementKey] = $target;
+            $this->flowStats[$incrementKey]        = $target;
+        }
 
         return $this;
     }
@@ -191,7 +209,6 @@ class FlowMap implements FlowMapInterface
         $this->flowStats['elapsed'] = $this->flowStats['end'] - $this->flowStats['start'];
 
         $this->flowStats = array_replace($this->flowStats, $this->duration($this->flowStats['elapsed']));
-        //dd($this->duration($this->flowStats['elapsed']),$this->flowStats);
 
         return $this;
     }
