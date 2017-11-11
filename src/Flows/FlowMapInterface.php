@@ -32,6 +32,15 @@ interface FlowMapInterface
     public function flowEnd();
 
     /**
+     * Let's be fast at incrementing while we are at it
+     *
+     * @param NodeInterface $node
+     *
+     * @return array
+     */
+    public function &getNodeStat(NodeInterface $node);
+
+    /**
      * @param NodeInterface $node
      * @param int           $index
      *

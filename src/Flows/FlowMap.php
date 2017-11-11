@@ -16,6 +16,8 @@ use fab2s\NodalFlow\Nodes\NodeInterface;
 
 /**
  * class FlowMap
+ * This implementation aims at being fast and therefore does a lot
+ * by reference
  */
 class FlowMap implements FlowMapInterface
 {
@@ -174,7 +176,21 @@ class FlowMap implements FlowMapInterface
     }
 
     /**
+     * Let's be fast at incrementing while we are at it
+     *
+     * @param NodeInterface $node
+     *
+     * @return array
+     */
+    public function &getNodeStat(NodeInterface $node)
+    {
+        return $this->nodeMap[$node->getNodeHash()];
+    }
+
+    /**
      * Get/Generate Node Map
+     *
+     * @throws NodalFlowException
      *
      * @return array
      */
