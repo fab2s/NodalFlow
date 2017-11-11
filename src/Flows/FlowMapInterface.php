@@ -45,7 +45,7 @@ interface FlowMapInterface
      *
      * @return $this
      */
-    public function increment($nodeHash, $key);
+    public function incrementNode($nodeHash, $key);
 
     /**
      * @param string $key

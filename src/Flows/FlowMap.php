@@ -110,7 +110,7 @@ class FlowMap implements FlowMapInterface
             'class' => get_class($this->flow),
             'id'    => $this->flow->getId(),
         ]);
-        $this->flowStats        = $this->defaultFlowStats;
+        $this->flowStats = $this->defaultFlowStats;
 
         $this->setFlowIncrement($flowIncrements);
     }
@@ -225,7 +225,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return $this
      */
-    public function increment($nodeHash, $key)
+    public function incrementNode($nodeHash, $key)
     {
         ++$this->nodeMap[$nodeHash][$key];
 

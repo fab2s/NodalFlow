@@ -565,7 +565,7 @@ class NodalFlow implements FlowInterface
                         $param = $value;
                     }
 
-                    $this->flowMap->increment($nodeHash, 'num_iterate')->incrementFlow('num_iterate');
+                    $this->flowMap->incrementNode($nodeHash, 'num_iterate')->incrementFlow('num_iterate');
                     ++$this->numIterate;
                     if (!($this->numIterate % $this->progressMod)) {
                         $this->triggerCallback(static::FLOW_PROGRESS, $node);
@@ -576,34 +576,34 @@ class NodalFlow implements FlowInterface
                         if ($this->continue = $this->interruptNode($node)) {
                             // since we want to bubble the continue upstream
                             // we break here waiting for next $param if any
-                            $this->flowMap->increment($nodeHash, 'num_break');
+                            $this->flowMap->incrementNode($nodeHash, 'num_break');
                             break;
                         }
 
                         // we drop one iteration
-                        $this->flowMap->increment($nodeHash, 'num_continue');
+                        $this->flowMap->incrementNode($nodeHash, 'num_continue');
                         continue;
                     }
 
                     if ($this->break) {
                         // we drop all subsequent iterations
-                        $this->flowMap->increment($nodeHash, 'num_break');
+                        $this->flowMap->incrementNode($nodeHash, 'num_break');
                         $this->break = $this->interruptNode($node);
                         break;
                     }
                 }
 
                 // we reached the end of this Traversable and executed all its downstream Nodes
-                $this->flowMap->increment($nodeHash, 'num_exec');
+                $this->flowMap->incrementNode($nodeHash, 'num_exec');
 
                 return $param;
             }
 
             $value = $node->exec($param);
-            $this->flowMap->increment($nodeHash, 'num_exec');
+            $this->flowMap->incrementNode($nodeHash, 'num_exec');
 
             if ($this->continue) {
-                $this->flowMap->increment($nodeHash, 'num_continue');
+                $this->flowMap->incrementNode($nodeHash, 'num_continue');
                 // a continue does not need to bubble up unless
                 // it specifically targets a node in this flow
                 // or targets an upstream flow
@@ -613,7 +613,7 @@ class NodalFlow implements FlowInterface
             }
 
             if ($this->break) {
-                $this->flowMap->increment($nodeHash, 'num_break');
+                $this->flowMap->incrementNode($nodeHash, 'num_break');
                 // a break always need to bubble up to the first upstream Traversable if any
                 return $param;
             }
