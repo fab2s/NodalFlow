@@ -46,6 +46,11 @@ abstract class NodeAbstract implements NodeInterface
     protected $isAFlow;
 
     /**
+     * @var array
+     */
+    protected $nodeIncrements = [];
+
+    /**
      * Instantiate a Node
      */
     public function __construct()
@@ -129,6 +134,23 @@ abstract class NodeAbstract implements NodeInterface
     public function getNodeHash()
     {
         return \sha1(\spl_object_hash($this));
+    }
+
+    /**
+     * Get the custom Node increments to be considered during
+     * Flow execution
+     * To set additional increment keys, use :
+     *      'keyName' => int
+     * to add keyName as increment, starting at int
+     * or :
+     *      'keyName' => 'existingIncrement'
+     * to assign keyName as a reference to an existingIncrement
+     *
+     * @return array
+     */
+    public function getNodeIncrements()
+    {
+        return $this->nodeIncrements;
     }
 
     /**

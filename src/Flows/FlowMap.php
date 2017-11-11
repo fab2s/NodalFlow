@@ -98,18 +98,12 @@ class FlowMap implements FlowMapInterface
     protected $flow;
 
     /**
-     * @var bool
-     */
-    protected $hasRun = false;
-
-    /**
      * Instantiate a Flow Status
      *
      * @param FlowInterface $flow
-     *
-     * @internal param string $status The flow status
+     * @param array         $flowIncrements
      */
-    public function __construct(FlowInterface $flow)
+    public function __construct(FlowInterface $flow, array $flowIncrements = [])
     {
         $this->flow             = $flow;
         $this->defaultFlowStats = array_replace($this->flowStatsDefault, $this->incrementStatsDefault, [
@@ -117,43 +111,8 @@ class FlowMap implements FlowMapInterface
             'id'    => $this->flow->getId(),
         ]);
         $this->flowStats        = $this->defaultFlowStats;
-    }
 
-    /**
-     * Set additional increment keys, use :
-     *      'keyName' => int
-     * to add keyName as increment, starting at int
-     * or :
-     *      'keyName' => 'existingIncrement'
-     * to assign keyName as a reference to existingIncrement
-     *
-     * @param array $flowIncrements
-     *
-     * @throws NodalFlowException
-     *
-     * @return $this
-     */
-    public function setFlowIncrement(array $flowIncrements)
-    {
-        if ($this->hasRun) {
-            throw new NodalFlowException('Cannot set custom increment after Flow started');
-        }
-
-        foreach ($flowIncrements as $incrementKey => $target) {
-            if (is_string($target)) {
-                if (!isset($this->flowStats[$target])) {
-                    throw new NodalFlowException('Cannot set reference on unset target');
-                }
-
-                $this->flowStats[$incrementKey] = &$this->flowStats[$target];
-                continue;
-            }
-
-            $this->defaultFlowStats[$incrementKey] = $target;
-            $this->flowStats[$incrementKey]        = $target;
-        }
-
-        return $this;
+        $this->setFlowIncrement($flowIncrements);
     }
 
     /**
@@ -165,8 +124,8 @@ class FlowMap implements FlowMapInterface
     public function register(NodeInterface $node, $index)
     {
         $this->enforceUniqueness($node);
-        $nodeHash                      = $node->getNodeHash();
-        $this->nodeMap[$nodeHash]      = array_replace($this->nodeMapDefault, [
+        $nodeHash                 = $node->getNodeHash();
+        $this->nodeMap[$nodeHash] = array_replace($this->nodeMapDefault, [
             'class'           => get_class($node),
             'flowId'          => $node->getCarrier()->getId(),
             'hash'            => $nodeHash,
@@ -175,6 +134,8 @@ class FlowMap implements FlowMapInterface
             'isAReturningVal' => $node->isReturningVal(),
             'isAFlow'         => $node->isFlow(),
         ]);
+
+        $this->setNodeIncrement($node);
 
         if (isset($this->reverseMap[$index])) {
             // replacing a note, maintain nodeMap accordingly
@@ -192,7 +153,6 @@ class FlowMap implements FlowMapInterface
     public function flowStart()
     {
         $this->flowStats['start'] = microtime(true);
-        $this->hasRun             = true;
 
         return $this;
     }
@@ -261,30 +221,6 @@ class FlowMap implements FlowMapInterface
 
     /**
      * @param string $nodeHash
-     * @param array  $incrementAliases
-     *
-     * @throws NodalFlowException
-     *
-     * @return $this
-     */
-    public function setIncrementAlias($nodeHash, array $incrementAliases = [])
-    {
-        foreach ($incrementAliases as $aliasKey => $incKey) {
-            if (!isset($this->incrementStatsDefault[$incKey])) {
-                throw new NodalFlowException('Tried to set an increment alias to an un-registered increment', 1, null, [
-                    'aliasKey'     => $aliasKey,
-                    'incrementKey' => $incKey,
-                ]);
-            }
-
-            $this->nodeMap[$nodeHash][$aliasKey] = &$this->nodeMap[$nodeHash][$incKey];
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string $nodeHash
      * @param string $key
      *
      * @return $this
@@ -316,7 +252,11 @@ class FlowMap implements FlowMapInterface
     public function resetNodeStats()
     {
         foreach ($this->nodeMap as &$nodeStat) {
-            $nodeStat = array_replace($nodeStat, $this->incrementStatsDefault);
+            foreach ($this->incrementStatsDefault as $key => $value) {
+                if (isset($nodeStat[$key])) {
+                    $nodeStat[$key] = $value;
+                }
+            }
         }
 
         return $this;
@@ -348,6 +288,69 @@ class FlowMap implements FlowMapInterface
         $result['duration'] = trim($duration);
 
         return $result;
+    }
+
+    /**
+     * Set additional increment keys, use :
+     *      'keyName' => int
+     * to add keyName as increment, starting at int
+     * or :
+     *      'keyName' => 'existingIncrement'
+     * to assign keyName as a reference to existingIncrement
+     *
+     * @param array $flowIncrements
+     *
+     * @throws NodalFlowException
+     *
+     * @return $this
+     */
+    protected function setFlowIncrement(array $flowIncrements)
+    {
+        foreach ($flowIncrements as $incrementKey => $target) {
+            if (is_string($target)) {
+                if (!isset($this->flowStats[$target])) {
+                    throw new NodalFlowException('Cannot set reference on unset target');
+                }
+
+                $this->flowStats[$incrementKey] = &$this->flowStats[$target];
+                continue;
+            }
+
+            $this->defaultFlowStats[$incrementKey] = $target;
+            $this->flowStats[$incrementKey]        = $target;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param NodeInterface $node
+     *
+     * @throws NodalFlowException
+     *
+     * @return $this
+     */
+    protected function setNodeIncrement(NodeInterface $node)
+    {
+        $nodeHash = $node->getNodeHash();
+        foreach ($node->getNodeIncrements() as $incrementKey => $target) {
+            if (is_string($target)) {
+                if (!isset($this->incrementStatsDefault[$target])) {
+                    throw new NodalFlowException('Tried to set an increment alias to an un-registered increment', 1, null, [
+                        'aliasKey'  => $incrementKey,
+                        'targetKey' => $target,
+                    ]);
+                }
+
+                $this->nodeMap[$nodeHash][$incrementKey] = &$this->nodeMap[$nodeHash][$target];
+                continue;
+            }
+
+            $this->incrementStatsDefault[$incrementKey] = $target;
+            $this->nodeMap[$nodeHash][$incrementKey]    = $target;
+        }
+
+        return $this;
     }
 
     /**

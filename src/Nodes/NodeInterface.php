@@ -63,4 +63,18 @@ interface NodeInterface
      * @return string
      */
     public function getNodeHash();
+
+    /**
+     * Get the custom Node increments to be considered during
+     * Flow execution
+     * To set additional increment keys, use :
+     *      'keyName' => int
+     * to add keyName as increment, starting at int
+     * or :
+     *      'keyName' => 'existingIncrement'
+     * to assign keyName as a reference to an existingIncrement
+     *
+     * @return array
+     */
+    public function getNodeIncrements();
 }

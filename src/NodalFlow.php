@@ -47,6 +47,11 @@ class NodalFlow implements FlowInterface
     protected $id;
 
     /**
+     * @var array
+     */
+    protected $flowIncrements = [];
+
+    /**
      * The underlying node structure
      *
      * @var NodeInterface[]
@@ -141,7 +146,7 @@ class NodalFlow implements FlowInterface
     public function __construct()
     {
         $this->id      = $this->uniqId();
-        $this->flowMap = new FlowMap($this);
+        $this->flowMap = new FlowMap($this, $this->flowIncrements);
     }
 
     /**
