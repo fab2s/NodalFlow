@@ -26,13 +26,14 @@ class NodalFlowAggregateTest extends \TestCase
             if (isset($nodeSetup['aggregate'])) {
                 $node = $nodeSetup['aggregate'];
             } else {
+                /** @var NodeInterface $node */
                 $node = new $nodeSetup['nodeClass']($nodeSetup['payload'], $nodeSetup['isAReturningVal'], $nodeSetup['isATraversable']);
             }
 
             $this->validateNode($node, $nodeSetup['isAReturningVal'], $nodeSetup['isATraversable'], $nodeSetup['validate']);
 
             $flow->add($node);
-            $nodes[$key]['hash'] = $node->getNodeHash();
+            $nodes[$key]['hash'] = $node->getId();
         }
 
         $result  = $flow->exec($param);

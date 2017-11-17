@@ -54,7 +54,7 @@ class Interrupter implements InterrupterInterface
     public function __construct($flowTarget = null, $nodeTarget = null, $type = null)
     {
         $this->flowTarget = $flowTarget instanceof FlowInterface ? $flowTarget->getId() : $flowTarget;
-        $this->nodeTarget = $nodeTarget instanceof NodeInterface ? $nodeTarget->getNodeHash() : $nodeTarget;
+        $this->nodeTarget = $nodeTarget instanceof NodeInterface ? $nodeTarget->getId() : $nodeTarget;
 
         if ($type !== null) {
             $this->setType($type);
@@ -105,27 +105,14 @@ class Interrupter implements InterrupterInterface
      */
     public function propagate(FlowInterface $flow)
     {
-        $InterrupterFlowId = $flow->getId();
         // evacuate edge cases
-        if (
-            // no target = InterrupterInterface::TARGET_SELF
-            !$this->flowTarget ||
-            (
-                // asked to stop right here
-                $this->flowTarget === InterrupterInterface::TARGET_SELF ||
-                $this->flowTarget === $InterrupterFlowId ||
-                (
-                    // target root when this Flow is root already
-                    $this->flowTarget === InterrupterInterface::TARGET_TOP &&
-                    !$flow->hasParent()
-                )
-            )
-        ) {
+        if ($this->isEdgeInterruptCase($flow)) {
             // if anything had to be done, it was done first hand already
             // just make sure we propagate the eventual nodeTarget
             return $flow->setInterruptNodeId($this->nodeTarget);
         }
 
+        $InterrupterFlowId = $flow->getId();
         if (!$this->type) {
             throw new NodalFlowException('No interrupt type set', 1, null, [
                 'InterrupterFlowId' => $InterrupterFlowId,
@@ -162,6 +149,26 @@ class Interrupter implements InterrupterInterface
      */
     public function interruptNode(NodeInterface $node = null)
     {
-        return $node ? $this->nodeTarget === $node->getNodeHash() : false;
+        return $node ? $this->nodeTarget === $node->getId() : false;
+    }
+
+    /**
+     * @param FlowInterface $flow
+     *
+     * @return bool
+     */
+    protected function isEdgeInterruptCase(FlowInterface $flow)
+    {
+        return !$this->flowTarget ||
+            (
+                // asked to stop right here
+                $this->flowTarget === InterrupterInterface::TARGET_SELF ||
+                $this->flowTarget === $flow->getId() ||
+                (
+                    // target root when this Flow is root already
+                    $this->flowTarget === InterrupterInterface::TARGET_TOP &&
+                    !$flow->hasParent()
+                )
+            );
     }
 }

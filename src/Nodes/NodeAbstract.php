@@ -9,6 +9,7 @@
 
 namespace fab2s\NodalFlow\Nodes;
 
+use fab2s\NodalFlow\Flows\FlowIdTrait;
 use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\NodalFlowException;
 
@@ -17,6 +18,8 @@ use fab2s\NodalFlow\NodalFlowException;
  */
 abstract class NodeAbstract implements NodeInterface
 {
+    use FlowIdTrait;
+
     /**
      * The carrying Flow
      *
@@ -119,21 +122,13 @@ abstract class NodeAbstract implements NodeInterface
     /**
      * Get this Node's hash, must be deterministic and unique
      *
-     * Caching the result would save a bit of resources
-     * but would require to implement `__clone()` to
-     * make sure we reset the hash should a node be cloned.
-     * Doing this would add the burden to actual Node
-     * implementation to trigger `parent::_clone()`
-     * which is not ideal and impossible to guaranty.
-     * Now since this method is not used in the actual
-     * flow execution loop, but only when an interruption
-     * is raised, it's not a performance issue.
+     * @deprecated use `getId` instead
      *
      * @return string
      */
     public function getNodeHash()
     {
-        return \sha1(\spl_object_hash($this));
+        return $this->getId();
     }
 
     /**

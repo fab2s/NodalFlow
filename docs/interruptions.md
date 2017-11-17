@@ -74,25 +74,29 @@ tNode : TraversableNode
 
 ## Lowest level
 
-Each nodes is filled with it's carrier Flow when it is attached to it. Extending the provided `NodeAbstract` you can use :
+Each nodes is filled with it's carrier Flow when it is attached to it. Any Node implementing `NodeInterface` can interrupt any Node in its carrier Flow and ancestors :
 
 ```php
 // skip this very action
-$this->carrier->continueFlow();
-$this->carrier->interruptFlow(FlowInterruptInterface::TYPE_CONTINUE);
+$this->getCarrier()->continueFlow();
+$this->getCarrier()->interruptFlow(InterrupterInterface::TYPE_CONTINUE);
 // propagate skip to root Flow
-$this->carrier->continueFlow(new FlowInterrupt(FlowInterruptInterface::TARGET_TOP));
-// propagate skip to Flow id `$targetFlowId`
-$this->carrier->continueFlow(new FlowInterrupt($targetFlowId));
+$this->getCarrier()->continueFlow(new Interrupter(InterrupterInterface::TARGET_TOP));
+// propagate skip to Flow id $targetFlowId
+$this->getCarrier()->continueFlow(new Interrupter($targetFlowId));
+// propagate skip at $targetNode  in Flow $targetFlow by instance
+$this->getCarrier()->continueFlow(new Interrupter($targetFlow, $targetNode));
+// same, but using lower level interruptFlow and by id
+$this->getCarrier()->interruptFlow(InterrupterInterface::TYPE_CONTINUE, new Interrupter($targetFlow->getId(), $targetNode->getId())));
 ```
 
 or
 
 ```php
-// stop the whole flow right here
-$this->carrier->breakFlow();
-$this->carrier->interruptFlow(FlowInterruptInterface::TYPE_BREAK);
+// stop the carrrier Flow right here
+$this->getCarrier()->breakFlow();
+$this->getCarrier()->interruptFlow(FlowInterruptInterface::TYPE_BREAK);
 // ...
 ```
 
-whenever you need to in the `getTraversable()` and / or `exec()` methods to `continue` or `break` the flow. 
+whenever you need to when `getTraversable()` and / or `exec()` methods are triggered to `continue` or `break` the flow. 

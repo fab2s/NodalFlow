@@ -15,15 +15,8 @@ use fab2s\NodalFlow\Nodes\NodeInterface;
 /**
  * Interface FlowInterface
  */
-interface FlowInterface
+interface FlowInterface extends FlowIdInterface
 {
-    /**
-     * Return the Flow id as set during instantiation
-     *
-     * @return string
-     */
-    public function getId();
-
     /**
      * get the Node Map
      *

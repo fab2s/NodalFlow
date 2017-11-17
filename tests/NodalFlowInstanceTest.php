@@ -8,6 +8,7 @@
  */
 
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\Nodes\NodeInterface;
 
 class NodalFlowInstanceTest extends \TestCase
 {
@@ -22,11 +23,12 @@ class NodalFlowInstanceTest extends \TestCase
     public function testFlows(FlowInterface $flow, array $nodes, $param, $expected)
     {
         foreach ($nodes as $key => $nodeSetup) {
+            /** @var NodeInterface $node */
             $node = new $nodeSetup['nodeClass']($nodeSetup['payload'], $nodeSetup['isAReturningVal'], $nodeSetup['isATraversable']);
             $this->validateNode($node, $nodeSetup['isAReturningVal'], $nodeSetup['isATraversable'], $nodeSetup['validate']);
 
             $flow->add($node);
-            $nodes[$key]['hash'] = $node->getNodeHash();
+            $nodes[$key]['hash'] = $node->getId();
         }
 
         $result  = $flow->exec($param);
