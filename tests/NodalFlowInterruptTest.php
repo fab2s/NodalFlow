@@ -60,7 +60,7 @@ class NodalFlowInterruptTest extends \TestCase
             $this->validateNode($node, $nodeSetup['isAReturningVal'], $nodeSetup['isATraversable'], $nodeSetup['validate']);
 
             $flow->add($node);
-            $nodes[$key]['hash'] = $node->getNodeHash();
+            $nodes[$key]['hash'] = $node->getId();
         }
 
         $result    = $flow->exec($param);
@@ -135,25 +135,25 @@ class NodalFlowInterruptTest extends \TestCase
                 ->add($breakAt5Node1)
                 ->add($noOpNode2),
             'expected' => [
-                $traversableNode1->getNodeHash() => [
+                $traversableNode1->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 5,
                     'num_break'    => 1,
                     'num_continue' => 0,
                 ],
-                $noOpNode1->getNodeHash() => [
+                $noOpNode1->getId() => [
                     'num_exec'     => 5,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $breakAt5Node1->getNodeHash() => [
+                $breakAt5Node1->getId() => [
                     'num_exec'     => 5,
                     'num_iterate'  => 0,
                     'num_break'    => 1,
                     'num_continue' => 0,
                 ],
-                $noOpNode2->getNodeHash() => [
+                $noOpNode2->getId() => [
                     'num_exec'     => 4,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -172,25 +172,25 @@ class NodalFlowInterruptTest extends \TestCase
                 ->add($continueAt5Node1)
                 ->add($noOpNode2),
             'expected' => [
-                $traversableNode1->getNodeHash() => [
+                $traversableNode1->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 10,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $noOpNode1->getNodeHash() => [
+                $noOpNode1->getId() => [
                     'num_exec'     => 10,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $continueAt5Node1->getNodeHash() => [
+                $continueAt5Node1->getId() => [
                     'num_exec'     => 10,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 1,
                 ],
-                $noOpNode2->getNodeHash() => [
+                $noOpNode2->getId() => [
                     'num_exec'     => 9,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -219,37 +219,37 @@ class NodalFlowInterruptTest extends \TestCase
                 ->add($branchNode1)
                 ->add($noOpNode4),
             'expected' => [
-                $noOpNode3->getNodeHash() => [
+                $noOpNode3->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getNodeHash() => [
+                $branchNode1->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                     'nodes'        => [
-                        $traversableNode1->getNodeHash() => [
+                        $traversableNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 5,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getNodeHash() => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $breakAt5Node1->getNodeHash() => [
+                        $breakAt5Node1->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getNodeHash() => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 4,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -257,7 +257,7 @@ class NodalFlowInterruptTest extends \TestCase
                         ],
                     ],
                 ],
-                $noOpNode4->getNodeHash() => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -286,37 +286,37 @@ class NodalFlowInterruptTest extends \TestCase
                 ->add($branchNode1)
                 ->add($noOpNode4),
             'expected' => [
-                $noOpNode3->getNodeHash() => [
+                $noOpNode3->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getNodeHash() => [
+                $branchNode1->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                     'nodes'        => [
-                        $traversableNode1->getNodeHash() => [
+                        $traversableNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 10,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getNodeHash() => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 10,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $continueAt5Node1->getNodeHash() => [
+                        $continueAt5Node1->getId() => [
                             'num_exec'     => 10,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 1,
                         ],
-                        $noOpNode2->getNodeHash() => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 9,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -324,7 +324,7 @@ class NodalFlowInterruptTest extends \TestCase
                         ],
                     ],
                 ],
-                $noOpNode4->getNodeHash() => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -357,49 +357,49 @@ class NodalFlowInterruptTest extends \TestCase
                 ->add($branchNode1)
                 ->add($noOpNode5),
             'expected' => [
-                $noOpNode4->getNodeHash() => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getNodeHash() => [
+                $branchNode1->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                     'nodes'        => [
-                        $traversableNode1->getNodeHash() => [
+                        $traversableNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 10,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getNodeHash() => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 10,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $traversableNode2->getNodeHash() => [
+                        $traversableNode2->getId() => [
                             'num_exec'     => 10,
                             'num_iterate'  => 95,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getNodeHash() => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 95,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $breakAt5Node1->getNodeHash() => [
+                        $breakAt5Node1->getId() => [
                             'num_exec'     => 95,
                             'num_iterate'  => 0,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode3->getNodeHash() => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 94,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -407,7 +407,7 @@ class NodalFlowInterruptTest extends \TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getNodeHash() => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -440,49 +440,49 @@ class NodalFlowInterruptTest extends \TestCase
                 ->add($branchNode1)
                 ->add($noOpNode5),
             'expected' => [
-                $noOpNode4->getNodeHash() => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getNodeHash() => [
+                $branchNode1->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                     'nodes'        => [
-                        $traversableNode1->getNodeHash() => [
+                        $traversableNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 10,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getNodeHash() => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 10,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $traversableNode2->getNodeHash() => [
+                        $traversableNode2->getId() => [
                             'num_exec'     => 10,
                             'num_iterate'  => 100,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getNodeHash() => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 100,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $continueAt5Node1->getNodeHash() => [
+                        $continueAt5Node1->getId() => [
                             'num_exec'     => 100,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 1,
                         ],
-                        $noOpNode3->getNodeHash() => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 99,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -490,7 +490,7 @@ class NodalFlowInterruptTest extends \TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getNodeHash() => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -523,49 +523,49 @@ class NodalFlowInterruptTest extends \TestCase
                 ->add($branchNode1)
                 ->add($noOpNode5),
             'expected' => [
-                $noOpNode4->getNodeHash() => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getNodeHash() => [
+                $branchNode1->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                     'nodes'        => [
-                        $traversableNode1->getNodeHash() => [
+                        $traversableNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 1,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getNodeHash() => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $traversableNode2->getNodeHash() => [
+                        $traversableNode2->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 5,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getNodeHash() => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $breakAt5Node1->getNodeHash() => [
+                        $breakAt5Node1->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode3->getNodeHash() => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 4,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -573,7 +573,7 @@ class NodalFlowInterruptTest extends \TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getNodeHash() => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -606,49 +606,49 @@ class NodalFlowInterruptTest extends \TestCase
                 ->add($branchNode1)
                 ->add($noOpNode5),
             'expected' => [
-                $noOpNode4->getNodeHash() => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getNodeHash() => [
+                $branchNode1->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                     'nodes'        => [
-                        $traversableNode1->getNodeHash() => [
+                        $traversableNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 10,
                             'num_break'    => 0,
                             'num_continue' => 1,
                         ],
-                        $noOpNode1->getNodeHash() => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 10,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $traversableNode2->getNodeHash() => [
+                        $traversableNode2->getId() => [
                             'num_exec'     => 10,
                             'num_iterate'  => 95,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getNodeHash() => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 95,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $continueAt5Node1->getNodeHash() => [
+                        $continueAt5Node1->getId() => [
                             'num_exec'     => 95,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 1,
                         ],
-                        $noOpNode3->getNodeHash() => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 94,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -656,7 +656,7 @@ class NodalFlowInterruptTest extends \TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getNodeHash() => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -692,49 +692,49 @@ class NodalFlowInterruptTest extends \TestCase
         $testCases['flow9'] = [
             'flow'     => $rootFlow,
             'expected' => [
-                $noOpNode4->getNodeHash() => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getNodeHash() => [
+                $branchNode1->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 1,
                     'num_continue' => 0,
                     'nodes'        => [
-                        $traversableNode1->getNodeHash() => [
+                        $traversableNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 1,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getNodeHash() => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $traversableNode2->getNodeHash() => [
+                        $traversableNode2->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 5,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getNodeHash() => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $breakAt5Node1->getNodeHash() => [
+                        $breakAt5Node1->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode3->getNodeHash() => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 4,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -742,7 +742,7 @@ class NodalFlowInterruptTest extends \TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getNodeHash() => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 0,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -778,49 +778,49 @@ class NodalFlowInterruptTest extends \TestCase
         $testCases['flow10'] = [
             'flow'     => $rootFlow,
             'expected' => [
-                $noOpNode4->getNodeHash() => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getNodeHash() => [
+                $branchNode1->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 1,
                     'nodes'        => [
-                        $traversableNode1->getNodeHash() => [
+                        $traversableNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 1,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getNodeHash() => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $traversableNode2->getNodeHash() => [
+                        $traversableNode2->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 5,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getNodeHash() => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $continueAt5Node1->getNodeHash() => [
+                        $continueAt5Node1->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 1,
                         ],
-                        $noOpNode3->getNodeHash() => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 4,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -828,7 +828,7 @@ class NodalFlowInterruptTest extends \TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getNodeHash() => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 0,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -870,19 +870,19 @@ class NodalFlowInterruptTest extends \TestCase
         $testCases['flow11'] = [
             'flow'     => $rootFlow,
             'expected' => [
-                $traversableNode3->getNodeHash() => [
+                $traversableNode3->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 10,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $noOpNode6->getNodeHash() => [
+                $noOpNode6->getId() => [
                     'num_exec'     => 10,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $traversableNode4->getNodeHash() => [
+                $traversableNode4->getId() => [
                     'num_exec'     => 10,
                     // the break signal is sent at rec n°5
                     // it is detected on the 1st records of
@@ -893,49 +893,49 @@ class NodalFlowInterruptTest extends \TestCase
                     'num_break'    => 1,
                     'num_continue' => 0,
                 ],
-                $noOpNode4->getNodeHash() => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 91,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getNodeHash() => [
+                $branchNode1->getId() => [
                     'num_exec'     => 91,
                     'num_iterate'  => 0,
                     'num_break'    => 1,
                     'num_continue' => 0,
                     'nodes'        => [
-                        $traversableNode1->getNodeHash() => [
+                        $traversableNode1->getId() => [
                             'num_exec'     => 91,
                             'num_iterate'  => 901,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getNodeHash() => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 901,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $traversableNode2->getNodeHash() => [
+                        $traversableNode2->getId() => [
                             'num_exec'     => 901,
                             'num_iterate'  => 9005,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getNodeHash() => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 9005,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $breakAt5Node1->getNodeHash() => [
+                        $breakAt5Node1->getId() => [
                             'num_exec'     => 9005,
                             'num_iterate'  => 0,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode3->getNodeHash() => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 9004,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -943,7 +943,7 @@ class NodalFlowInterruptTest extends \TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getNodeHash() => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 90,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -985,19 +985,19 @@ class NodalFlowInterruptTest extends \TestCase
         $testCases['flow12'] = [
             'flow'     => $rootFlow,
             'expected' => [
-                $traversableNode3->getNodeHash() => [
+                $traversableNode3->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 10,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $noOpNode6->getNodeHash() => [
+                $noOpNode6->getId() => [
                     'num_exec'     => 10,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $traversableNode4->getNodeHash() => [
+                $traversableNode4->getId() => [
                     'num_exec'     => 10,
                     // the break signal is sent at rec n°5
                     // it is detected on the 1st records of
@@ -1008,49 +1008,49 @@ class NodalFlowInterruptTest extends \TestCase
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $noOpNode4->getNodeHash() => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 100,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getNodeHash() => [
+                $branchNode1->getId() => [
                     'num_exec'     => 100,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 1,
                     'nodes'        => [
-                        $traversableNode1->getNodeHash() => [
+                        $traversableNode1->getId() => [
                             'num_exec'     => 100,
                             'num_iterate'  => 991,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getNodeHash() => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 991,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $traversableNode2->getNodeHash() => [
+                        $traversableNode2->getId() => [
                             'num_exec'     => 991,
                             'num_iterate'  => 9905,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getNodeHash() => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 9905,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $continueAt5Node1->getNodeHash() => [
+                        $continueAt5Node1->getId() => [
                             'num_exec'     => 9905,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 1,
                         ],
-                        $noOpNode3->getNodeHash() => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 9904,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -1058,7 +1058,7 @@ class NodalFlowInterruptTest extends \TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getNodeHash() => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 99,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -1100,67 +1100,67 @@ class NodalFlowInterruptTest extends \TestCase
         $testCases['flow13'] = [
             'flow'     => $rootFlow,
             'expected' => [
-                $traversableNode3->getNodeHash() => [
+                $traversableNode3->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 1,
                     'num_break'    => 1,
                     'num_continue' => 0,
                 ],
-                $noOpNode6->getNodeHash() => [
+                $noOpNode6->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $traversableNode4->getNodeHash() => [
+                $traversableNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 1,
                     'num_break'    => 1,
                     'num_continue' => 0,
                 ],
-                $noOpNode4->getNodeHash() => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getNodeHash() => [
+                $branchNode1->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 1,
                     'num_continue' => 0,
                     'nodes'        => [
-                        $traversableNode1->getNodeHash() => [
+                        $traversableNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 1,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getNodeHash() => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $traversableNode2->getNodeHash() => [
+                        $traversableNode2->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 5,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getNodeHash() => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $breakAt5Node1->getNodeHash() => [
+                        $breakAt5Node1->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode3->getNodeHash() => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 4,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -1168,7 +1168,7 @@ class NodalFlowInterruptTest extends \TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getNodeHash() => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 0,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -1210,67 +1210,67 @@ class NodalFlowInterruptTest extends \TestCase
         $testCases['flow13'] = [
             'flow'     => $rootFlow,
             'expected' => [
-                $traversableNode3->getNodeHash() => [
+                $traversableNode3->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 10,
                     'num_break'    => 0,
                     'num_continue' => 1,
                 ],
-                $noOpNode6->getNodeHash() => [
+                $noOpNode6->getId() => [
                     'num_exec'     => 10,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $traversableNode4->getNodeHash() => [
+                $traversableNode4->getId() => [
                     'num_exec'     => 10,
                     'num_iterate'  => 91,
                     'num_break'    => 1,
                     'num_continue' => 0,
                 ],
-                $noOpNode4->getNodeHash() => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 91,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getNodeHash() => [
+                $branchNode1->getId() => [
                     'num_exec'     => 91,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 1,
                     'nodes'        => [
-                        $traversableNode1->getNodeHash() => [
+                        $traversableNode1->getId() => [
                             'num_exec'     => 91,
                             'num_iterate'  => 901,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getNodeHash() => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 901,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $traversableNode2->getNodeHash() => [
+                        $traversableNode2->getId() => [
                             'num_exec'     => 901,
                             'num_iterate'  => 9005,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getNodeHash() => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 9005,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $continueAt5Node1->getNodeHash() => [
+                        $continueAt5Node1->getId() => [
                             'num_exec'     => 9005,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 1,
                         ],
-                        $noOpNode3->getNodeHash() => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 9004,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -1278,7 +1278,7 @@ class NodalFlowInterruptTest extends \TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getNodeHash() => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 90,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -1320,67 +1320,67 @@ class NodalFlowInterruptTest extends \TestCase
         $testCases['flow15'] = [
             'flow'     => $rootFlow,
             'expected' => [
-                $traversableNode3->getNodeHash() => [
+                $traversableNode3->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 10,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $noOpNode6->getNodeHash() => [
+                $noOpNode6->getId() => [
                     'num_exec'     => 10,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $traversableNode4->getNodeHash() => [
+                $traversableNode4->getId() => [
                     'num_exec'     => 10,
                     'num_iterate'  => 91,
                     'num_break'    => 1,
                     'num_continue' => 0,
                 ],
-                $noOpNode4->getNodeHash() => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 91,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getNodeHash() => [
+                $branchNode1->getId() => [
                     'num_exec'     => 91,
                     'num_iterate'  => 0,
                     'num_break'    => 1,
                     'num_continue' => 0,
                     'nodes'        => [
-                        $traversableNode1->getNodeHash() => [
+                        $traversableNode1->getId() => [
                             'num_exec'     => 91,
                             'num_iterate'  => 901,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getNodeHash() => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 901,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $traversableNode2->getNodeHash() => [
+                        $traversableNode2->getId() => [
                             'num_exec'     => 901,
                             'num_iterate'  => 9005,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getNodeHash() => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 9005,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $breakAt5Node1->getNodeHash() => [
+                        $breakAt5Node1->getId() => [
                             'num_exec'     => 9005,
                             'num_iterate'  => 0,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode3->getNodeHash() => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 9004,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -1388,7 +1388,7 @@ class NodalFlowInterruptTest extends \TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getNodeHash() => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 90,
                     'num_iterate'  => 0,
                     'num_break'    => 0,

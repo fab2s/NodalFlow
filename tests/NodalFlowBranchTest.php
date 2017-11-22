@@ -8,6 +8,7 @@
  */
 
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\Nodes\NodeInterface;
 
 class NodalFlowBranchTest extends \TestCase
 {
@@ -29,11 +30,11 @@ class NodalFlowBranchTest extends \TestCase
             } else {
                 $node = new $nodeSetup['nodeClass']($nodeSetup['payload'], $nodeSetup['isAReturningVal'], $nodeSetup['isATraversable']);
             }
-
+            /* @var $node NodeInterface */
             $this->validateNode($node, $nodeSetup['isAReturningVal'], $nodeSetup['isATraversable'], $nodeSetup['validate']);
 
             $flow->add($node);
-            $nodes[$key]['hash'] = $node->getNodeHash();
+            $nodes[$key]['hash'] = $node->getId();
         }
 
         $result  = $flow->exec($param);

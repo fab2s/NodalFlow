@@ -34,11 +34,11 @@ interface FlowMapInterface
     /**
      * Let's be fast at incrementing while we are at it
      *
-     * @param NodeInterface $node
+     * @param string $nodeHash
      *
      * @return array
      */
-    public function &getNodeStat(NodeInterface $node);
+    public function &getNodeStat($nodeHash);
 
     /**
      * @param NodeInterface $node

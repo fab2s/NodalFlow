@@ -9,20 +9,19 @@
 
 namespace fab2s\NodalFlow;
 
-use fab2s\NodalFlow\Callbacks\CallbackInterface;
-use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\Flows\FlowAbstract;
 use fab2s\NodalFlow\Flows\FlowMap;
-use fab2s\NodalFlow\Flows\FlowMapInterface;
 use fab2s\NodalFlow\Flows\FlowStatus;
-use fab2s\NodalFlow\Flows\FlowStatusInterface;
 use fab2s\NodalFlow\Flows\InterrupterInterface;
 use fab2s\NodalFlow\Nodes\BranchNodeInterface;
+use fab2s\NodalFlow\Nodes\ExecNodeInterface;
 use fab2s\NodalFlow\Nodes\NodeInterface;
+use fab2s\NodalFlow\Nodes\TraversableNodeInterface;
 
 /**
  * Class NodalFlow
  */
-class NodalFlow implements FlowInterface
+class NodalFlow extends FlowAbstract
 {
     /**
      * Flow steps triggering callbacks
@@ -33,30 +32,9 @@ class NodalFlow implements FlowInterface
     const FLOW_FAIL     = 'fail';
 
     /**
-     * The parent Flow, only set when branched
-     *
-     * @var FlowInterface
-     */
-    public $parent;
-
-    /**
-     * This Flow id
-     *
-     * @var string
-     */
-    protected $id;
-
-    /**
      * @var array
      */
     protected $flowIncrements = [];
-
-    /**
-     * The underlying node structure
-     *
-     * @var NodeInterface[]
-     */
-    protected $nodes = [];
 
     /**
      * The current Node index
@@ -87,65 +65,10 @@ class NodalFlow implements FlowInterface
     protected $numIterate = 0;
 
     /**
-     * The current registered Callback class if any
-     *
-     * @var CallbackInterface|null
-     */
-    protected $callBack;
-
-    /**
-     * Progress modulo to apply
-     * Set to x if you want to trigger
-     * progress every x iterations in flow
-     *
-     * @var int
-     */
-    protected $progressMod = 1024;
-
-    /**
-     * Continue flag
-     *
-     * @var bool
-     */
-    protected $continue = false;
-
-    /**
-     * Break Flag
-     *
-     * @var bool
-     */
-    protected $break = false;
-
-    /**
-     * Current Flow Status
-     *
-     * @var FlowStatusInterface
-     */
-    protected $flowStatus;
-
-    /**
-     * @var FlowMapInterface
-     */
-    protected $flowMap;
-
-    /**
-     * @var string|bool
-     */
-    protected $interruptNodeId;
-
-    /**
-     * Current nonce
-     *
-     * @var int
-     */
-    private static $nonce = 0;
-
-    /**
      * Instantiate a Flow
      */
     public function __construct()
     {
-        $this->id      = $this->uniqId();
         $this->flowMap = new FlowMap($this, $this->flowIncrements);
     }
 
@@ -169,6 +92,7 @@ class NodalFlow implements FlowInterface
 
         $this->flowMap->register($node, $this->nodeIdx);
         $this->nodes[$this->nodeIdx] = $node;
+
         ++$this->nodeIdx;
 
         return $this;
@@ -193,86 +117,6 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * Register callback class
-     *
-     * @param CallbackInterface $callBack
-     *
-     * @return $this
-     */
-    public function setCallBack(CallbackInterface $callBack)
-    {
-        $this->callBack = $callBack;
-
-        return $this;
-    }
-
-    /**
-     * Used to set the eventual Node Target of an Interrupt signal
-     * set to :
-     * - A node hash to target
-     * - true to interrupt every upstream nodes
-     *     in this Flow
-     * - false to only interrupt up to the first
-     *     upstream Traversable in this Flow
-     *
-     * @param string|bool $interruptNodeId
-     *
-     * @return $this
-     */
-    public function setInterruptNodeId($interruptNodeId)
-    {
-        $this->interruptNodeId = $interruptNodeId;
-
-        return $this;
-    }
-
-    /**
-     * Set parent Flow, happens only when branched
-     *
-     * @param FlowInterface $flow
-     *
-     * @return $this
-     */
-    public function setParent(FlowInterface $flow)
-    {
-        $this->parent = $flow;
-
-        return $this;
-    }
-
-    /**
-     * Get eventual parent Flow
-     *
-     * @return FlowInterface
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * Tells if this flow has a parent
-     *
-     * @return bool
-     */
-    public function hasParent()
-    {
-        return !empty($this->parent);
-    }
-
-    /**
-     * Generates a truly unique id for the Flow context
-     *
-     * @return string
-     */
-    public function uniqId()
-    {
-        // while we're at it, drop any doubt about
-        // colliding from here
-        return \sha1(uniqid() . $this->getNonce());
-    }
-
-    /**
      * Execute the flow
      *
      * @param null|mixed $param The eventual init argument to the first node
@@ -290,6 +134,7 @@ class NodalFlow implements FlowInterface
             $result = $this->rewind()
                     ->flowStart()
                     ->recurse($param);
+
             // set flowStatus to make sure that we have the proper
             // value in flowEnd even when overridden without (or when
             // improperly) calling parent
@@ -314,58 +159,6 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * Get the stats array with latest Node stats
-     *
-     * @return array
-     */
-    public function getStats()
-    {
-        return $this->flowMap->getStats();
-    }
-
-    /**
-     * Return the Flow id as set during instantiation
-     *
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * getId() alias for backward compatibility
-     *
-     * @deprecated
-     *
-     * @return string
-     */
-    public function getFlowId()
-    {
-        return $this->getId();
-    }
-
-    /**
-     * Get the Node array
-     *
-     * @return NodeInterface[]
-     */
-    public function getNodes()
-    {
-        return $this->nodes;
-    }
-
-    /**
-     * Get/Generate Node Map
-     *
-     * @return array
-     */
-    public function getNodeMap()
-    {
-        return $this->flowMap->getNodeMap();
-    }
-
-    /**
      * Rewinds the Flow
      *
      * @return $this
@@ -379,44 +172,6 @@ class NodalFlow implements FlowInterface
         $this->interruptNodeId = null;
 
         return $this;
-    }
-
-    /**
-     * Define the progress modulo, Progress Callback will be
-     * triggered upon each iteration in the flow modulo $progressMod
-     *
-     * @param int $progressMod
-     *
-     * @return $this
-     */
-    public function setProgressMod($progressMod)
-    {
-        $this->progressMod = max(1, (int) $progressMod);
-
-        return $this;
-    }
-
-    /**
-     * Get current $progressMod
-     *
-     * @return int
-     */
-    public function getProgressMod()
-    {
-        return $this->progressMod;
-    }
-
-    /**
-     * The Flow status can either indicate be:
-     *      - clean (isClean()): everything went well
-     *      - dirty (isDirty()): one Node broke the flow
-     *      - exception (isException()): an exception was raised during the flow
-     *
-     * @return FlowStatusInterface
-     */
-    public function getFlowStatus()
-    {
-        return $this->flowStatus;
     }
 
     /**
@@ -443,49 +198,6 @@ class NodalFlow implements FlowInterface
     public function continueFlow(InterrupterInterface $flowInterrupt = null)
     {
         return $this->interruptFlow(InterrupterInterface::TYPE_CONTINUE, $flowInterrupt);
-    }
-
-    /**
-     * @param string                    $interruptType
-     * @param InterrupterInterface|null $flowInterrupt
-     *
-     * @throws NodalFlowException
-     *
-     * @return $this
-     */
-    public function interruptFlow($interruptType, InterrupterInterface $flowInterrupt = null)
-    {
-        switch ($interruptType) {
-            case InterrupterInterface::TYPE_CONTINUE:
-                $this->continue = true;
-                $this->flowMap->incrementFlow('num_continue');
-                break;
-            case InterrupterInterface::TYPE_BREAK:
-                $this->flowStatus = new FlowStatus(FlowStatus::FLOW_DIRTY);
-                $this->break      = true;
-                $this->flowMap->incrementFlow('num_break');
-                break;
-            default:
-                throw new NodalFlowException('FlowInterrupt Type missing');
-        }
-
-        if ($flowInterrupt) {
-            $flowInterrupt->setType($interruptType)->propagate($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param NodeInterface $node
-     *
-     * @return bool
-     */
-    protected function interruptNode(NodeInterface $node)
-    {
-        // if we have an interruptNodeId, bubble up until we match a node
-        // else stop propagation
-        return $this->interruptNodeId ? $this->interruptNodeId !== $node->getNodeHash() : false;
     }
 
     /**
@@ -519,16 +231,6 @@ class NodalFlow implements FlowInterface
     }
 
     /**
-     * Return a simple nonce, fully valid within any flow
-     *
-     * @return int
-     */
-    protected function getNonce()
-    {
-        return self::$nonce++;
-    }
-
-    /**
      * Recurse over nodes which may as well be Flows and
      * Traversable ...
      * Welcome to the abysses of recursion or iter-recursion ^^
@@ -555,10 +257,12 @@ class NodalFlow implements FlowInterface
     {
         while ($nodeIdx <= $this->lastIdx) {
             $node      = $this->nodes[$nodeIdx];
-            $nodeStats = &$this->flowMap->getNodeStat($node);
+            $nodeStats = &$this->flowMap->getNodeStat($node->getId());
+
             $returnVal = $node->isReturningVal();
 
             if ($node->isTraversable()) {
+                /** @var TraversableNodeInterface $node */
                 foreach ($node->getTraversable($param) as $value) {
                     if ($returnVal) {
                         // pass current $value as next param
@@ -599,6 +303,7 @@ class NodalFlow implements FlowInterface
                 return $param;
             }
 
+            /** @var ExecNodeInterface $node */
             $value = $node->exec($param);
             ++$nodeStats['num_exec'];
 
@@ -628,22 +333,5 @@ class NodalFlow implements FlowInterface
 
         // we reached the end of this recursion
         return $param;
-    }
-
-    /**
-     * KISS helper to trigger Callback slots
-     *
-     * @param string             $which
-     * @param null|NodeInterface $node
-     *
-     * @return $this
-     */
-    protected function triggerCallback($which, NodeInterface $node = null)
-    {
-        if (null !== $this->callBack) {
-            $this->callBack->$which($this, $node);
-        }
-
-        return $this;
     }
 }

@@ -9,12 +9,13 @@
 
 namespace fab2s\NodalFlow\Nodes;
 
+use fab2s\NodalFlow\Flows\FlowIdInterface;
 use fab2s\NodalFlow\Flows\FlowInterface;
 
 /**
  * Interface NodeInterface
  */
-interface NodeInterface
+interface NodeInterface extends FlowIdInterface
 {
     /**
      * Indicate if the Node is Traversable
@@ -59,6 +60,8 @@ interface NodeInterface
 
     /**
      * Get this Node's hash, must be deterministic and unique
+     *
+     * @deprecated use `getId` instead
      *
      * @return string
      */
