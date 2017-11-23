@@ -9,6 +9,8 @@
 
 namespace fab2s\NodalFlow\Flows;
 
+use fab2s\NodalFlow\Nodes\NodeInterface;
+
 /**
  * Trait FlowIdTrait
  */
@@ -35,6 +37,10 @@ trait FlowIdTrait
     public function __clone()
     {
         $this->id = null;
+        // need to detach node from carrier
+        if ($this instanceof NodeInterface) {
+            $this->setCarrier(null);
+        }
     }
 
     /**

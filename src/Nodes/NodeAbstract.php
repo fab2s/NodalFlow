@@ -96,13 +96,13 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
-     * Set carrying Flow
+     * Set/Reset carrying Flow
      *
-     * @param FlowInterface $flow
+     * @param FlowInterface|null $flow
      *
      * @return $this
      */
-    public function setCarrier(FlowInterface $flow)
+    public function setCarrier(FlowInterface $flow = null)
     {
         $this->carrier = $flow;
 
