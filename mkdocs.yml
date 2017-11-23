@@ -2,6 +2,7 @@ site_name: 'NodalFlow'
 pages:
     - 'NodalFlow Documentation': 'index.md'
     - 'Usage': 'usage.md'
+    - 'Serialization': 'serialization.md'
     - 'NodalFlow Citizens': 'citizens.md'
     - 'Traversability': 'traversability.md'
     - 'Interruptions': 'interruptions.md'

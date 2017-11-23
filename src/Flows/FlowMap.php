@@ -92,9 +92,14 @@ class FlowMap implements FlowMapInterface
     protected $flowStats;
 
     /**
+     * @var FlowRegistryInterface
+     */
+    protected $registry;
+
+    /**
      * @var array
      */
-    protected static $registry = [];
+    protected $registryData = [];
 
     /**
      * @var FlowInterface
@@ -114,77 +119,20 @@ class FlowMap implements FlowMapInterface
      */
     public function __construct(FlowInterface $flow, array $flowIncrements = [])
     {
-        $this->flow             = $flow;
-        $this->flowId           = $this->flow->getId();
+        $this->flow     = $flow;
+        $this->flowId   = $this->flow->getId();
+        $this->registry = (new FlowRegistry)->registerFlow($flow);
         $this->initDefaults()->setRefs()->setFlowIncrement($flowIncrements);
     }
 
     /**
-     * The goal is to offer a cheap global state that supports
-     * sending a parameter to whatever node in any live Flows.
-     * We also need some kind of specific setup for each Flows
-     * and Nodes (custom increments etc).
-     *
-     * The idea is to share a registry among all instances
-     * without :
-     *  - singleton: would only be useful to store the global state
-     *      not the specific setup
-     *  - breaking references: we want to be able to increment fast
-     *      thus multiple entries at once by reference
-     *  - DI: it would be a bit too much of code for the purpose and
-     *      would come with the same limitation as the singleton
-     *  - Complex and redundant merge strategies: registering a Node
-     *      would then require to look up for ascendant and descendant
-     *      Flows each time.
-     *  - Breaking serialization: Playing with static and references
-     *      require some attention. The matter is dealt with transparently
-     *      as the static registry acts like a global cache feed with each
-     *      instance data upon un-serialization.
-     *
-     * By using a static, we make sure all instances share the same
-     * registry at all time in the simplest way.
-     * Each FlowMap instance keeps dynamic reference to the portion
-     * of the registry that belongs to the Flow holding the instance.
-     * Upon Serialization, every FlowMap instance will thus only store
-     * a portion of the global state, that is relevant to its carrying
-     * Flow.
-     *
-     * Upon un-serialization, the global state is restored bit by bit
-     * as each FlowMap gets un-serialized.
-     * This leverage one edge case, that is, if we un-serialize two
-     * time the same Flow (could only be members of different Flows).
-     * This is not very likely as Flow id are immutable and unique,
-     * but it could occur.
-     * This situation is currently dealt with by throwing an exception,
-     * as it would introduce the need to deal with distinct instances
-     * with the same Id. And generating new ids is not simple either
-     * as their whole point is to stay the same for others to know
-     * who's who.
-     * I find it a small trade of though, as un-serializing twice
-     * the same string seems buggy and reusing the same Flow without
-     * cloning is not such a good idea either (nor required).
-     *
-     * The use of a static registry also bring a somehow exotic feature :
-     * The ability to target any Node in any Flow is not limited to the
-     * flow within the same root Flow. You can actually target any Flow
-     * in the current process. Using reference implementation would limit
-     * the sharing to the root FLow members.
-     * I don't know if this can be actually useful, but I don't think
-     * it's such a big deal either.
-     *
      * If you don't feel like doing this at home, I completely
      * understand, I'd be very happy to hear about a better and
      * more efficient way
      */
     public function __wakeup()
     {
-        if (isset(static::$registry[$this->flowId])) {
-            throw new NodalFlowException('Un-serializing a Flow when it is already instantiated is not supported', 1, null, [
-                'class' => get_class($this->flow),
-                'id'    => $this->flowId,
-            ]);
-        }
-
+        $this->registry->load($this->flow, $this->registryData);
         $this->setRefs();
     }
 
@@ -196,7 +144,7 @@ class FlowMap implements FlowMapInterface
      */
     public function register(NodeInterface $node, $index)
     {
-        $this->enforceUniqueness($node);
+        $this->registry->registerNode($node);
         $nodeId                 = $node->getId();
         $this->nodeMap[$nodeId] = array_replace($this->nodeMapDefault, [
             'class'           => get_class($node),
@@ -296,6 +244,7 @@ class FlowMap implements FlowMapInterface
      */
     public function getStats()
     {
+        $this->resetTotals();
         foreach ($this->flow->getNodes() as $node) {
             $nodeMap = $this->nodeMap[$node->getId()];
             foreach ($this->incrementTotals as $srcKey => $totalKey) {
@@ -394,10 +343,10 @@ class FlowMap implements FlowMapInterface
      */
     protected function setRefs()
     {
-        static::$registry[$this->flowId]['flowStats'] = &$this->flowStats;
-        static::$registry[$this->flowId]['nodeStats'] = &$this->nodeMap;
-        static::$registry[$this->flowId]['flow']      = $this->flow;
-        static::$registry[$this->flowId]['nodes']     = &$this->reverseMap;
+        $this->registryData              = &$this->registry->get($this->flowId);
+        $this->registryData['flowStats'] = &$this->flowStats;
+        $this->registryData['nodeStats'] = &$this->nodeMap;
+        $this->registryData['nodes']     = &$this->reverseMap;
 
         return $this;
     }
@@ -425,6 +374,18 @@ class FlowMap implements FlowMapInterface
     }
 
     /**
+     * @return $this
+     */
+    protected function resetTotals()
+    {
+        foreach ($this->incrementTotals as $totalKey) {
+            $this->flowStats[$totalKey] = 0;
+        }
+
+        return $this;
+    }
+
+    /**
      * Set additional increment keys, use :
      *      'keyName' => int
      * to add keyName as increment, starting at int
@@ -446,18 +407,14 @@ class FlowMap implements FlowMapInterface
                     throw new NodalFlowException('Cannot set reference on unset target');
                 }
 
-                if (substr($incrementKey, -6) === '_total') {
-                    $this->incrementTotals[$incrementKey] = $target;
-                    $this->flowStats[$incrementKey]       = 0;
-                    continue;
-                }
-
-                $this->flowStats[$incrementKey] = &$this->flowStats[$target];
+                $this->flowStats[$incrementKey]            = &$this->flowStats[$target];
+                $this->flowStats[$incrementKey . '_total'] = &$this->flowStats[$target . '_total'];
                 continue;
             }
 
-            $this->flowIncrements[$incrementKey] = $target;
-            $this->flowStats[$incrementKey]      = $target;
+            $this->flowIncrements[$incrementKey]  = $target;
+            $this->incrementTotals[$incrementKey] = $incrementKey . '_total';
+            $this->flowStats[$incrementKey]       = $target;
         }
 
         return $this;
@@ -488,25 +445,6 @@ class FlowMap implements FlowMapInterface
 
             $this->nodeIncrements[$incrementKey]   = $target;
             $this->nodeMap[$nodeId][$incrementKey] = $target;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param NodeInterface $node
-     *
-     * @throws NodalFlowException
-     *
-     * @return $this
-     */
-    protected function enforceUniqueness(NodeInterface $node)
-    {
-        if (isset($this->nodeMap[$node->getId()])) {
-            throw new NodalFlowException('Cannot reuse Node instances within a Flow', 1, null, [
-                'duplicate_node' => get_class($node),
-                'hash'           => $node->getId(),
-            ]);
         }
 
         return $this;

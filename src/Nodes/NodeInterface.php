@@ -43,13 +43,13 @@ interface NodeInterface extends FlowIdInterface
     public function isReturningVal();
 
     /**
-     * Set carrying Flow
+     * Set/Reset carrying Flow
      *
-     * @param FlowInterface $flow
+     * @param FlowInterface|null $flow
      *
      * @return $this
      */
-    public function setCarrier(FlowInterface $flow);
+    public function setCarrier(FlowInterface $flow = null);
 
     /**
      * Return the carrying Flow

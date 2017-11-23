@@ -70,11 +70,11 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
     /**
      * Set carrier (eg the Flow this Node is attached to)
      *
-     * @param FlowInterface $flow
+     * @param FlowInterface|null $flow
      *
      * @return $this
      */
-    public function setCarrier(FlowInterface $flow)
+    public function setCarrier(FlowInterface $flow = null)
     {
         // maintain carrier among aggregated nodes
         foreach ($this->nodeCollection as $node) {
