@@ -11,6 +11,7 @@ namespace fab2s\NodalFlow;
 
 use fab2s\NodalFlow\Flows\FlowAbstract;
 use fab2s\NodalFlow\Flows\FlowMap;
+use fab2s\NodalFlow\Flows\FlowRegistry;
 use fab2s\NodalFlow\Flows\FlowStatus;
 use fab2s\NodalFlow\Flows\InterrupterInterface;
 use fab2s\NodalFlow\Nodes\BranchNodeInterface;
@@ -69,7 +70,8 @@ class NodalFlow extends FlowAbstract
      */
     public function __construct()
     {
-        $this->flowMap = new FlowMap($this, $this->flowIncrements);
+        $this->flowMap  = new FlowMap($this, $this->flowIncrements);
+        $this->registry = new FlowRegistry;
     }
 
     /**
