@@ -11,6 +11,8 @@ namespace fab2s\NodalFlow\Nodes;
 
 use fab2s\NodalFlow\Flows\FlowIdTrait;
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\Flows\FlowRegistry;
+use fab2s\NodalFlow\Flows\FlowRegistryInterface;
 use fab2s\NodalFlow\NodalFlowException;
 
 /**
@@ -49,6 +51,11 @@ abstract class NodeAbstract implements NodeInterface
     protected $isAFlow;
 
     /**
+     * @var FlowRegistryInterface
+     */
+    protected $registry;
+
+    /**
      * @var array
      */
     protected $nodeIncrements = [];
@@ -59,6 +66,7 @@ abstract class NodeAbstract implements NodeInterface
     public function __construct()
     {
         $this->enforceIsATraversable();
+        $this->registry = new FlowRegistry;
     }
 
     /**
