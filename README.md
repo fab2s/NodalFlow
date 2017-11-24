@@ -86,11 +86,6 @@ $result = $nodalFlow->addPayload(('SomeClass::someTraversableMethod', true, true
     ->exec($wateverParam);
 ```
 
-## Serialization
-
-As the workflow became an object, it became serializable, but this is unless it carries Closures. Closure serialization is not natively supported by PHP, but there are ways around it like [Opis Closure](https://github.com/opis/closure)
-
-
 ## Requirements
 
 NodalFlow is tested against php 5.6, 7.0, 7.1 and hhvm, but it may run bellow that (might up to 5.3).
