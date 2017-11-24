@@ -18,6 +18,13 @@ use fab2s\NodalFlow\Nodes\NodeInterface;
 interface FlowMapInterface
 {
     /**
+     * @param string $nodeId
+     *
+     * @return int|null
+     */
+    public function getNodeIndex($nodeId);
+
+    /**
      * Triggered right before the flow starts
      *
      * @return $this
