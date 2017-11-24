@@ -38,7 +38,7 @@ Nodes are linked together by the fact they return a value or not. When a node is
 
 ```
 
-In this flow, as node 2 (which may as well be a whole flow or branch) is not returning a value, it is executed "outside" of the main exec line.
+In this flow, as node 2 (which may as well be a whole flow or branch) is not returning a value, it is executed "outside" of the main execution line.
 
 In other words, NodalFlow implements a directed graph structure in the form of a tree composed of nodes that can, but not always are, branches or leaves.
 
