@@ -47,6 +47,11 @@ abstract class FlowAbstract implements FlowInterface
     protected $flowMap;
 
     /**
+     * @var FlowRegistryInterface
+     */
+    protected $registry;
+
+    /**
      * The current registered Callback class if any
      *
      * @var CallbackInterface|null
