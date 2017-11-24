@@ -167,6 +167,16 @@ class FlowMap implements FlowMapInterface
     }
 
     /**
+     * @param string $nodeId
+     *
+     * @return int|null
+     */
+    public function getNodeIndex($nodeId)
+    {
+        return isset($this->nodeMap[$nodeId]) ? $this->nodeMap[$nodeId]['index'] : null;
+    }
+
+    /**
      * Triggered right before the flow starts
      *
      * @return $this
