@@ -5,7 +5,7 @@
 NodalFlow is a generic Workflow that can execute chained tasks. It is designed around simple interfaces that specifies a flow composed of executable nodes and flows. Nodes can be executed or traversed. They accept a single parameter as argument and can be set to pass or not their result as an argument for the next node.
 Flows also accept one argument and may be set to pass their result to be used or not as an argument for the next node.
 
-```bash
+```
 +--------------------------+Flow Execution+----------------------------->
 
 +-----------------+        +------------------+         +---------------+
@@ -26,7 +26,7 @@ Flows also accept one argument and may be set to pass their result to be used or
 
 Nodes are linked together by the fact they return a value or not. When a node is returning a value (by declaration), it will be used as argument to the next node (but not necessarily used by it). When it doesn't, the current parameter (if any) will be used as argument by the next node, and so on until one node returns a result intended to be used as argument to the next node.
 
-```bash
+```
 +--------+ Result 1 +--------+ Result 3
 | Node 1 +----+-----> Node 3 +--------->...
 +--------+    |     +--------+

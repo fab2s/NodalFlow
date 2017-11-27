@@ -7,7 +7,7 @@ When a Node issues an Interrupt signal, it is caught by is direct carrier Flow. 
 
 Let's consider the following example Flow, composed of three Flows:
 
-```bash
+```
 +-------------------------+-------+-----------------+
 |               |-->      |       |                 |
 +--Node1-->tNode|-->Node3-> bNode +-->iNode--....+-->
