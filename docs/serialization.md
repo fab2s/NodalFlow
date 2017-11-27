@@ -20,6 +20,8 @@ On the other hand, it could be handy to dynamically generate and store Flows if 
 This uniqueness requirement comes with a limitation: it is not possible to un-serialize a Flow if it was serialized within the same process, even if you `unset` the Flow before that. This is a tricky case because php does not necessarily call it's garbage collector right away when you `unset` an object, it may occur later. 
 
 Supporting this quite particular case would require to implement and manually call the root Flow's `__destruct()` method and have it call the underlying `FlowMap` instance `__destruct()` where references and consistency would also need to be maintained. While it's not impossible in principle, the details can become very interesting, especially since the global state also carries each Flows and Nodes instances. It's just a circle that feels a bit too much to square for the purpose.
+
+This also implies that un-serializing a Flow may only occur once per process.
  
 All together, it's not to be such a big deal, as a Flow is a duplicate of itself, this case is treated like any other duplication: an exception is thrown.
 

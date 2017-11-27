@@ -99,6 +99,15 @@ interface FlowInterface extends FlowIdInterface
     public function hasParent();
 
     /**
+     * Get this Flow's root Flow
+     *
+     * @param FlowInterface $flow Root Flow, or self if root flow
+     *
+     * @return FlowInterface
+     */
+    public function getRootFlow(FlowInterface $flow);
+
+    /**
      * The Flow status can either indicate be:
      *      - clean (isClean()): everything went well
      *      - dirty (isDirty()): one Node broke the flow

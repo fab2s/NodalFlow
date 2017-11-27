@@ -10,6 +10,7 @@
 namespace fab2s\NodalFlow;
 
 use fab2s\NodalFlow\Flows\FlowAbstract;
+use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\Flows\FlowMap;
 use fab2s\NodalFlow\Flows\FlowRegistry;
 use fab2s\NodalFlow\Flows\FlowStatus;
@@ -59,13 +60,6 @@ class NodalFlow extends FlowAbstract
     protected $nodeCount = 0;
 
     /**
-     * The number of iteration within this Flow
-     *
-     * @var int
-     */
-    protected $numIterate = 0;
-
-    /**
      * Instantiate a Flow
      */
     public function __construct()
@@ -86,8 +80,10 @@ class NodalFlow extends FlowAbstract
     public function add(NodeInterface $node)
     {
         if ($node instanceof BranchNodeInterface) {
-            // this node is a branch, set it's parent
-            $node->getPayload()->setParent($this);
+            // this node is a branch
+            $childFlow = $node->getPayload();
+            $this->branchFlowCheck($childFlow);
+            $childFlow->setParent($this);
         }
 
         $node->setCarrier($this);
@@ -203,6 +199,27 @@ class NodalFlow extends FlowAbstract
     }
 
     /**
+     * @param FlowInterface $flow
+     *
+     * @throws NodalFlowException
+     */
+    protected function branchFlowCheck(FlowInterface $flow)
+    {
+        if (
+            // this flow has parent already
+            $flow->hasParent() ||
+            // adding root flow in itself
+            $this->getRootFlow($flow)->getId() === $this->getRootFlow($this)->getId()
+        ) {
+            throw new NodalFlowException('Cannot reuse Flow within Branches', 1, null, [
+                'flowId'             => $this->getId(),
+                'BranchFlowId'       => $flow->getId(),
+                'BranchFlowParentId' => $flow->hasParent() ? $flow->getParent()->getId() : null,
+            ]);
+        }
+    }
+
+    /**
      * Triggered just before the flow starts
      *
      * @return $this
@@ -272,8 +289,7 @@ class NodalFlow extends FlowAbstract
                     }
 
                     ++$nodeStats['num_iterate'];
-                    ++$this->numIterate;
-                    if (!($this->numIterate % $this->progressMod)) {
+                    if (!($nodeStats['num_iterate'] % $this->progressMod)) {
                         $this->triggerCallback(static::FLOW_PROGRESS, $node);
                     }
 
