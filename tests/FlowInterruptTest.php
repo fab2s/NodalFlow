@@ -16,7 +16,7 @@ use fab2s\NodalFlow\Nodes\CallableInterruptNode;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 use fab2s\NodalFlow\PayloadNodeFactory;
 
-class NodalFlowInterruptTest extends \TestCase
+class FlowInterruptTest extends \TestCase
 {
     /**
      * @var array
@@ -1409,16 +1409,6 @@ class NodalFlowInterruptTest extends \TestCase
             for ($i = 1; $i <= 10; ++$i) {
                 yield $i;
             }
-        };
-    }
-
-    /**
-     * @return Closure
-     */
-    protected function getNoOpClosure()
-    {
-        return function ($record) {
-            return $record;
         };
     }
 

@@ -11,6 +11,7 @@ namespace fab2s\NodalFlow\Nodes;
 
 use fab2s\NodalFlow\Flows\FlowIdInterface;
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\NodalFlowException;
 
 /**
  * Interface NodeInterface
@@ -66,6 +67,17 @@ interface NodeInterface extends FlowIdInterface
      * @return string
      */
     public function getNodeHash();
+
+    /**
+     * @param string      $flowId
+     * @param string|null $nodeId
+     * @param string|null $param
+     *
+     * @throws NodalFlowException
+     *
+     * @return mixed
+     */
+    public function sendTo($flowId, $nodeId = null, $param = null);
 
     /**
      * Get the custom Node increments to be considered during

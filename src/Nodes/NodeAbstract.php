@@ -157,6 +157,27 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
+     * @param string      $flowId
+     * @param string|null $nodeId
+     * @param string|null $param
+     *
+     * @throws NodalFlowException
+     *
+     * @return mixed
+     */
+    public function sendTo($flowId, $nodeId = null, $param = null)
+    {
+        if (!($flow = $this->registry->getFlow($flowId))) {
+            throw new NodalFlowException('Cannot sendTo without valid Flow target', 1, null, [
+                'flowId' => $flowId,
+                'nodeId' => $nodeId,
+            ]);
+        }
+
+        return $flow->sendTo($nodeId, $param);
+    }
+
+    /**
      * Make sure this Node is consistent
      *
      * @throws NodalFlowException
