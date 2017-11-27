@@ -276,6 +276,22 @@ abstract class FlowAbstract implements FlowInterface
     }
 
     /**
+     * Get this Flow's root Flow
+     *
+     * @param FlowInterface $flow Root Flow, or self if root flow
+     *
+     * @return FlowInterface
+     */
+    public function getRootFlow(FlowInterface $flow)
+    {
+        while ($flow->hasParent()) {
+            $flow = $flow->getParent();
+        }
+
+        return $flow;
+    }
+
+    /**
      * @param NodeInterface $node
      *
      * @return bool
