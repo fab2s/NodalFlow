@@ -14,7 +14,6 @@ use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\Flows\FlowMap;
 use fab2s\NodalFlow\Flows\FlowRegistry;
 use fab2s\NodalFlow\Flows\FlowStatus;
-use fab2s\NodalFlow\Flows\InterrupterInterface;
 use fab2s\NodalFlow\Nodes\BranchNodeInterface;
 use fab2s\NodalFlow\Nodes\ExecNodeInterface;
 use fab2s\NodalFlow\Nodes\NodeInterface;
@@ -115,6 +114,29 @@ class NodalFlow extends FlowAbstract
     }
 
     /**
+     * @param string|null $nodeId
+     * @param mixed|null  $param
+     *
+     * @throws NodalFlowException
+     *
+     * @return mixed
+     */
+    public function sendTo($nodeId = null, $param = null)
+    {
+        $nodeIndex = 0;
+        if ($nodeId !== null) {
+            if (!($nodeIndex = $this->flowMap->getNodeIndex($nodeId))) {
+                throw new NodalFlowException('Cannot sendTo without valid Node target', 1, null, [
+                    'flowId' => $this->getId(),
+                    'nodeId' => $nodeId,
+                ]);
+            }
+        }
+
+        return $this->rewind()->recurse($param, $nodeIndex);
+    }
+
+    /**
      * Execute the flow
      *
      * @param null|mixed $param The eventual init argument to the first node
@@ -170,32 +192,6 @@ class NodalFlow extends FlowAbstract
         $this->interruptNodeId = null;
 
         return $this;
-    }
-
-    /**
-     * Break the flow's execution, conceptually similar to breaking
-     * a regular loop
-     *
-     * @param InterrupterInterface|null $flowInterrupt
-     *
-     * @return $this
-     */
-    public function breakFlow(InterrupterInterface $flowInterrupt = null)
-    {
-        return $this->interruptFlow(InterrupterInterface::TYPE_BREAK, $flowInterrupt);
-    }
-
-    /**
-     * Continue the flow's execution, conceptually similar to continuing
-     * a regular loop
-     *
-     * @param InterrupterInterface|null $flowInterrupt
-     *
-     * @return $this
-     */
-    public function continueFlow(InterrupterInterface $flowInterrupt = null)
-    {
-        return $this->interruptFlow(InterrupterInterface::TYPE_CONTINUE, $flowInterrupt);
     }
 
     /**

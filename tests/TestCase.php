@@ -440,4 +440,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         return \sha1(\spl_object_hash($object));
     }
+
+    /**
+     * @return Closure
+     */
+    protected function getNoOpClosure()
+    {
+        return function ($record) {
+            return $record;
+        };
+    }
 }

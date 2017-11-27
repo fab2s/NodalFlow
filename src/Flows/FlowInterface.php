@@ -108,6 +108,16 @@ interface FlowInterface extends FlowIdInterface
     public function getRootFlow(FlowInterface $flow);
 
     /**
+     * @param string|null $nodeId
+     * @param mixed|null  $param
+     *
+     * @throws NodalFlowException
+     *
+     * @return mixed
+     */
+    public function sendTo($nodeId = null, $param = null);
+
+    /**
      * The Flow status can either indicate be:
      *      - clean (isClean()): everything went well
      *      - dirty (isDirty()): one Node broke the flow
