@@ -44,6 +44,38 @@ In other words, NodalFlow implements a directed graph structure in the form of a
 
 But it also goes beyond that by allowing any Flow and Node to send whatever parameter to any part of any Flow alive within the process. The feature is conceptually similar to `Generator`'s `sendTo()` method and makes it possible to turn Flows into _networks_ of Nodes (and Flows).
 
+```
++-------------------------+-------+----------+
+|               |-->      |       |          |
++-+Node1+->tNode|-->Node3+> bNode +-->NodeN+->
+|RootFlow    ^  |-->      |   +   |          |
++------------|-------------------------------+
+             |            |   v   |
+             |            | Node1 |
+             |            |   +   |
+             |            |   v   |
+             +---sendTo()-+ tNode |
+                          | +-+-+ |
+                          | | | | |
+                          | v v v |
+                          | iNode |
+                          +---+--------------+
+                          |   v   |          |
+                          | bNode +-->Node1+->
+                          |   +   |     |    |
+                          +------------------+
+                          |   |   |     |
+                          +---v---+     |
+                                        |
+               +-------sendTo()---------+
+               |
+ +-------------|----------------+
+ |             v                |
+ +--Node1-->Node2-->NodeN--...+->
+ |                              |
+ +------------------------------+
+```
+
 NodalFlow aims at organizing and simplifying data processing workflow's where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. It makes it possible to dynamically configure and execute complex scenario in an organized and repeatable manner. And even more important, to write Nodes that will be reusable in any other workflow you may think of.
 
 NodalFlow enforces minimalistic requirements upon nodes. This means that in most cases, you should extend `NodalFlow` to implement the required constraints and grammar for your use case.
