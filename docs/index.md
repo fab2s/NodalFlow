@@ -24,7 +24,7 @@ Flows also accept one argument and may be set to pass their result to be used or
 
 ```
 
-Nodes are linked together by the fact they return a value or not. When a node is returning a value (by declaration), it will be used as argument to the next node (but not necessarily used by it). When it doesn't, the current parameter (if any) will be used as argument by the next node, and so on until one node returns a result intended to be used as argument to the next node.
+Within the Flow, Nodes are linked together by the fact they return a value or not. When a node is returning a value (by declaration), it will be used as argument to the next node (but not necessarily used by it). When it doesn't, the current parameter (if any) will be used as argument by the next node, and so on until one node returns a result intended to be used as argument to the next node.
 
 ```
 +--------+ Result 1 +--------+ Result 3
@@ -40,7 +40,9 @@ Nodes are linked together by the fact they return a value or not. When a node is
 
 In this flow, as node 2 (which may as well be a whole flow or branch) is not returning a value, it is executed "outside" of the main execution line.
 
-In other words, NodalFlow implements a directed graph structure in the form of a tree composed of nodes that can, but not always are, branches or leaves.
+In other words, NodalFlow implements a directed graph structure in the form of a tree composed of nodes that can, but not always are, branches or leaves. 
+
+But it also goes beyond that by allowing any Flow and Node to send whatever parameter to any part of any Flow alive within the process. The feature is conceptually similar to `Generator`'s `sendTo()` method and makes it possible to turn Flows into _networks_ of Nodes (and Flows).
 
 NodalFlow aims at organizing and simplifying data processing workflow's where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. It makes it possible to dynamically configure and execute complex scenario in an organized and repeatable manner. And even more important, to write Nodes that will be reusable in any other workflow you may think of.
 

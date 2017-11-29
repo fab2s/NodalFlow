@@ -40,9 +40,11 @@ Nodes are linked together by the fact they return a value or not. When a node is
 
 In this flow, as node 2 (which may as well be a whole flow or branch) is not returning a value, it is executed "outside" of the main execution line.
 
-In other words, NodalFlow implements a directed graph structure in the form of a tree composed of nodes that can, but not always are, branches or leaves.
+In other words, NodalFlow implements a directed graph structure in the form of a tree composed of nodes that can, but not always are, branches or leaves. 
 
-NodalFlow aims at organizing and simplifying data processing workflow where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. It makes it possible to dynamically configure and execute complex scenario in an organized and repeatable manner. And even more important, to write Nodes that will be reusable in any other workflow you may think of.
+But it also goes beyond that by allowing any Flow and Node to send whatever parameter to any part of any Flow alive within the process. The feature is conceptually similar to `Generator`'s `sendTo()` method and makes it possible to turn Flows into _networks_ of Nodes (and Flows).
+
+NodalFlow aims at organizing and simplifying data processing workflow's where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. It makes it possible to dynamically configure and execute complex scenario in an organized and repeatable manner. And even more important, to write Nodes that will be reusable in any other workflow you may think of.
 
 NodalFlow enforces minimalistic requirements upon nodes. This means that in most cases, you should extend `NodalFlow` to implement the required constraints and grammar for your use case.
 
