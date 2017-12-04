@@ -84,9 +84,8 @@ NodalFlow enforces minimalistic requirements upon nodes. This means that in most
 
 NodalFlow shares conceptual similarities with [Transduction](https://en.wikipedia.org/wiki/Transduction) as it allow basic interaction chaining, especially when dealing with `ExecNodes`, but the comparison diverges quickly.
 
-
-
 ## NodalFlow Documentation
+
 [![Documentation Status](https://readthedocs.org/projects/nodalflow/badge/?version=latest)](http://nodalflow.readthedocs.io/en/latest/?badge=latest) Documentation can be found at [ReadTheDocs](http://nodalflow.readthedocs.io/en/latest/?badge=latest)
 
 ## Installation
