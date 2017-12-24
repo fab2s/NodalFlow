@@ -1,6 +1,6 @@
 # Serialization
 
-Flow Serialization comes with some interesting challenges, especially since Flows may contain Flows. The problematic is tight with a very fundamental aspect of NodalFlow's design: Nodes Instances can only be carried by a single Flow at a time. 
+Flow Serialization comes with some interesting challenges, especially since Flows may contain Flows. The problematic is tight with a very fundamental aspect of NodalFlow's design: Node Instances can only be carried by a single Flow at a time. 
 So there is no way around it, Node instances _must_ be unique among _every_ Flows in the process. For the good part, this brings immutable instances ids, but this also introduces some interesting challenges and exotic cases.
 
 To enforce such a strong requirement among Flows that may have no other relation than to reside into the same php process require some sort of global state. In NodalFlow, this global state is embodied by a `static` variable of a `FlowRegistry` instance hold by each Flow's `FlowMap` instance.
