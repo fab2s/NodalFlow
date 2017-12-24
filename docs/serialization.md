@@ -1,6 +1,6 @@
 # Serialization
 
-Flow Serialization comes with some interesting challenges, especially since Flows may contain Flows. The problematic is tight with a very fundamental aspect of NodalFlow's design: Nodes can only be carried by a single Flow at a time. 
+Flow Serialization comes with some interesting challenges, especially since Flows may contain Flows. The problematic is tight with a very fundamental aspect of NodalFlow's design: Nodes Instances can only be carried by a single Flow at a time. 
 So there is no way around it, Node instances _must_ be unique among _every_ Flows in the process. For the good part, this brings immutable instances ids, but this also introduces some interesting challenges and exotic cases.
 
 To enforce such a strong requirement among Flows that may have no other relation than to reside into the same php process require some sort of global state. In NodalFlow, this global state is embodied by a `static` variable of a `FlowRegistry` instance hold by each Flow's `FlowMap` instance.
@@ -13,7 +13,7 @@ When un-serializing a Flow, the global state is restored bit by bit, as more mem
 
 Serializing a Flow is not useful in all cases. For example, if you where to trigger some data processing Flow within a worker, it would certainly be simpler to just pass parameters to some job function in charge of instantiating and executing the proper Flow with proper parameters.
 
-On the other hand, it could be handy to dynamically generate and store Flows if you where to use a lot of them. You could even support multiple implementations of your Flows all together this way.
+On the other hand, it could be handy to dynamically generate and store Flows if you where to use a lot of them. You could even support multiple implementations and versions of your Flows all together this way.
 
 ## Exoticism and RTFM
 
