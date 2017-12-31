@@ -72,6 +72,70 @@ tNode : TraversableNode
     - Targeting branchFlowA (by id): The signal bubbles up to the first `Traversable` Node above bNode in branchFlowA, tNode, and `break` its loop, resulting in halting the branchFlowA for this RootFlow's parameter. Targeting any Node in RootFlow would result in the same effect as there is only one Traversable above bNode.
     - Targeting RootFlow (by id or targeting root flow): The signal bubbles up to RootFlow's first upstream (read above bNode) Traversable, tNode, and `break` its loop, resulting in halting the RootFlow and all it's children Flows at their respective point of execution. Likewise, targeting any Node in RootFlow would result in the same effect as there is only one Traversable above bNode.
 
+## In practice
+
+NodalFlow comes with an `InterruptNodeInterface` which you can implement by extending `InterruptNodeAbstract` leaving you with a single method to implement :
+
+```php
+    /**
+     * @param mixed $param
+     *
+     * @return InterrupterInterface|null|bool `null` do do nothing, eg let the Flow proceed untouched
+     *                                        `true` to trigger a continue on the carrier Flow (not ancestors)
+     *                                        `false` to trigger a break on the carrier Flow (not ancestors)
+     *                                        `InterrupterInterface` to trigger an interrupt to propagate up to a target (which may be one ancestor)
+     */
+    public function interrupt($param);
+```
+
+As you can see, the basics are simple, just return `null` to let the Flow proceed,  `true` to skip (`continue`) the current record at the current point of execution or `false` to `break` the first upstream `Traversable` in the carrying Flow.
+
+By returning an `InterrupterInterface` instance, implemented as the `Interrupter` class, you can accurately target any Flow and / or Node among the Node carrier Flow's ancestors.
+
+For example, returning `true` is equivalent to returning:
+
+```php
+new Interrupter(null, null, InterrupterInterface::TYPE_CONTINUE);
+```
+
+and returning false is equivalent to returning:
+
+```php
+new Interrupter(null, null, InterrupterInterface::TYPE_BREAK);
+```
+
+The first two parameters respectively stands for Flow and Node instances or ids. 
+
+### Targeting a Flow
+
+Within an `InterruptNodeInterface` Node, targeting the carrier Flow can be done by either using as first parameter of the constructor:
+ - `null`
+ - `$this->getCarrier()`
+ - `$this->getCarrier()->getId()`
+ - `InterrupterInterface::TARGET_SELF`
+
+You can target any ancestor of the carrying Flow either by Instance or Id, and you can target the root Flow directly by using `InterrupterInterface::TARGET_TOP`.
+
+In each of these cases, the signal will bubble up to the targeted Flow and will:
+    - for `continue` signals: skip the current record for all Nodes that may be found after the `BranchNode` where the signal showed up
+    - for `break` signals: continue to bubble up among upstream Nodes in the target Flow until a `Traversable` Node is found, in which case its loop is halted, or up to the first Node of the targeted Flow in which case the Flow is halted.
+
+If you feed the `Interrupter` with something that does not match any Flow among the carrier's ancestors, a `NodalFlowException` will be thrown.
+
+### Targeting a Node
+
+You can additionally target a particular Node within the targeted Flow. Obviously, it will only do something if the targeted Flow is reached. You can target Node by feeding `Interrupter` with:
+    - a Node Instance in the target Flow
+    - a Node Id in the target Flow
+    - `false|null` to target the branching point on the target Flow
+    - `true` to target the first Node in the target Flow
+    
+There is _no_ magic aliases like `InterrupterInterface::TARGET_TOP` for Nodes.
+
+When an Interrupt signal reaches its target Flow and there is a target Node, the signal will bubble up to the targeted Node. Internally, this is done by resolving recursions without altering the record and continuing any traversable on the way up to the target where the signal is finally processed.
+
+If a target Node was set and it was not found on the way, a `NodalFlowException` will be thrown.
+ 
 ## Lowest level
 
 Each nodes is filled with it's carrier Flow when it is attached to it. Any Node implementing `NodeInterface` can interrupt any Node in its carrier Flow and ancestors :

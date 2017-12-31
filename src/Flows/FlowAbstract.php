@@ -27,11 +27,6 @@ abstract class FlowAbstract extends FlowAncestryAbstract
     protected $nodes = [];
 
     /**
-     * @var FlowRegistryInterface
-     */
-    protected $registry;
-
-    /**
      * The current registered Callback class if any
      *
      * @var CallbackInterface|null

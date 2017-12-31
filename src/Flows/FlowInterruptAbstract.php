@@ -42,6 +42,11 @@ abstract class FlowInterruptAbstract implements FlowInterface
     protected $flowMap;
 
     /**
+     * @var FlowRegistryInterface
+     */
+    protected $registry;
+
+    /**
      * Current Flow Status
      *
      * @var FlowStatusInterface
@@ -53,6 +58,8 @@ abstract class FlowInterruptAbstract implements FlowInterface
      * a regular loop
      *
      * @param InterrupterInterface|null $flowInterrupt
+     *
+     * @throws NodalFlowException
      *
      * @return $this
      */
@@ -66,6 +73,8 @@ abstract class FlowInterruptAbstract implements FlowInterface
      * a regular loop
      *
      * @param InterrupterInterface|null $flowInterrupt
+     *
+     * @throws NodalFlowException
      *
      * @return $this
      */
@@ -108,18 +117,27 @@ abstract class FlowInterruptAbstract implements FlowInterface
     /**
      * Used to set the eventual Node Target of an Interrupt signal
      * set to :
-     * - A node hash to target
+     * - A Node Id to target
      * - true to interrupt every upstream nodes
      *     in this Flow
      * - false to only interrupt up to the first
      *     upstream Traversable in this Flow
      *
-     * @param string|bool $interruptNodeId
+     * @param null|string|bool $interruptNodeId
+     *
+     * @throws NodalFlowException
      *
      * @return $this
      */
     public function setInterruptNodeId($interruptNodeId)
     {
+        if ($interruptNodeId !== null && !is_bool($interruptNodeId) && !$this->registry->getNode($interruptNodeId)) {
+            throw new NodalFlowException('Targeted Node not found in target Flow for Interruption', 1, null, [
+                'targetFlow' => $this->getId(),
+                'targetNode' => $interruptNodeId,
+            ]);
+        }
+
         $this->interruptNodeId = $interruptNodeId;
 
         return $this;

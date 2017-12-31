@@ -10,7 +10,6 @@
 namespace fab2s\NodalFlow\Nodes;
 
 use fab2s\NodalFlow\Flows\InterrupterInterface;
-use fab2s\NodalFlow\NodalFlowException;
 
 /**
  * Abstract Class InterruptNodeAbstract
@@ -45,8 +44,6 @@ abstract class InterruptNodeAbstract extends NodeAbstract implements InterruptNo
      *      - return void|null (whatever) to proceed with the flow
      *
      * @param mixed $param
-     *
-     * @throws NodalFlowException
      *
      * @return mixed|void
      */
