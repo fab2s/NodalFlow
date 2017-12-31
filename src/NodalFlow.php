@@ -102,6 +102,8 @@ class NodalFlow extends FlowAbstract
      * @param mixed    $isAReturningVal
      * @param mixed    $isATraversable
      *
+     * @throws NodalFlowException
+     *
      * @return $this
      */
     public function addPayload(callable $payload, $isAReturningVal, $isATraversable = false)
@@ -109,6 +111,32 @@ class NodalFlow extends FlowAbstract
         $node = PayloadNodeFactory::create($payload, $isAReturningVal, $isATraversable);
 
         $this->add($node);
+
+        return $this;
+    }
+
+    /**
+     * Replaces a node with another one
+     *
+     * @param int           $nodeIdx
+     * @param NodeInterface $node
+     *
+     * @throws NodalFlowException
+     *
+     * @return $this
+     */
+    public function replace($nodeIdx, NodeInterface $node)
+    {
+        if (!isset($this->nodes[$nodeIdx])) {
+            throw new NodalFlowException('Argument 1 should be a valid index in nodes', 1, null, [
+                'nodeIdx' => $nodeIdx,
+                'node'    => get_class($node),
+            ]);
+        }
+
+        $node->setCarrier($this);
+        $this->nodes[$nodeIdx] = $node;
+        $this->flowMap->register($node, $nodeIdx);
 
         return $this;
     }

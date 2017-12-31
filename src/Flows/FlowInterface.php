@@ -43,6 +43,18 @@ interface FlowInterface extends FlowIdInterface
     public function add(NodeInterface $node);
 
     /**
+     * Replaces a node with another one
+     *
+     * @param int           $nodeIdx
+     * @param NodeInterface $node
+     *
+     * @throws NodalFlowException
+     *
+     * @return $this
+     */
+    public function replace($nodeIdx, NodeInterface $node);
+
+    /**
      * Execute the Flow
      *
      * @param mixed $param The first param to apply, mostly

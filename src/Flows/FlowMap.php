@@ -116,6 +116,8 @@ class FlowMap implements FlowMapInterface
      *
      * @param FlowInterface $flow
      * @param array         $flowIncrements
+     *
+     * @throws NodalFlowException
      */
     public function __construct(FlowInterface $flow, array $flowIncrements = [])
     {
@@ -218,8 +220,6 @@ class FlowMap implements FlowMapInterface
 
     /**
      * Get/Generate Node Map
-     *
-     * @throws NodalFlowException
      *
      * @return array
      */
