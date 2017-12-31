@@ -99,4 +99,4 @@ $this->getCarrier()->interruptFlow(FlowInterruptInterface::TYPE_BREAK);
 // ...
 ```
 
-whenever you need to when `getTraversable()` and / or `exec()` methods are triggered to `continue` or `break` the flow. 
+whenever you need to, when `getTraversable()` and / or `exec()` methods are triggered to `continue` or `break` the flow. 
