@@ -14,6 +14,9 @@ use fab2s\NodalFlow\PayloadNodeFactory;
 
 class StructuralTest extends \TestCase
 {
+    /**
+     * @throws NodalFlowException
+     */
     public function testFlowReuseSelf()
     {
         $this->expectException(NodalFlowException::class);
@@ -21,6 +24,9 @@ class StructuralTest extends \TestCase
         $flow->add(new BranchNode($flow, 1));
     }
 
+    /**
+     * @throws NodalFlowException
+     */
     public function testFlowReuse1()
     {
         $this->expectException(NodalFlowException::class);
@@ -30,6 +36,9 @@ class StructuralTest extends \TestCase
         $rootFlow->add(new BranchNode($branchFlow, 1));
     }
 
+    /**
+     * @throws NodalFlowException
+     */
     public function testFlowReuse2()
     {
         $this->expectException(NodalFlowException::class);
@@ -41,6 +50,9 @@ class StructuralTest extends \TestCase
         $branchFlow2->add(new BranchNode($rootFlow, 1));
     }
 
+    /**
+     * @throws NodalFlowException
+     */
     public function testNodeReuse()
     {
         $this->expectException(NodalFlowException::class);
@@ -53,6 +65,9 @@ class StructuralTest extends \TestCase
         $flow->add($node);
     }
 
+    /**
+     * @throws NodalFlowException
+     */
     public function testNodeReuseInBranch1()
     {
         $this->expectException(NodalFlowException::class);
@@ -66,6 +81,9 @@ class StructuralTest extends \TestCase
         $branchFlow->add($node);
     }
 
+    /**
+     * @throws NodalFlowException
+     */
     public function testNodeReuseInBranch2()
     {
         $this->expectException(NodalFlowException::class);
@@ -79,6 +97,9 @@ class StructuralTest extends \TestCase
         $branchFlow->add($node);
     }
 
+    /**
+     * @throws NodalFlowException
+     */
     public function testNodeReuseInBranch3()
     {
         $this->expectException(NodalFlowException::class);

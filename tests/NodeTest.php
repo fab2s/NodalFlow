@@ -10,6 +10,9 @@
 use fab2s\NodalFlow\NodalFlow;
 use fab2s\NodalFlow\Nodes\ExecNodeInterface;
 
+/**
+ * Class NodeTest
+ */
 class NodeTest extends \TestCase
 {
     /**

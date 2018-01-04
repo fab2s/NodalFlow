@@ -88,7 +88,7 @@ NodalFlow comes with an `InterruptNodeInterface` which you can implement by exte
     public function interrupt($param);
 ```
 
-As you can see, the basics are simple, just return `null` to let the Flow proceed,  `true` to skip (`continue`) the current record at the current point of execution or `false` to `break` the first upstream `Traversable` in the carrying Flow.
+As you can see, the basics are simple, just return `null` to let the Flow proceed,  `true` to skip (`continue`) the current record (`$param`) at the current point of execution or `false` to `break` the first upstream `Traversable` in the carrying Flow.
 
 By returning an `InterrupterInterface` instance, implemented as the `Interrupter` class, you can accurately target any Flow and / or Node among the Node carrier Flow's ancestors.
 

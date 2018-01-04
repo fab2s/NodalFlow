@@ -11,11 +11,15 @@ use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\Flows\InterrupterInterface;
 use fab2s\NodalFlow\Interrupter;
 use fab2s\NodalFlow\NodalFlow;
+use fab2s\NodalFlow\NodalFlowException;
 use fab2s\NodalFlow\Nodes\BranchNode;
 use fab2s\NodalFlow\Nodes\CallableInterruptNode;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 use fab2s\NodalFlow\PayloadNodeFactory;
 
+/**
+ * Class FlowInterruptTest
+ */
 class FlowInterruptTest extends \TestCase
 {
     /**
@@ -51,6 +55,8 @@ class FlowInterruptTest extends \TestCase
      * @param mixed         $param
      * @param mixed         $expected
      * @param array         $case
+     *
+     * @throws NodalFlowException
      */
     public function testInterruptFlows(FlowInterface $flow, array $nodes, $param, $expected, $case)
     {
@@ -121,6 +127,11 @@ class FlowInterruptTest extends \TestCase
         $this->assertSame($expected, $result);
     }
 
+    /**
+     * @throws NodalFlowException
+     *
+     * @return array
+     */
     public function interruptProvider()
     {
         $breakAt5Node1    = new CallableInterruptNode($this->getBreakAt5Closure());
@@ -1207,7 +1218,7 @@ class FlowInterruptTest extends \TestCase
             ->add($branchNode1)
             ->add($noOpNode5);
 
-        $testCases['flow13'] = [
+        $testCases['flow14'] = [
             'flow'     => $rootFlow,
             'expected' => [
                 $traversableNode3->getId() => [
@@ -1450,6 +1461,10 @@ class FlowInterruptTest extends \TestCase
         };
     }
 
+    /**
+     * @param array $nodeMap
+     * @param array $expected
+     */
     protected function interruptAssertions(array $nodeMap, array $expected)
     {
         foreach ($nodeMap as $nodeId => $data) {
@@ -1524,10 +1539,6 @@ class FlowInterruptTest extends \TestCase
      */
     protected function getFlowCases()
     {
-        /*
-         *
-         */
-
         $traversedInterrupt    = $this->interruptPos ? $this->interruptPos : $this->traversableIterations;
         $interruptEqIterations = $this->interruptPos === $this->traversableIterations;
         $cases                 = [

@@ -8,10 +8,17 @@
  */
 
 use fab2s\NodalFlow\NodalFlow;
+use fab2s\NodalFlow\NodalFlowException;
 use fab2s\NodalFlow\PayloadNodeFactory;
 
+/**
+ * Class SendToTest
+ */
 class SendToTest extends \TestCase
 {
+    /**
+     * @throws NodalFlowException
+     */
     public function testSendFlow()
     {
         $noOpNode1 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
@@ -35,6 +42,9 @@ class SendToTest extends \TestCase
         $this->assertSame(0, $flowStats['num_exec']);
     }
 
+    /**
+     * @throws NodalFlowException
+     */
     public function testSendNode()
     {
         $flow   = new NodalFlow;

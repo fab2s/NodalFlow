@@ -7,6 +7,9 @@
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
  */
 
+/**
+ * Class DummyClass
+ */
 class DummyClass
 {
     const YIELDER_ITERATIONS = 5;

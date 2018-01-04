@@ -9,12 +9,16 @@
 
 use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\NodalFlow;
+use fab2s\NodalFlow\NodalFlowException;
 use fab2s\NodalFlow\Nodes\AggregateNode;
 use fab2s\NodalFlow\Nodes\BranchNode;
 use fab2s\NodalFlow\Nodes\CallableNode;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 use fab2s\NodalFlow\Nodes\PayloadNodeInterface;
 
+/**
+ * abstract Class TestCase
+ */
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     const PAYLOAD_TYPE_INSTANCE_TRAVERSABLE = 'instance_traversable';
@@ -163,6 +167,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws NodalFlowException
+     *
      * @return array
      */
     public function flowCasesProvider()
@@ -297,6 +303,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return $testNodes;
     }
 
+    /**
+     * @param null|string $flowName
+     *
+     * @return bool
+     */
     protected function getFlow($flowName = null)
     {
         if (isset($this->flows[$flowName])) {
@@ -306,6 +317,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return false;
     }
 
+    /**
+     * @param null|string $nodeName
+     *
+     * @return bool
+     */
     protected function getNode($nodeName = null)
     {
         if (isset($this->nodes[$nodeName])) {

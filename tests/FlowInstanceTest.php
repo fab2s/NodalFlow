@@ -8,8 +8,12 @@
  */
 
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\NodalFlowException;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 
+/**
+ * Class FlowInstanceTest
+ */
 class FlowInstanceTest extends \TestCase
 {
     /**
@@ -19,6 +23,8 @@ class FlowInstanceTest extends \TestCase
      * @param array         $nodes
      * @param mixed         $param
      * @param mixed         $expected
+     *
+     * @throws NodalFlowException
      */
     public function testFlows(FlowInterface $flow, array $nodes, $param, $expected)
     {
