@@ -50,6 +50,8 @@ class FlowRegistry implements FlowRegistryInterface
      * @param FlowInterface $flow
      * @param array         $entry
      *
+     * @throws NodalFlowException
+     *
      * @return $this
      */
     public function load(FlowInterface $flow, array $entry)

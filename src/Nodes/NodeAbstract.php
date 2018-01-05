@@ -61,7 +61,9 @@ abstract class NodeAbstract implements NodeInterface
     protected $nodeIncrements = [];
 
     /**
-     * Instantiate a Node
+     * NodeAbstract constructor.
+     *
+     * @throws NodalFlowException
      */
     public function __construct()
     {

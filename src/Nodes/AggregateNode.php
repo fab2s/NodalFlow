@@ -10,6 +10,7 @@
 namespace fab2s\NodalFlow\Nodes;
 
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\NodalFlowException;
 
 /**
  * class AggregateNode
@@ -41,6 +42,8 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
      * Instantiate an Aggregate Node
      *
      * @param bool $isAReturningVal
+     *
+     * @throws NodalFlowException
      */
     public function __construct($isAReturningVal)
     {

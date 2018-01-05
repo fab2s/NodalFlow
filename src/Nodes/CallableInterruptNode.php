@@ -10,6 +10,7 @@
 namespace fab2s\NodalFlow\Nodes;
 
 use fab2s\NodalFlow\Flows\InterrupterInterface;
+use fab2s\NodalFlow\NodalFlowException;
 
 /**
  * Class CallableInterruptNode
@@ -25,6 +26,8 @@ class CallableInterruptNode extends InterruptNodeAbstract
      * Instantiate a CallableInterruptNode Node
      *
      * @param callable $interrupter
+     *
+     * @throws NodalFlowException
      */
     public function __construct(callable $interrupter)
     {

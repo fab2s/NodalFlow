@@ -10,6 +10,7 @@
 namespace fab2s\NodalFlow\Nodes;
 
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\NodalFlowException;
 
 /**
  * abstract class PayloadNodeAbstract
@@ -30,6 +31,8 @@ abstract class PayloadNodeAbstract extends NodeAbstract implements PayloadNodeIn
      * @param mixed $payload
      * @param bool  $isAReturningVal
      * @param bool  $isATraversable
+     *
+     * @throws NodalFlowException
      */
     public function __construct($payload, $isAReturningVal, $isATraversable = false)
     {
