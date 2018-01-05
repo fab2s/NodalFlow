@@ -250,7 +250,7 @@ class FlowMap implements FlowMapInterface
     /**
      * Get the latest Node stats
      *
-     * @return array
+     * @return array<string,integer|string>
      */
     public function getStats()
     {
