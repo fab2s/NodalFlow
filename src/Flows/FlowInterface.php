@@ -25,6 +25,13 @@ interface FlowInterface extends FlowIdInterface
     public function getNodeMap();
 
     /**
+     * Get the stats array with latest Node stats
+     *
+     * @return FlowMapInterface
+     */
+    public function getFlowMap();
+
+    /**
      * Get the latest Node stats
      *
      * @return array
