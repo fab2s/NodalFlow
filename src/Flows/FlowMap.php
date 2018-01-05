@@ -274,6 +274,9 @@ class FlowMap implements FlowMapInterface
             }
         }
 
+        $flowStatus                     = $this->flow->getFlowStatus();
+        $this->flowStats['flow_status'] = $flowStatus->getStatus();
+
         return $this->flowStats;
     }
 
