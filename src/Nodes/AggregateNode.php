@@ -10,33 +10,20 @@
 namespace fab2s\NodalFlow\Nodes;
 
 use fab2s\NodalFlow\Flows\FlowInterface;
+use fab2s\NodalFlow\NodalFlow;
 use fab2s\NodalFlow\NodalFlowException;
 
 /**
  * class AggregateNode
  */
-class AggregateNode extends NodeAbstract implements AggregateNodeInterface
+class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterface
 {
     /**
-     * Returning val status
+     * The underlying pseudo Flow
      *
-     * @var bool
+     * @var FlowInterface
      */
-    protected $isAReturningVal = true;
-
-    /**
-     * Traversable status
-     *
-     * @var bool
-     */
-    protected $isATraversable = true;
-
-    /**
-     * The underlying Node structure
-     *
-     * @var array
-     */
-    protected $nodeCollection = [];
+    protected $payload;
 
     /**
      * Instantiate an Aggregate Node
@@ -47,56 +34,25 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
      */
     public function __construct($isAReturningVal)
     {
-        $this->isAReturningVal = (bool) $isAReturningVal;
-
-        parent::__construct();
+        parent::__construct(new NodalFlow, $isAReturningVal);
+        $this->isATraversable = true;
+        $this->isAFlow        = false;
     }
 
     /**
-     * Get the traversable to traverse within the Flow
+     * Add a traversable to the aggregate
      *
      * @param TraversableNodeInterface $node
+     *
+     * @throws NodalFlowException
      *
      * @return $this
      */
     public function addTraversable(TraversableNodeInterface $node)
     {
-        if ($this->carrier) {
-            $node->setCarrier($this->carrier);
-        }
-
-        $this->nodeCollection[] = $node;
+        $this->payload->add($node);
 
         return $this;
-    }
-
-    /**
-     * Set carrier (eg the Flow this Node is attached to)
-     *
-     * @param FlowInterface|null $flow
-     *
-     * @return $this
-     */
-    public function setCarrier(FlowInterface $flow = null)
-    {
-        // maintain carrier among aggregated nodes
-        foreach ($this->nodeCollection as $node) {
-            $node->setCarrier($flow);
-        }
-
-        parent::setCarrier($flow);
-
-        return $this;
-    }
-
-    /**
-     * Return the underlying Node collection
-     *
-     * @return NodeInterface[]
-     */
-    public function getNodeCollection()
-    {
-        return $this->nodeCollection;
     }
 
     /**
@@ -109,9 +65,13 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
     public function getTraversable($param)
     {
         $value = null;
-        foreach ($this->nodeCollection as $node) {
+        /** @var $nodes TraversableNodeInterface[] */
+        $nodes = $this->payload->getNodes();
+        foreach ($nodes as $node) {
             $returnVal = $node->isReturningVal();
+            $nodeStats = &$node->getCarrier()->getFlowMap()->getNodeStat($node->getId());
             foreach ($node->getTraversable($param) as $value) {
+                ++$nodeStats['num_iterate'];
                 if ($returnVal) {
                     yield $value;
                     continue;
@@ -120,6 +80,7 @@ class AggregateNode extends NodeAbstract implements AggregateNodeInterface
                 yield $param;
             }
 
+            ++$nodeStats['num_exec'];
             if ($returnVal) {
                 // since this node is returning something
                 // we will pass its last yield to the next

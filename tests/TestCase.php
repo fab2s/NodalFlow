@@ -7,14 +7,14 @@
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
  */
 
-use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\NodalFlow;
 use fab2s\NodalFlow\NodalFlowException;
 use fab2s\NodalFlow\Nodes\AggregateNode;
 use fab2s\NodalFlow\Nodes\BranchNode;
+use fab2s\NodalFlow\Nodes\BranchNodeInterface;
 use fab2s\NodalFlow\Nodes\CallableNode;
 use fab2s\NodalFlow\Nodes\NodeInterface;
-use fab2s\NodalFlow\Nodes\PayloadNodeInterface;
+use fab2s\NodalFlow\Nodes\TraversableNodeInterface;
 
 /**
  * abstract Class TestCase
@@ -103,11 +103,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $this->assertEquals($isAReturningVal, $node->isReturningVal(), 'isReturningVal for: ' . get_class($node));
         $this->assertEquals($node->isFlow() ? false : $isATraversable, $node->isTraversable(), 'isTraversable Val for: ' . get_class($node));
 
-        $this->assertEquals($node->isFlow(), is_a($node, BranchNode::class), 'BranchNode isFlow for: ' . get_class($node));
-
-        if ($node instanceof PayloadNodeInterface) {
-            $this->assertEquals($node->isFlow(), $node->getPayload() instanceof FlowInterface, 'FlowInterface isFlow for: ' . get_class($node));
-        }
+        $this->assertEquals($node->isFlow(), $node instanceof  BranchNodeInterface, 'BranchNode isFlow for: ' . get_class($node));
 
         if ($closureAssertTrue !== null) {
             $this->assertTrue($closureAssertTrue($node), 'Node failing: ' . get_class($node));
@@ -202,9 +198,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                                 foreach ($nodeSetup['nodes'] as $subIdx => $payloadGenerator) {
                                     $isAReturningVal         = $nodeSetup['nodeIsAReturningVal'][$subIdx];
                                     $payloadSetup            = $this->$payloadGenerator();
+                                    $subNode                 = new CallableNode($payloadSetup['callable'], $isAReturningVal, true);
+                                    $payloadSetup['nodeId']  = $subNode->getId();
                                     $nodeSetup['payloads'][] = $payloadSetup;
-
-                                    $aggregateNode->addTraversable(new CallableNode($payloadSetup['callable'], $isAReturningVal, true));
+                                    $aggregateNode->addTraversable($subNode);
                                 }
 
                                 $nodeSetup['aggregate'] = $aggregateNode;
@@ -339,12 +336,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected function getTraversableValidator($debug = false)
     {
         $generationOrder = self::$generationOrder;
-        $closure         = function (NodeInterface $node, $param = null) use ($generationOrder, $debug) {
+        $closure         = function (TraversableNodeInterface $node, $param = null) use ($generationOrder, $debug) {
             static $invocations = 0;
             $result             = true;
             $i                  = max(0, (int) $param);
             ++$invocations;
-            foreach ($node->getTraversable() as $value) {
+            foreach ($node->getTraversable(null) as $value) {
                 $result = $result && ($i === $value);
                 if ($debug) {
                     echo str_repeat('    ', $generationOrder) . "#$generationOrder TraversableValidator invocations: $invocations, param: $param value: $value, i: $i, result:" . ($result ? 'true' : 'false') . "\n";

@@ -143,6 +143,8 @@ class FlowMap implements FlowMapInterface
      * @param int           $index
      *
      * @throws NodalFlowException
+     *
+     * @return $this
      */
     public function register(NodeInterface $node, $index)
     {
@@ -166,6 +168,8 @@ class FlowMap implements FlowMapInterface
         }
 
         $this->reverseMap[$index] = $node;
+
+        return $this;
     }
 
     /**
@@ -227,12 +231,12 @@ class FlowMap implements FlowMapInterface
     {
         foreach ($this->flow->getNodes() as $node) {
             $nodeId = $node->getId();
-            if ($node instanceof BranchNodeInterface) {
+            if ($node instanceof BranchNodeInterface || $node instanceof AggregateNodeInterface) {
                 $this->nodeMap[$nodeId]['nodes'] = $node->getPayload()->getNodeMap();
                 continue;
             }
 
-            if ($node instanceof AggregateNodeInterface) {
+            /*if ($node instanceof AggregateNodeInterface) {
                 foreach ($node->getNodeCollection() as $aggregatedNode) {
                     $this->nodeMap[$nodeId]['nodes'][$aggregatedNode->getId()] = array_replace($this->nodeMapDefault, [
                         'class'  => get_class($aggregatedNode),
@@ -241,7 +245,7 @@ class FlowMap implements FlowMapInterface
                     ]);
                 }
                 continue;
-            }
+            }*/
         }
 
         return $this->nodeMap;

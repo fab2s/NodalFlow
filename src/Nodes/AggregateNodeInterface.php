@@ -15,18 +15,11 @@ namespace fab2s\NodalFlow\Nodes;
 interface AggregateNodeInterface extends TraversableNodeInterface
 {
     /**
-     * Get the traversable to traverse within the Flow
+     * Add a traversable to the aggregate
      *
      * @param TraversableNodeInterface $node A Traversable Node
      *
      * @return $this
      */
     public function addTraversable(TraversableNodeInterface $node);
-
-    /**
-     * Get the underlying node collection
-     *
-     * @return NodeInterface[]
-     */
-    public function getNodeCollection();
 }

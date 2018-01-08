@@ -52,6 +52,8 @@ interface FlowMapInterface
      * @param int           $index
      *
      * @throws NodalFlowException
+     *
+     * @return $this
      */
     public function register(NodeInterface $node, $index);
 
