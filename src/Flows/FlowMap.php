@@ -235,17 +235,6 @@ class FlowMap implements FlowMapInterface
                 $this->nodeMap[$nodeId]['nodes'] = $node->getPayload()->getNodeMap();
                 continue;
             }
-
-            /*if ($node instanceof AggregateNodeInterface) {
-                foreach ($node->getNodeCollection() as $aggregatedNode) {
-                    $this->nodeMap[$nodeId]['nodes'][$aggregatedNode->getId()] = array_replace($this->nodeMapDefault, [
-                        'class'  => get_class($aggregatedNode),
-                        'flowId' => $this->flowId,
-                        'hash'   => $aggregatedNode->getId(),
-                    ]);
-                }
-                continue;
-            }*/
         }
 
         return $this->nodeMap;

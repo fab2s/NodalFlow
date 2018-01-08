@@ -12,7 +12,7 @@ namespace fab2s\NodalFlow\Nodes;
 /**
  * Interface AggregateNodeInterface
  */
-interface AggregateNodeInterface extends TraversableNodeInterface
+interface AggregateNodeInterface extends TraversableNodeInterface, PayloadNodeInterface
 {
     /**
      * Add a traversable to the aggregate
