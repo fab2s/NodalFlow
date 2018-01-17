@@ -130,4 +130,16 @@ class FlowRegistry implements FlowRegistryInterface
     {
         return isset(static::$nodes[$nodeId]) ? static::$nodes[$nodeId] : null;
     }
+
+    /**
+     * @param NodeInterface $node
+     *
+     * @return $this
+     */
+    public function removeNode(NodeInterface $node)
+    {
+        static::$nodes[$node->getId()] = null;
+
+        return $this;
+    }
 }

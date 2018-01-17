@@ -36,7 +36,6 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
     {
         parent::__construct(new NodalFlow, $isAReturningVal);
         $this->isATraversable = true;
-        $this->isAFlow        = false;
     }
 
     /**
@@ -69,9 +68,7 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
         $nodes = $this->payload->getNodes();
         foreach ($nodes as $node) {
             $returnVal = $node->isReturningVal();
-            $nodeStats = &$node->getCarrier()->getFlowMap()->getNodeStat($node->getId());
             foreach ($node->getTraversable($param) as $value) {
-                ++$nodeStats['num_iterate'];
                 if ($returnVal) {
                     yield $value;
                     continue;
@@ -80,7 +77,6 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
                 yield $param;
             }
 
-            ++$nodeStats['num_exec'];
             if ($returnVal) {
                 // since this node is returning something
                 // we will pass its last yield to the next
@@ -90,5 +86,19 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
                 $param = $value;
             }
         }
+    }
+
+    /**
+     * Execute the BranchNode
+     *
+     * @param mixed $param
+     *
+     * @throws NodalFlowException
+     *
+     * @return mixed
+     */
+    public function exec($param)
+    {
+        throw new NodalFlowException('AggregateNode cannot be executed, use getTraversable to iterate instead');
     }
 }

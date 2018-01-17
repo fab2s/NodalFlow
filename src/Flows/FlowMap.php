@@ -141,14 +141,20 @@ class FlowMap implements FlowMapInterface
     /**
      * @param NodeInterface $node
      * @param int           $index
+     * @param bool          $replace
      *
      * @throws NodalFlowException
      *
      * @return $this
      */
-    public function register(NodeInterface $node, $index)
+    public function register(NodeInterface $node, $index, $replace = false)
     {
-        $this->registry->registerNode($node);
+        if (!$replace) {
+            $this->registry->registerNode($node);
+        } else {
+            $this->registry->removeNode($this->reverseMap[$index]);
+        }
+
         $nodeId                 = $node->getId();
         $this->nodeMap[$nodeId] = array_replace($this->nodeMapDefault, [
             'class'           => get_class($node),
@@ -164,7 +170,7 @@ class FlowMap implements FlowMapInterface
 
         if (isset($this->reverseMap[$index])) {
             // replacing a node, maintain nodeMap accordingly
-            unset($this->nodeMap[$this->reverseMap[$index]->getId()]);
+            unset($this->nodeMap[$this->reverseMap[$index]->getId()], $this->reverseMap[$index]);
         }
 
         $this->reverseMap[$index] = $node;

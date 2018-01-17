@@ -101,7 +101,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     public function validateNode(NodeInterface $node, $isAReturningVal, $isATraversable, $closureAssertTrue = null)
     {
         $this->assertEquals($isAReturningVal, $node->isReturningVal(), 'isReturningVal for: ' . get_class($node));
-        $this->assertEquals($node->isFlow() ? false : $isATraversable, $node->isTraversable(), 'isTraversable Val for: ' . get_class($node));
 
         $this->assertEquals($node->isFlow(), $node instanceof  BranchNodeInterface, 'BranchNode isFlow for: ' . get_class($node));
 

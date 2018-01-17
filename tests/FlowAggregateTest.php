@@ -16,10 +16,6 @@ use fab2s\NodalFlow\Nodes\NodeInterface;
  */
 class FlowAggregateTest extends \TestCase
 {
-    public function testAggregateTo()
-    {
-    }
-
     /**
      * @dataProvider flowCasesProvider
      *
@@ -66,8 +62,8 @@ class FlowAggregateTest extends \TestCase
                     $invocations    = $payloadSetup['spy']->getInvocations();
                     $spyInvocations = count($invocations);
 
-                    $aggregateNodeStats = $nodeStats['nodes'][$payloadSetup['nodeId']];
-                    $this->assertSame($spyInvocations, $aggregateNodeStats['num_exec'], "Node num_exec {$aggregateNodeStats['num_exec']} does not match spy's invocation $spyInvocations");
+                    // assert that each node in the aggregate did exec as many time as the aggregate node
+                    $this->assertSame($spyInvocations, $nodeStats['num_exec'], "Node num_exec {$nodeStats['num_exec']} does not match spy's invocation $spyInvocations");
                 }
 
                 $this->assertSame($nodeStats['num_iterate'], $this->traversableIterations * 2 * $nodeStats['num_exec'], "Node num_iterate {$nodeStats['num_iterate']} does not match expected \$this->traversableIterations * 2 * num_exec = $this->traversableIterations * 2 * {$nodeStats['num_exec']}");

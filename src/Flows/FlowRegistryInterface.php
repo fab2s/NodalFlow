@@ -67,4 +67,11 @@ interface FlowRegistryInterface
      * @return NodeInterface|null
      */
     public function getNode($nodeId);
+
+    /**
+     * @param NodeInterface $node
+     *
+     * @return $this
+     */
+    public function removeNode(NodeInterface $node);
 }

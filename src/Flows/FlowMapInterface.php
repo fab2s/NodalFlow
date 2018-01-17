@@ -50,12 +50,13 @@ interface FlowMapInterface
     /**
      * @param NodeInterface $node
      * @param int           $index
+     * @param bool          $replace
      *
      * @throws NodalFlowException
      *
      * @return $this
      */
-    public function register(NodeInterface $node, $index);
+    public function register(NodeInterface $node, $index, $replace = false);
 
     /**
      * @param string $nodeHash
