@@ -45,7 +45,7 @@ abstract class FlowAbstract extends FlowAncestryAbstract
     /**
      * Get the stats array with latest Node stats
      *
-     * @return array
+     * @return array<string,integer|string>
      */
     public function getStats()
     {
