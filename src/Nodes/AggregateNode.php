@@ -94,8 +94,6 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
      * @param mixed $param
      *
      * @throws NodalFlowException
-     *
-     * @return mixed
      */
     public function exec($param)
     {
