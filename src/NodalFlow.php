@@ -136,7 +136,7 @@ class NodalFlow extends FlowAbstract
 
         $node->setCarrier($this);
         $this->nodes[$nodeIdx] = $node;
-        $this->flowMap->register($node, $nodeIdx);
+        $this->flowMap->register($node, $nodeIdx, true);
 
         return $this;
     }
