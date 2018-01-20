@@ -42,7 +42,7 @@ In this flow, as node 2 (which may as well be a whole flow or branch) is not ret
 
 In other words, NodalFlow implements a directed graph structure in the form of a tree composed of nodes that can, but not always are, branches or leaves. 
 
-But it also goes beyond that by allowing any Flow and Node to send whatever parameter to any part of any Flow alive within the process. The feature shares similarities with the `Generator`'s `sendTo()` method and makes it possible to turn Flows into _networks_ of Nodes (and Flows).
+But it also goes beyond that by allowing any Flow and Node to send whatever parameter to any part of any Flow alive within the process. The feature shares similarities with the `Generator`'s `sendTo()` method and makes it possible to turn Flows into _executable networks_ of Nodes (and Flows).
 
 ```
 +-------------------------+-------+----------+
