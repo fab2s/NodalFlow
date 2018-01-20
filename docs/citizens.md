@@ -40,7 +40,7 @@ Branch Nodes cannot be traversed. It is not a technical limitation, but rather s
 
 ## Interrupter Node
 
-An Interrupter Node is a Node implementing `InterruptNodeInterface`, partially implemented by `InterruptNodeAbstract` and fully implemented by `CallableInterruptNode`. Extending from , you would be left with implementing :
+An Interrupter Node is a Node implementing `InterruptNodeInterface`, partially implemented by `InterruptNodeAbstract` and fully implemented by `CallableInterruptNode`. Extending from `InterruptNodeAbstract`, you would be left with implementing :
 
 ```php
     /**
