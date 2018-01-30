@@ -38,7 +38,7 @@ abstract class InterruptNodeAbstract extends NodeAbstract implements InterruptNo
     protected $isAFlow = false;
 
     /**
-     * The CallableInterruptNode's payload interface is simple :
+     * The interrupt's method interface is simple :
      *      - return false to break
      *      - return true to continue
      *      - return void|null (whatever) to proceed with the flow
@@ -65,6 +65,7 @@ abstract class InterruptNodeAbstract extends NodeAbstract implements InterruptNo
             $flowInterrupt     = null;
         }
 
+        /** @var null|InterrupterInterface $flowInterrupt */
         $this->carrier->interruptFlow($flowInterruptType, $flowInterrupt);
     }
 }
