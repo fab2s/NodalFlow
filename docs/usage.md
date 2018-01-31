@@ -163,3 +163,7 @@ $isDirty = $flow->getFlowStatus()->isException();
 ```
 
 This can be useful to find out what is going on within callbacks.
+
+## Flow Map and Registry
+
+Each Flow holds its `FlowMap`, in charge of handling increment and tracking Flow structure. Each `FlowMap` is bound by reference to a global `FlowRegistry` acting as a global state and enforcing the strong uniqueness requirement among Nodes and Flow instances. As the global state is kept withing a static member of every `FlowRegistry` instances, you can at any time and anywhere instantiate `FlowRegistry` to access the complete hash map of all Nodes and Flows, including usage statistics and instances. A more detailed presentation of `FlowMap` and `FlowRegistry` together with some of the design decisions explanation can be found in the [serialization documentation](https://github.com/fab2s/NodalFlow/blob/master/docs/serialization.md).
