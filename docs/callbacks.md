@@ -13,6 +13,7 @@ Please note that there is no guarantee that you will see each node in `progress(
 NodalFlow also implements two protected method that will be triggered just before and after the flow's execution, `flowStrat()` and `flowEnd($success)`. You can override them to add more logic. These are not treated as events as they are always used by NodalFlow to provide with basic statistics.
 
 To use a callback, just implement `CallbackInterface` and inject it in the flow.
+
 ```php
 $flow = new NodalFlow;
 $callback = new ClassImplementingCallbackInterface;

@@ -80,15 +80,17 @@ The interface contract is simple, `interrupt` will be passed with the incoming r
  Example :
  
  ```php
- $qualifer = new CallableInterruptNode(function($record) {
+ $interruptNode = new CallableInterruptNode(function($record) {
     // assuming that we deal with array in this case
     if ($record['is_free']) {
         // hum, not paying, okay, don't send the refund ^^
         return true;
     }
+    
+    // doing nothing will let the flow proceed with the record
  });
  ```
  
 This Node increases separation of concerns, by isolating control conditions and direct manipulation (through `$this->carrier` to trigger `continueFlow` and `breakFlow`). 
 
-Such node can be used as gate, conditionally allowing the Flow to proceed further for a given value passing through, or/and as an interrupter, conditionally stopping the Flow execution (or at least the branch it is put in) at a specific value (most likely to be one of the upstream Node's return value).
+Such node can be used as gate (typically as first node of a branch), conditionally allowing the Flow to proceed further for a given value passing through, or/and as an interrupter, conditionally stopping the Flow execution (or at least the branch it is put in) at a specific value (most likely to be one of the upstream Node's return value). By isolating such condition in this Node, you keep other node more agnostic and re-usable.

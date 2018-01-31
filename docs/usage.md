@@ -1,5 +1,6 @@
 # Usage
-The current version comes with three directly usable Payload Nodes, which are also used to build tests :
+
+The current version comes with directly usable Payload Nodes, which are also used to build tests.
 
 ## CallableNode
 
@@ -136,19 +137,27 @@ As you can see, it is possible to dynamically generate and organize tasks which 
 ## Flow Status
 
 NodalFlow uses a `FlowStatusInterface` to expose its exec state. The FlowStatus object is maintained at all time by the flow and can be used to find out how things went. The status can reflect three states :
+
 ### Clean
+
 That is if everything went well up to this point:
+
 ```php
 $isClean = $flow->getFlowStatus()->isClean();
 ```
 
 ### Dirty
+
 That is if the flow was broken by a node:
+
 ```php
 $isDirty = $flow->getFlowStatus()->isDirty();
 ```
+
 ### Exception
+
 That is if a node raised an exception during the execution:
+
 ```php
 $isDirty = $flow->getFlowStatus()->isException();
 ```

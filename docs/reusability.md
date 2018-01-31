@@ -1,15 +1,19 @@
 # Code re-usability
 
 NodalFlow allows vast possibilities to reuse the code once written for any workflow. You can for example use an Exec Node logic in any other context:
+
 ```php
 $node->exec($param);
 ```
+
  or wrapped in a flow:
+ 
 ```php
 (new NodalFlow)->add($node)->exec($param);
 ```
 
 And the same goes with Traversable Nodes:
+
 ```php
 foreach ($traversableNode->getTraversable($param) as $value) {
     // do something with $value
