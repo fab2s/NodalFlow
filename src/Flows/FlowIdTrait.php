@@ -10,6 +10,7 @@
 namespace fab2s\NodalFlow\Flows;
 
 use fab2s\NodalFlow\Nodes\NodeInterface;
+use fab2s\SoUuid\SoUuid;
 
 /**
  * Trait FlowIdTrait
@@ -56,17 +57,7 @@ trait FlowIdTrait
     public function getId()
     {
         if ($this->id === null) {
-            // would require more effort if we where to massively generate / store Flows
-            $timeParts       = explode(' ', microtime(false));
-
-            return $this->id = implode('.', array_map(function ($value) {
-                return base_convert($value, 10, 36);
-            }, [
-                $timeParts[1],
-                $timeParts[0] * 1000000,
-                ++static::$nonce,
-                mt_rand(0, 999999),
-            ]));
+            return $this->id = SoUuid::generate()->getString();
         }
 
         return $this->id;

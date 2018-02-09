@@ -92,7 +92,7 @@ NodalFlow shares conceptual similarities with [Transduction](https://en.wikipedi
 
 NodalFlow can be installed using composer :
 
-```shell
+```
 composer require "fab2s/NodalFlow"
 ```
 

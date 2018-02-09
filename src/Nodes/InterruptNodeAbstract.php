@@ -65,7 +65,7 @@ abstract class InterruptNodeAbstract extends NodeAbstract implements InterruptNo
             $flowInterrupt     = null;
         }
 
-        /** @var null|InterrupterInterface $flowInterrupt */
+        /* @var null|InterrupterInterface $flowInterrupt */
         $this->carrier->interruptFlow($flowInterruptType, $flowInterrupt);
     }
 }
