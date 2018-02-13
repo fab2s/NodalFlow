@@ -92,6 +92,67 @@ $node = new PayloadNodeFactory($branchFlow, true);
 // ..
 ```
 
+## Interruptions
+
+Have a look at the [Interruption section](https://github.com/fab2s/NodalFlow/blob/master/docs/interruptions.md) of the documentation
+
+## The `sendTo()` methods
+
+The `sendTo()` method is a Flow method that can send a parameter to any of its Node. When `sendTo()` is called, the Flow will start a new recursion starting at the targeted Node position in the Flow. This means that everything will happen like if the Flow only contained the target Node and the ones after it. The return value will be the Flow return value of its targeted portion if any involved Node returns something.
+
+The Flow method uses two optional arguments, a Node Id to target within the Flow (absence is identical to full execution) and an eventual argument to pass to the target:
+
+```php
+    /**
+     * @param string|null $nodeId
+     * @param mixed|null  $param
+     *
+     * @throws NodalFlowException
+     *
+     * @return mixed
+     */
+    public function sendTo($nodeId = null, $param = null);
+```
+
+In practice:
+
+```php
+$node1 = new Node1;
+$node2 = new Node2;
+$nodeN = new NodeN;
+
+$flow = (new NodalFlow)
+    ->add($node1)
+    ->add($node2)
+    ->add($nodeN);
+    
+// exec the whole Flow with $something as initial parameter
+// and get the $result, being the return value of the last
+// Node returning a value (by declaration), or exactely 
+// $something in case none are
+$result = $flow->exec($something);
+// same as 
+$result = $flow->sendTo(null, $something);
+
+// execute the Flow as if it did not contain $node1
+$partialResult = $flow->sendTo($node2->getId(), $something);
+```
+
+For convenience, a version of `sendTo()` is also present in `NodeInterface`  and implemented in `NodeAbstract` as a proxy to the Flow method. Its purpose is to ease Flow targeting outside of the Node's carrier Flow (since targeting the carrier is already trivial using Node's `getCarrier()`). The Node version of `sendTo()` thus uses one more argument to target the Flow:
+
+```php
+    /**
+     * @param string      $flowId
+     * @param string|null $nodeId
+     * @param string|null $param
+     *
+     * @throws NodalFlowException
+     *
+     * @return mixed
+     */
+    public function sendTo($flowId, $nodeId = null, $param = null);
+```
+
 ## The Flow
 
 ```php
