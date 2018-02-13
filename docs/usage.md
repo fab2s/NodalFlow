@@ -94,7 +94,7 @@ $node = new PayloadNodeFactory($branchFlow, true);
 
 ## Interruptions
 
-Have a look at the [Interruption section](https://github.com/fab2s/NodalFlow/blob/master/docs/interruptions.md) of the documentation
+Have a look at the [Interruption section](docs/interruptions.md) of the documentation
 
 ## The `sendTo()` methods
 
@@ -227,4 +227,19 @@ This can be useful to find out what is going on within callbacks.
 
 ## Flow Map and Registry
 
-Each Flow holds its `FlowMap`, in charge of handling increment and tracking Flow structure. Each `FlowMap` is bound by reference to a global `FlowRegistry` acting as a global state and enforcing the strong uniqueness requirement among Nodes and Flow instances. As the global state is kept withing a static member of every `FlowRegistry` instances (acting as an instance proxy to static data), you can at any time and anywhere instantiate a `FlowRegistry` instance and access the complete hash map of all Nodes and Flows, including usage statistics and actual instances. A more detailed presentation of `FlowMap` and `FlowRegistry` together with some of the design decisions explanation can be found in the [serialization documentation](https://github.com/fab2s/NodalFlow/blob/master/docs/serialization.md).
+Each Flow holds its `FlowMap`, in charge of handling increment and tracking Flow structure. Each `FlowMap` is bound by reference to a global `FlowRegistry` acting as a global state and enforcing the strong uniqueness requirement among Nodes and Flow instances. As the global state is kept withing a static member of every `FlowRegistry` instances (acting as an instance proxy to static data), you can at any time and anywhere instantiate a `FlowRegistry` instance and access the complete hash map of all Nodes and Flows, including usage statistics and actual instances. A more detailed presentation of `FlowMap` and `FlowRegistry` together with some of the design decisions explanation can be found in the [serialization documentation](docs/serialization.md).
+
+Anywhere at any time you can:
+
+```php
+$registry = new FlowRegistry;
+
+// get any Flow instance by Id
+$registry->getFlow($flowId);
+
+// get any Node instance by Id
+$registry->getNode($nodeId);
+
+// get the underlying array struct for a given Flow Id
+$registry->get($flowId);
+```
