@@ -153,6 +153,8 @@ For convenience, a version of `sendTo()` is also present in `NodeInterface`  and
     public function sendTo($flowId, $nodeId = null, $param = null);
 ```
 
+This means that from _any_ `Node` you can send _any_ parameter to _any_ Flow in the same process at _any_ Node position. This effectively can turn any set of Nodal(work)Flow residing into the same PHP process into an _Executable Network_ of Nodes and Flows.
+
 ## The Flow
 
 ```php
