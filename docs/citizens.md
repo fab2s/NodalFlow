@@ -60,36 +60,36 @@ The interface contract is simple, `interrupt` will be passed with the incoming r
 - `null` to let the Flow proceed with that particular record (or anything else actually, but `null`, or `void`, it 's php after all, should be _preferred_ as it may be later enforced)
 - An instance of `InterrupterInterface` to target any Node (or none) in the carrier Flow and its eventual ancestor. Have a look at the **Interruptions** section of this doc to find out more about targeted interruptions.
  
- As it may have crossed your mind already, `CallableInterruptNode` will just use its Callable payload to compute the result of `interrupt` :
+As it may have crossed your mind already, `CallableInterruptNode` will just use its Callable payload to compute the result of `interrupt` :
  
- ```php
+```php
      /**
-      * @param mixed $param
-      *
-      * @return InterrupterInterface|null|bool `null` do do nothing, eg let the Flow proceed untouched
-      *                                        `true` to trigger a continue on the carrier Flow (not ancestors)
-      *                                        `false` to trigger a break on the carrier Flow (not ancestors)
-      *                                        `InterrupterInterface` to trigger an interrupt to propagate up to a target (which may be one ancestor)
-      */
-     public function interrupt($param)
-     {
-         return \call_user_func($this->interrupter, $param);
-     }
- ```
- 
- Example :
- 
- ```php
- $interruptNode = new CallableInterruptNode(function($record) {
-    // assuming that we deal with array in this case
-    if ($record['is_free']) {
-        // hum, not paying, okay, don't send the refund ^^
-        return true;
+     * @param mixed $param
+     *
+     * @return InterrupterInterface|null|bool `null` do do nothing, eg let the Flow proceed untouched
+     *                                        `true` to trigger a continue on the carrier Flow (not ancestors)
+     *                                        `false` to trigger a break on the carrier Flow (not ancestors)
+     *                                        `InterrupterInterface` to trigger an interrupt to propagate up to a target (which may be one ancestor)
+     */
+    public function interrupt($param)
+    {
+        return \call_user_func($this->interrupter, $param);
     }
-    
-    // doing nothing will let the flow proceed with the record
- });
- ```
+```
+ 
+Example :
+ 
+```php
+$interruptNode = new CallableInterruptNode(function($record) {
+   // assuming that we deal with array in this case
+   if ($record['is_free']) {
+       // hum, not paying, okay, don't send the refund ^^
+       return true;
+   }
+
+   // doing nothing will let the flow proceed with the record
+});
+```
  
 This Node increases separation of concerns, by isolating control conditions and direct manipulation (through `$this->carrier` to trigger `continueFlow` and `breakFlow`). 
 
