@@ -94,7 +94,7 @@ abstract class FlowInterruptAbstract extends FlowEventAbstract
      */
     public function interruptFlow($interruptType, InterrupterInterface $flowInterrupt = null)
     {
-        $node  = isset($this->nodes[$this->nodeIdx]) ? $this->nodes[$this->nodeIdx] : null;
+        $node = isset($this->nodes[$this->nodeIdx]) ? $this->nodes[$this->nodeIdx] : null;
         switch ($interruptType) {
             case InterrupterInterface::TYPE_CONTINUE:
                 $this->continue = true;
