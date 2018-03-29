@@ -28,11 +28,11 @@ interface FlowEventInterface
     public function getNode();
 
     /**
-     * @param NodeInterface $node
+     * @param NodeInterface|null $node
      *
      * @return $this
      */
-    public function setNode(NodeInterface $node);
+    public function setNode(NodeInterface $node = null);
 
     /**
      * @return array
