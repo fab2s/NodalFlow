@@ -26,14 +26,6 @@ use fab2s\NodalFlow\Nodes\TraversableNodeInterface;
 class NodalFlow extends FlowAbstract
 {
     /**
-     * Flow steps triggering callbacks
-     */
-    const FLOW_START    = 'start';
-    const FLOW_PROGRESS = 'progress';
-    const FLOW_SUCCESS  = 'success';
-    const FLOW_FAIL     = 'fail';
-
-    /**
      * @var array
      */
     protected $flowIncrements = [];
