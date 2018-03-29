@@ -17,6 +17,13 @@ use fab2s\NodalFlow\NodalFlowException;
 class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterface, ExecNodeInterface
 {
     /**
+     * The underlying executable or traversable Payload
+     *
+     * @var callable
+     */
+    protected $payload;
+
+    /**
      * Instantiate a Callable Node
      *
      * @param callable $payload
