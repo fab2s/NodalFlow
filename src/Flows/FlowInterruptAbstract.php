@@ -9,13 +9,14 @@
 
 namespace fab2s\NodalFlow\Flows;
 
+use fab2s\NodalFlow\Events\FlowEvent;
 use fab2s\NodalFlow\NodalFlowException;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 
 /**
  * Abstract Class FlowInterruptAbstract
  */
-abstract class FlowInterruptAbstract implements FlowInterface
+abstract class FlowInterruptAbstract extends FlowEventAbstract
 {
     /**
      * Continue flag
@@ -93,15 +94,18 @@ abstract class FlowInterruptAbstract implements FlowInterface
      */
     public function interruptFlow($interruptType, InterrupterInterface $flowInterrupt = null)
     {
+        $node  = isset($this->nodes[$this->nodeIdx]) ? $this->nodes[$this->nodeIdx] : null;
         switch ($interruptType) {
             case InterrupterInterface::TYPE_CONTINUE:
                 $this->continue = true;
                 $this->flowMap->incrementFlow('num_continue');
+                $this->triggerEvent(FlowEvent::FLOW_CONTINUE, $node);
                 break;
             case InterrupterInterface::TYPE_BREAK:
                 $this->flowStatus = new FlowStatus(FlowStatus::FLOW_DIRTY);
                 $this->break      = true;
                 $this->flowMap->incrementFlow('num_break');
+                $this->triggerEvent(FlowEvent::FLOW_BREAK, $node);
                 break;
             default:
                 throw new NodalFlowException('FlowInterrupt Type missing');

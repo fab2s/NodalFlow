@@ -12,14 +12,36 @@ namespace fab2s\NodalFlow\Flows;
 /**
  * Abstract Class FlowAncestryAbstract
  */
-abstract class FlowAncestryAbstract extends FlowInterruptAbstract
+abstract class FlowAncestryAbstract implements FlowInterface
 {
+    /**
+     * The underlying node structure
+     *
+     * @var NodeInterface[]
+     */
+    protected $nodes = [];
+
+    /**
+     * The current Node index, being the next slot in $this->nodes for
+     * node additions and the current node index when executing the flow
+     *
+     * @var int
+     */
+    protected $nodeIdx = 0;
+
+    /**
+     * The last index value
+     *
+     * @var int
+     */
+    protected $lastIdx = 0;
+
     /**
      * The parent Flow, only set when branched
      *
      * @var FlowInterface
      */
-    public $parent;
+    protected $parent;
 
     /**
      * Set parent Flow, happens only when branched
@@ -52,7 +74,7 @@ abstract class FlowAncestryAbstract extends FlowInterruptAbstract
      */
     public function hasParent()
     {
-        return !empty($this->parent);
+        return isset($this->parent);
     }
 
     /**

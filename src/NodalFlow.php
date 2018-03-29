@@ -9,6 +9,7 @@
 
 namespace fab2s\NodalFlow;
 
+use fab2s\NodalFlow\Events\FlowEvent;
 use fab2s\NodalFlow\Flows\FlowAbstract;
 use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\Flows\FlowMap;
@@ -38,20 +39,6 @@ class NodalFlow extends FlowAbstract
     protected $flowIncrements = [];
 
     /**
-     * The current Node index
-     *
-     * @var int
-     */
-    protected $nodeIdx = 0;
-
-    /**
-     * The last index value
-     *
-     * @var int
-     */
-    protected $lastIdx = 0;
-
-    /**
      * The number of Node in this Flow
      *
      * @var int
@@ -60,11 +47,14 @@ class NodalFlow extends FlowAbstract
 
     /**
      * Instantiate a Flow
+     *
+     * @throws NodalFlowException
      */
     public function __construct()
     {
-        $this->flowMap  = new FlowMap($this, $this->flowIncrements);
-        $this->registry = new FlowRegistry;
+        $this->flowMap     = new FlowMap($this, $this->flowIncrements);
+        $this->registry    = new FlowRegistry;
+        $this->sharedEvent = new FlowEvent($this);
     }
 
     /**
@@ -180,8 +170,8 @@ class NodalFlow extends FlowAbstract
     {
         try {
             $result = $this->rewind()
-                    ->flowStart()
-                    ->recurse($param);
+                ->flowStart()
+                ->recurse($param);
 
             // set flowStatus to make sure that we have the proper
             // value in flowEnd even when overridden without (or when
@@ -246,14 +236,17 @@ class NodalFlow extends FlowAbstract
     /**
      * Triggered just before the flow starts
      *
+     * @throws NodalFlowException
+     *
      * @return $this
      */
     protected function flowStart()
     {
         $this->flowMap->incrementFlow('num_exec')->flowStart();
-        $this->triggerCallback(static::FLOW_START);
-
-        // flow is started
+        $this->listActiveEvent(!$this->hasParent())->triggerEvent(FlowEvent::FLOW_START);
+        // flow is started kick this in after Events to hint eventual children
+        // as this way root flow is only running when a record hits a branch
+        // and triggers a child flow flowStart() call
         $this->flowStatus = new FlowStatus(FlowStatus::FLOW_RUNNING);
 
         return $this;
@@ -267,28 +260,34 @@ class NodalFlow extends FlowAbstract
     protected function flowEnd()
     {
         $this->flowMap->flowEnd();
+        $eventName = FlowEvent::FLOW_SUCCESS;
+        $node      = null;
+        if ($this->flowStatus->isException()) {
+            $eventName = FlowEvent::FLOW_FAIL;
+            $node      = $this->nodes[$this->nodeIdx];
+        }
 
-        $this->triggerCallback($this->flowStatus->isException() ? static::FLOW_FAIL : static::FLOW_SUCCESS);
+        // restore nodeIdx
+        $this->nodeIdx = $this->lastIdx + 1;
+        $this->triggerEvent($eventName, $node);
 
         return $this;
     }
 
     /**
-     * Recurse over nodes which may as well be Flows and
-     * Traversable ...
+     * Recurse over nodes which may as well be Flows and Traversable ...
      * Welcome to the abysses of recursion or iter-recursion ^^
      *
-     * `recurse` perform kind of an hybrid recursion as the
-     * Flow is effectively iterating and recurring over its
-     * Nodes, which may as well be seen as over itself
+     * `recurse` perform kind of an hybrid recursion as the Flow
+     * is effectively iterating and recurring over its Nodes,
+     * which may as well be seen as over itself
      *
      * Iterating tends to limit the amount of recursion levels:
      * recursion is only triggered when executing a Traversable
      * Node's downstream Nodes while every consecutive exec
-     * Nodes are executed within a while loop.
-     * And recursion keeps the size of the recursion context
-     * to a minimum as pretty much everything is done by the
-     * iterating instance
+     * Nodes are executed within the while loop.
+     * The size of the recursion context is kept to a minimum
+     * as pretty much everything is done by the iterating instance
      *
      * @param mixed $param
      * @param int   $nodeIdx
@@ -299,10 +298,10 @@ class NodalFlow extends FlowAbstract
     protected function recurse($param = null, $nodeIdx = 0)
     {
         while ($nodeIdx <= $this->lastIdx) {
-            $node      = $this->nodes[$nodeIdx];
-            $nodeStats = &$this->flowMap->getNodeStat($node->getId());
-
-            $returnVal = $node->isReturningVal();
+            $node          = $this->nodes[$nodeIdx];
+            $this->nodeIdx = $nodeIdx;
+            $nodeStats     = &$this->flowMap->getNodeStat($node->getId());
+            $returnVal     = $node->isReturningVal();
 
             if ($node->isTraversable()) {
                 /** @var TraversableNodeInterface $node */
@@ -314,7 +313,7 @@ class NodalFlow extends FlowAbstract
 
                     ++$nodeStats['num_iterate'];
                     if (!($nodeStats['num_iterate'] % $this->progressMod)) {
-                        $this->triggerCallback(static::FLOW_PROGRESS, $node);
+                        $this->triggerEvent(FlowEvent::FLOW_PROGRESS, $node);
                     }
 
                     $param = $this->recurse($param, $nodeIdx + 1);
