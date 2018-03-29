@@ -17,9 +17,10 @@ interface FlowStatusInterface
     /**
      * Instantiate a Flow status
      *
-     * @param string $status The flow status
+     * @param string          $status The flow status
+     * @param \Exception|null $e
      */
-    public function __construct($status);
+    public function __construct($status, \Exception $e = null);
 
     /**
      * Get a string representation of the Flow status
@@ -65,4 +66,11 @@ interface FlowStatusInterface
      * @return string The flow status
      */
     public function getStatus();
+
+    /**
+     * Return the eventual exception throw during the flow execution
+     *
+     * @return \Exception|null
+     */
+    public function getException();
 }

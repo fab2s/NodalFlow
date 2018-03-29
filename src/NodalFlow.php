@@ -194,7 +194,7 @@ class NodalFlow extends FlowAbstract
 
             return $result;
         } catch (\Exception $e) {
-            $this->flowStatus = new FlowStatus(FlowStatus::FLOW_EXCEPTION);
+            $this->flowStatus = new FlowStatus(FlowStatus::FLOW_EXCEPTION, $e);
             $this->flowEnd();
             if ($e instanceof NodalFlowException) {
                 throw $e;

@@ -32,6 +32,11 @@ class FlowStatus implements FlowStatusInterface
     protected $status;
 
     /**
+     * @var \Exception
+     */
+    protected $exception;
+
+    /**
      * Flow statuses
      *
      * @var array
@@ -46,17 +51,19 @@ class FlowStatus implements FlowStatusInterface
     /**
      * Instantiate a Flow Status
      *
-     * @param string $status The flow status
+     * @param string          $status The flow status
+     * @param \Exception|null $e
      *
      * @throws NodalFlowException
      */
-    public function __construct($status)
+    public function __construct($status, \Exception $e = null)
     {
         if (!isset($this->flowStatuses[$status])) {
             throw new NodalFlowException('$status must be one of :' . \implode(', ', $this->flowStatuses));
         }
 
-        $this->status = $status;
+        $this->status    = $status;
+        $this->exception = $e;
     }
 
     /**
@@ -121,5 +128,15 @@ class FlowStatus implements FlowStatusInterface
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Return the eventual exception throw during the flow execution
+     *
+     * @return \Exception|null
+     */
+    public function getException()
+    {
+        return $this->exception;
     }
 }
