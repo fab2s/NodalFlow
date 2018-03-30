@@ -47,7 +47,7 @@ If you need more granularity, you will need to register events in each Flow you 
 
 ## `FlowEvent::FLOW_START`
 
-Triggered when the Flow starts, the event only carries a flow instance.
+Triggered when the Flow starts, the event only carries the flow instance.
 
 ```php
 $flow->getDispatcher()->addListener(FlowEvent::FLOW_START, function(FlowEventInterface $event) {
@@ -82,7 +82,7 @@ For example, using a `$progressMod` of 10 and extracting 10 categories chained t
 
 ## `FlowEvent::FLOW_CONTINUE`
 
-Triggered when a node triggers a `continue` on the Flow, the event carries the flow and the iterating node instances. 
+Triggered when a node triggers a `continue` on the Flow, the event carries the flow and the node instance triggering the `continue`. 
 
 ```php
 $flow->getDispatcher()->addListener(FlowEvent::FLOW_CONTINUE, function(FlowEventInterface $event) {
@@ -94,7 +94,7 @@ $flow->getDispatcher()->addListener(FlowEvent::FLOW_CONTINUE, function(FlowEvent
 
 ## `FlowEvent::FLOW_BREAK`
 
-Triggered when a node triggers a `break` on the Flow, the event carries the flow and the iterating node instances. 
+Triggered when a node triggers a `break` on the Flow, the event carries the flow and the node instance triggering the `break`. 
 
 ```php
 $flow->getDispatcher()->addListener(FlowEvent::FLOW_BREAK, function(FlowEventInterface $event) {
@@ -106,7 +106,7 @@ $flow->getDispatcher()->addListener(FlowEvent::FLOW_BREAK, function(FlowEventInt
 
 ## `FlowEvent::FLOW_SUCCESS`
 
-Triggered when the Flow completes successfully (eg with no exceptions), the event only carries a flow instance.
+Triggered when the Flow completes successfully (eg with no exceptions), the event only carries the flow instance.
 
 ```php
 $flow->getDispatcher()->addListener(FlowEvent::FLOW_SUCCESS, function(FlowEventInterface $event) {
@@ -117,18 +117,19 @@ $flow->getDispatcher()->addListener(FlowEvent::FLOW_SUCCESS, function(FlowEventI
 
 ## `FlowEvent::FLOW_FAIL`
 
-Triggered an exception is raised during Flow execution, the event only carries a flow instance.
+Triggered when an exception is raised during Flow execution, the event carries the flow instance, and the node current Node instance in the Flow when the exception was thrown.
 
 ```php
 $flow->getDispatcher()->addListener(FlowEvent::FLOW_FAIL, function(FlowEventInterface $event) {
     $flow = $event->getFlow();
+    $node = $event->getNode();
     // if you need to inspect the exeption 
     $exception = $flow->getFlowStatus()->getException();
     // do stuff ...
 });
 ```
 
-The original exception is throw after the execution of FlowEvent::FLOW_FAIL events.
+The original exception is re-throw by NodalFlow after the execution of FlowEvent::FLOW_FAIL events.
 
 ## Compatibility
 
