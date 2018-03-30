@@ -129,7 +129,7 @@ $flow->getDispatcher()->addListener(FlowEvent::FLOW_FAIL, function(FlowEventInte
 });
 ```
 
-The original exception is re-throw by NodalFlow after the execution of FlowEvent::FLOW_FAIL events.
+The original exception is [re-thrown by NodalFlow](exceptions.md) after the execution of FlowEvent::FLOW_FAIL events.
 
 ## Compatibility
 
