@@ -23,6 +23,11 @@ use fab2s\NodalFlow\PayloadNodeFactory;
 class FlowInterruptTest extends \TestCase
 {
     /**
+     * @var int
+     */
+    protected $progressMod = 10;
+
+    /**
      * @var array
      */
     protected $interruptMapUnset = [
@@ -125,6 +130,33 @@ class FlowInterruptTest extends \TestCase
         }
 
         $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @dataProvider interruptProvider
+     *
+     * @param NodalFlow $flow
+     *
+     * @throws NodalFlowException
+     */
+    public function testCallback(NodalFlow $flow)
+    {
+        $dummyCallback = new DummyCallback;
+        $flow->setProgressMod($this->progressMod)->setCallback($dummyCallback)->exec();
+        $this->assertTrue($dummyCallback->hasStarted());
+        $this->assertTrue($dummyCallback->hasSucceeded());
+        $this->assertFalse($dummyCallback->hasFailed());
+
+        $nodeMap        = $flow->getNodeMap();
+        $shouldProgress = false;
+        foreach ($nodeMap as $nodeId => $data) {
+            if ($data['num_iterate'] >= $this->progressMod) {
+                $shouldProgress = true;
+                break;
+            }
+        }
+
+        $this->assertTrue($shouldProgress ? $dummyCallback->getNumProgress() > 0 : true);
     }
 
     /**
