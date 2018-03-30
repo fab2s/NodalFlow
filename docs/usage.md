@@ -199,7 +199,7 @@ As you can see, it is possible to dynamically generate and organize tasks which 
 
 ## Flow Status
 
-NodalFlow uses a `FlowStatusInterface` to expose its exec state. The FlowStatus object is maintained at all time by the flow and can be used to find out how things went. The status can reflect three states :
+NodalFlow uses a `FlowStatusInterface` to expose its exec state. A `FlowStatus` instance is maintained at all time by the flow and can be used to find out how things went. The status can reflect three states :
 
 ### Clean
 
@@ -225,7 +225,13 @@ That is if a node raised an exception during the execution:
 $isDirty = $flow->getFlowStatus()->isException();
 ```
 
-This can be useful to find out what is going on within callbacks.
+When an exception was thrown during the flow execution, it will be stored in the `FlowStatus` instance and can be easily retrieved :
+
+```php
+$exception = $flow->getFlowStatus()->getException();
+```
+
+This can be useful to find out what is going on within Flow events as they carry the Flow instance.
 
 ## Flow Map and Registry
 

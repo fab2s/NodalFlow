@@ -15,6 +15,7 @@ use fab2s\NodalFlow\Events\FlowEvent;
 use fab2s\NodalFlow\Events\FlowEventInterface;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Abstract Class FlowEventAbstract
@@ -31,7 +32,7 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
     protected $progressMod = 1024;
 
     /**
-     * @var EventDispatcher
+     * @var EventDispatcherInterface
      */
     protected $dispatcher;
 
@@ -71,19 +72,23 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
     }
 
     /**
-     * @return EventDispatcher
+     * @return EventDispatcherInterface
      */
     public function getDispatcher()
     {
+        if ($this->dispatcher === null) {
+            $this->dispatcher = new EventDispatcher;
+        }
+
         return $this->dispatcher;
     }
 
     /**
-     * @param EventDispatcher $dispatcher
+     * @param EventDispatcherInterface $dispatcher
      *
      * @return FlowEventAbstract
      */
-    public function setDispatcher(EventDispatcher $dispatcher)
+    public function setDispatcher(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
 
@@ -93,17 +98,15 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
     /**
      * Register callback class
      *
+     * @deprecated Use Flow events & dispatcher instead
+     *
      * @param CallbackInterface $callBack
      *
      * @return $this
      */
     public function setCallBack(CallbackInterface $callBack)
     {
-        if ($this->dispatcher === null) {
-            $this->dispatcher = new EventDispatcher;
-        }
-
-        $this->dispatcher->addSubscriber(new CallbackWrapper($callBack));
+        $this->getDispatcher()->addSubscriber(new CallbackWrapper($callBack));
 
         return $this;
     }

@@ -1,4 +1,6 @@
-# Callbacks
+# Callbacks (deprecated)
+
+Although _deprecated_, Callbacks works just exactly as before, but you should consider using the new [Event handling implementation](events.md) for future work.
 
 NodalFlow implements a KISS callback interface you can use to trigger callback events in various steps of the process.
 

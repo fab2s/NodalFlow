@@ -10,7 +10,6 @@
 namespace fab2s\NodalFlow\Events;
 
 use fab2s\NodalFlow\Callbacks\CallbackInterface;
-use fab2s\NodalFlow\NodalFlow;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
