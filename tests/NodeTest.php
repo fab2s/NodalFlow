@@ -8,6 +8,7 @@
  */
 
 use fab2s\NodalFlow\NodalFlow;
+use fab2s\NodalFlow\NodalFlowException;
 use fab2s\NodalFlow\Nodes\ExecNodeInterface;
 
 /**
@@ -17,6 +18,7 @@ class NodeTest extends \TestCase
 {
     /**
      * @return array
+     * @throws NodalFlowException
      */
     public function nodeProvider()
     {
