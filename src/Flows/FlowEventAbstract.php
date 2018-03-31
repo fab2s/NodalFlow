@@ -133,18 +133,16 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
      */
     protected function listActiveEvent($reload = false)
     {
-        if (!isset($this->dispatcher)) {
+        if (!isset($this->dispatcher) || (isset($this->activeEvents) && !$reload)) {
             return $this;
         }
 
-        if (!isset($this->activeEvents) || $reload) {
-            $this->activeEvents = [];
-            $eventList          = FlowEvent::getEventList();
-            $sortedListeners    = $this->dispatcher->getListeners();
-            foreach ($sortedListeners as $eventName => $listeners) {
-                if (isset($eventList[$eventName]) && !empty($listeners)) {
-                    $this->activeEvents[$eventName] = 1;
-                }
+        $this->activeEvents = [];
+        $eventList          = FlowEvent::getEventList();
+        $sortedListeners    = $this->dispatcher->getListeners();
+        foreach ($sortedListeners as $eventName => $listeners) {
+            if (isset($eventList[$eventName]) && !empty($listeners)) {
+                $this->activeEvents[$eventName] = 1;
             }
         }
 
