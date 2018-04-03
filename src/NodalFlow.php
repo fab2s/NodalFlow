@@ -236,8 +236,8 @@ class NodalFlow extends FlowAbstract
     {
         $this->flowMap->incrementFlow('num_exec')->flowStart();
         $this->listActiveEvent(!$this->hasParent())->triggerEvent(FlowEvent::FLOW_START);
-        // flow is started kick this in after Events to hint eventual children
-        // as this way root flow is only running when a record hits a branch
+        // flow started status kicks in after Event start to hint eventual children
+        // this way, root flow is only running when a record hits a branch
         // and triggers a child flow flowStart() call
         $this->flowStatus = new FlowStatus(FlowStatus::FLOW_RUNNING);
 

@@ -2,7 +2,7 @@
 
 NodalFlow implements a series of events through [`symfony/event-dispatcher`](https://symfony.com/doc/current/components/event_dispatcher.html). You can easily register any existing dispatcher implementing Symfony's `EventDispatcherInterface`. 
 
-NodalFlow is compatible and tested with [symfony/event-dispatcher](https://symfony.com/doc/current/components/event_dispatcher.html) versions `2.8.*`, `3.4.*` and `4.0.*` (php > 7.1). 
+NodalFlow events are compatible and tested with [symfony/event-dispatcher](https://symfony.com/doc/current/components/event_dispatcher.html) versions `2.8.*`, `3.4.*` and `4.0.*` (php > 7.1). 
 
 NodalFlow provides each `dispatch()` call with a `FlowEvent` instance, extending Symfony `Event` and implementing `FlowEventInterface`. Each FlowEvent instance carries the dispatcher's Flow instance, and eventually a Node instance, when the event is tied to a specific Node.
 
@@ -70,7 +70,7 @@ $flow->getDispatcher()->addListener(FlowEvent::FLOW_PROGRESS, function(FlowEvent
 });
 ```
 
-As this is the most called event, a modulo is implemented to only fire it once every `$progressMod` iteration. The default is 1024, you can set it directly on the Flow :
+As this is the most called event, a modulo is implemented to only fire it once every `$progressMod` iteration, plus one at the first record. The default is 1024, you can set it directly on the Flow :
 
 ```php
 // increase to 100k
