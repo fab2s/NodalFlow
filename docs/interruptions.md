@@ -109,6 +109,7 @@ The first two parameters respectively stands for Flow and Node instances or ids.
 ### Targeting a Flow
 
 Within an `InterruptNodeInterface` Node, targeting the carrier Flow can be done by either using as first parameter of the constructor:
+
  - `null`
  - `$this->getCarrier()`
  - `$this->getCarrier()->getId()`
@@ -125,6 +126,7 @@ If you feed the `Interrupter` with something that does not match any Flow among 
 ### Targeting a Node
 
 You can additionally target a particular Node within the targeted Flow. Obviously, it will only do something if the targeted Flow is reached. You can target Node by feeding `Interrupter` with:
+
     - a Node Instance in the target Flow
     - a Node Id in the target Flow
     - `false|null` to target the branching point on the target Flow
