@@ -6,7 +6,17 @@
         "name" : "Fabrice de Stefanis"
     }],
     "keywords" : [
-        "PHP NodalFlow WorkFlow Nodal Node"
+        "PHP",
+        "NodalFlow",
+        "WorkFlow",
+        "Nodal",
+        "Node",
+        "Graph",
+        "Executable",
+        "Network",
+        "Traversable",
+        "Data-Processing",
+        "Serializable"
     ],
     "license" : [
         "MIT"
