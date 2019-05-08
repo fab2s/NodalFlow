@@ -9,6 +9,8 @@
 
 namespace fab2s\NodalFlow\Flows;
 
+use fab2s\NodalFlow\Nodes\NodeInterface;
+
 /**
  * Abstract Class FlowAncestryAbstract
  */

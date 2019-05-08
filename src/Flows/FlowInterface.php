@@ -101,7 +101,7 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return $this
      */
-    public function setParent(FlowInterface $flow);
+    public function setParent(self $flow);
 
     /**
      * Get eventual parent Flow
@@ -124,7 +124,7 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return FlowInterface
      */
-    public function getRootFlow(FlowInterface $flow);
+    public function getRootFlow(self $flow);
 
     /**
      * @param string|null $nodeId
