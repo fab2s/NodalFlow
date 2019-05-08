@@ -122,7 +122,6 @@ class FlowStatus implements FlowStatusInterface
 
     /**
      * Return the Flow status
-
      *
      * @return string The flow status
      */
