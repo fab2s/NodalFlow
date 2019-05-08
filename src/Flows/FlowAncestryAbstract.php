@@ -10,6 +10,7 @@
 namespace fab2s\NodalFlow\Flows;
 
 use fab2s\NodalFlow\Nodes\NodeInterface;
+use fab2s\NodalFlow\Nodes\TraversableNodeInterface;
 
 /**
  * Abstract Class FlowAncestryAbstract
@@ -19,7 +20,7 @@ abstract class FlowAncestryAbstract implements FlowInterface
     /**
      * The underlying node structure
      *
-     * @var NodeInterface[]
+     * @var TraversableNodeInterface|NodeInterface[]
      */
     protected $nodes = [];
 
