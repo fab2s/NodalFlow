@@ -55,6 +55,7 @@ An Interrupter Node is a Node implementing `InterruptNodeInterface`, partially i
 ```
 
 The interface contract is simple, `interrupt` will be passed with the incoming record as argument and should return :
+
 - `true` to skip the record and continue with the Flow
 - `false` to break the Flow
 - `null` to let the Flow proceed with that particular record (or anything else actually, but `null`, or `void`, it 's php after all, should be _preferred_ as it may be later enforced)
