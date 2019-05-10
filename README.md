@@ -82,7 +82,7 @@ NodalFlow enforces minimalistic requirements upon nodes. This means that in most
 
 [YaEtl](https://github.com/fab2s/YaEtl) is an example of a more specified workflow build upon [NodalFlow](https://github.com/fab2s/NodalFlow).
 
-NodalFlow shares conceptual similarities with [Transducers](https://clojure.org/reference/transducers) (if you are interested, also have a look at [Transducers PHP](https://github.com/mtdowling/transducers.php) )as it allow basic interaction chaining, especially when dealing with `ExecNodes`, but the comparison diverges quickly.
+NodalFlow shares conceptual similarities with [Transducers](https://clojure.org/reference/transducers) (if you are interested, also have a look at [Transducers PHP](https://github.com/mtdowling/transducers.php)) as it allow basic interaction chaining, especially when dealing with `ExecNodes`, but the comparison diverges quickly.
 
 ## NodalFlow Documentation
 
