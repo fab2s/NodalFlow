@@ -42,7 +42,7 @@ In this flow, as node 2 (which may as well be a whole flow or branch) is not ret
 
 In other words, NodalFlow implements a directed graph structure in the form of a tree composed of nodes that can be, but not always are, branches or leaves. 
 
-NodalFlow also goes beyond that by allowing any Flow or Node to send whatever parameter to any part of any Flow alive within the same PHP process. The feature shares similarities with the `Generator`'s [`sendTo()`](docs/usage.md#the-sendto-methods) method and makes it possible to turn Flows into _executable networks_ of Nodes (and Flows).
+NodalFlow also goes beyond that by allowing any Flow or Node to send whatever parameter to any part of any Flow alive within the same PHP process. The feature shares similarities with the `Generator`'s [`sendTo()`](/docs/usage.md#the-sendto-methods) method and makes it possible to turn Flows into _executable networks_ of Nodes (and Flows).
 
 ```
 +-------------------------+-------+----------+
@@ -76,7 +76,7 @@ NodalFlow also goes beyond that by allowing any Flow or Node to send whatever pa
  +------------------------------+
 ```
 
-NodalFlow aims at organizing and simplifying data processing workflow's where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. But it can as well be the foundation to organizing pretty much any sequence of tasks (NodalFlow could easily become Turing complete after all). It makes it possible to dynamically configure and execute complex scenario in an organized and repeatable manner (NodalFlow is [serializable](docs/serialization.md)). And even more important, to write Nodes that will be reusable in any other workflow you may think of.
+NodalFlow aims at organizing and simplifying data processing workflow's where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. But it can as well be the foundation to organizing pretty much any sequence of tasks (NodalFlow could easily become Turing complete after all). It makes it possible to dynamically configure and execute complex scenario in an organized and repeatable manner (NodalFlow is [serializable](/docs/serialization.md)). And even more important, to write Nodes that will be reusable in any other workflow you may think of.
 
 NodalFlow enforces minimalistic requirements upon nodes. This means that in most cases, you should extend `NodalFlow` to implement the required constraints and grammar for your use case.
 
