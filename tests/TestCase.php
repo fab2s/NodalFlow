@@ -136,6 +136,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws ReflectionException
+     *
      * @return array
      */
     public function getTraversableInstance()
@@ -171,7 +173,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     public function flowCasesProvider()
     {
-        $testNodes = $this->getTestnodes();
+        $testNodes = $this->getTestNodes();
         $cases     = $this->getFlowCases();
 
         $entryDefault = [
@@ -260,7 +262,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getTestnodes()
+    public function getTestNodes()
     {
         $testNodes = [
             'traversableInstance' => [

@@ -76,7 +76,7 @@ class Interrupter implements InterrupterInterface
      *
      * @return $this
      */
-    public function setType($type): InterrupterInterface
+    public function setType(string $type): InterrupterInterface
     {
         if (!isset($this->types[$type])) {
             throw new InvalidArgumentException('type must be one of:' . implode(', ', array_keys($this->types)));

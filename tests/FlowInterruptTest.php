@@ -138,6 +138,7 @@ class FlowInterruptTest extends \TestCase
      * @param NodalFlow $flow
      *
      * @throws NodalFlowException
+     * @throws ReflectionException
      */
     public function testCallback(NodalFlow $flow)
     {
