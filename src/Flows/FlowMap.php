@@ -221,13 +221,13 @@ class FlowMap implements FlowMapInterface
     /**
      * Let's be fast at incrementing while we are at it
      *
-     * @param string $nodeHash
+     * @param string $nodeId
      *
      * @return array
      */
-    public function &getNodeStat($nodeHash): array
+    public function &getNodeStat(string $nodeId): array
     {
-        return $this->nodeMap[$nodeHash];
+        return $this->nodeMap[$nodeId];
     }
 
     /**
@@ -289,7 +289,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return $this
      */
-    public function incrementNode(string $nodeId, $key): FlowMapInterface
+    public function incrementNode(string $nodeId, string $key): FlowMapInterface
     {
         ++$this->nodeMap[$nodeId][$key];
 

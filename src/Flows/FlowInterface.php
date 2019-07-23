@@ -97,7 +97,7 @@ interface FlowInterface extends FlowIdInterface
     /**
      * Set parent Flow, happens only when branched
      *
-     * @param FlowInterface $flow
+     * @param self $flow
      *
      * @return $this
      */
