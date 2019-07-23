@@ -11,7 +11,7 @@ namespace fab2s\NodalFlow\Events;
 
 use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\Nodes\NodeInterface;
-use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Class FlowEvent
