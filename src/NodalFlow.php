@@ -106,7 +106,7 @@ class NodalFlow extends FlowAbstract
      *
      * @return $this
      */
-    public function replace($nodeIdx, NodeInterface $node): FlowInterface
+    public function replace(int $nodeIdx, NodeInterface $node): FlowInterface
     {
         if (!isset($this->nodes[$nodeIdx])) {
             throw new NodalFlowException('Argument 1 should be a valid index in nodes', 1, null, [
