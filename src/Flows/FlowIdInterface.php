@@ -19,5 +19,5 @@ interface FlowIdInterface
      *
      * @return string immutable unique id
      */
-    public function getId();
+    public function getId(): string;
 }

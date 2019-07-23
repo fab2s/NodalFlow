@@ -51,7 +51,7 @@ class Interrupter implements InterrupterInterface
      * @param null|string|NodeInterface $nodeTarget
      * @param null|string               $type
      */
-    public function __construct($flowTarget = null, $nodeTarget = null, $type = null)
+    public function __construct($flowTarget = null, $nodeTarget = null, ?string $type = null)
     {
         $this->flowTarget = $flowTarget instanceof FlowInterface ? $flowTarget->getId() : $flowTarget;
         $this->nodeTarget = $nodeTarget instanceof NodeInterface ? $nodeTarget->getId() : $nodeTarget;
@@ -64,7 +64,7 @@ class Interrupter implements InterrupterInterface
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -76,7 +76,7 @@ class Interrupter implements InterrupterInterface
      *
      * @return $this
      */
-    public function setType($type)
+    public function setType($type): InterrupterInterface
     {
         if (!isset($this->types[$type])) {
             throw new InvalidArgumentException('type must be one of:' . implode(', ', array_keys($this->types)));
@@ -103,7 +103,7 @@ class Interrupter implements InterrupterInterface
      *
      * @return FlowInterface
      */
-    public function propagate(FlowInterface $flow)
+    public function propagate(FlowInterface $flow): FlowInterface
     {
         // evacuate edge cases
         if ($this->isEdgeInterruptCase($flow)) {
@@ -147,7 +147,7 @@ class Interrupter implements InterrupterInterface
      *
      * @return bool
      */
-    public function interruptNode(NodeInterface $node = null)
+    public function interruptNode(NodeInterface $node = null): bool
     {
         return $node ? $this->nodeTarget === $node->getId() : false;
     }
@@ -157,7 +157,7 @@ class Interrupter implements InterrupterInterface
      *
      * @return bool
      */
-    protected function isEdgeInterruptCase(FlowInterface $flow)
+    protected function isEdgeInterruptCase(FlowInterface $flow): bool
     {
         return !$this->flowTarget ||
             (

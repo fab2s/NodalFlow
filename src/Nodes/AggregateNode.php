@@ -32,7 +32,7 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
      *
      * @throws NodalFlowException
      */
-    public function __construct($isAReturningVal)
+    public function __construct(bool $isAReturningVal)
     {
         parent::__construct(new NodalFlow, $isAReturningVal);
         $this->isATraversable = true;
@@ -47,7 +47,7 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
      *
      * @return $this
      */
-    public function addTraversable(TraversableNodeInterface $node)
+    public function addTraversable(TraversableNodeInterface $node): AggregateNodeInterface
     {
         $this->payload->add($node);
 
@@ -61,7 +61,7 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
      *
      * @return \Generator
      */
-    public function getTraversable($param)
+    public function getTraversable($param = null)
     {
         $value = null;
         /** @var $nodes TraversableNodeInterface[] */
@@ -95,7 +95,7 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
      *
      * @throws NodalFlowException
      */
-    public function exec($param)
+    public function exec($param = null)
     {
         throw new NodalFlowException('AggregateNode cannot be executed, use getTraversable to iterate instead');
     }

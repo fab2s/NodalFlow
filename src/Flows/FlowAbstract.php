@@ -23,7 +23,7 @@ abstract class FlowAbstract extends FlowInterruptAbstract
      *
      * @return array<string,integer|string>
      */
-    public function getStats()
+    public function getStats(): array
     {
         return $this->flowMap->getStats();
     }
@@ -33,7 +33,7 @@ abstract class FlowAbstract extends FlowInterruptAbstract
      *
      * @return FlowMapInterface
      */
-    public function getFlowMap()
+    public function getFlowMap(): FlowMapInterface
     {
         return $this->flowMap;
     }
@@ -43,7 +43,7 @@ abstract class FlowAbstract extends FlowInterruptAbstract
      *
      * @return NodeInterface[]
      */
-    public function getNodes()
+    public function getNodes(): array
     {
         return $this->nodes;
     }
@@ -53,7 +53,7 @@ abstract class FlowAbstract extends FlowInterruptAbstract
      *
      * @return array
      */
-    public function getNodeMap()
+    public function getNodeMap(): array
     {
         return $this->flowMap->getNodeMap();
     }
@@ -66,7 +66,7 @@ abstract class FlowAbstract extends FlowInterruptAbstract
      *
      * @return FlowStatusInterface
      */
-    public function getFlowStatus()
+    public function getFlowStatus(): ? FlowStatusInterface
     {
         return $this->flowStatus;
     }
@@ -78,7 +78,7 @@ abstract class FlowAbstract extends FlowInterruptAbstract
      *
      * @return string
      */
-    public function getFlowId()
+    public function getFlowId(): string
     {
         return $this->getId();
     }

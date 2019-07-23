@@ -48,7 +48,7 @@ interface InterrupterInterface
     /**
      * @return string
      */
-    public function getType();
+    public function getType(): string;
 
     /**
      * @param string $type
@@ -57,7 +57,7 @@ interface InterrupterInterface
      *
      * @return $this
      */
-    public function setType($type);
+    public function setType(string $type): self;
 
     /**
      * Trigger the Interrupt of each ancestor Flows up to a specific one, the root one
@@ -74,5 +74,5 @@ interface InterrupterInterface
      *
      * @return FlowInterface
      */
-    public function propagate(FlowInterface $flow);
+    public function propagate(FlowInterface $flow): FlowInterface;
 }

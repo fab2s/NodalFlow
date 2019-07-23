@@ -53,7 +53,7 @@ abstract class FlowAncestryAbstract implements FlowInterface
      *
      * @return $this
      */
-    public function setParent(FlowInterface $flow)
+    public function setParent(FlowInterface $flow): FlowInterface
     {
         $this->parent = $flow;
 
@@ -65,7 +65,7 @@ abstract class FlowAncestryAbstract implements FlowInterface
      *
      * @return FlowInterface
      */
-    public function getParent()
+    public function getParent(): FlowInterface
     {
         return $this->parent;
     }
@@ -75,7 +75,7 @@ abstract class FlowAncestryAbstract implements FlowInterface
      *
      * @return bool
      */
-    public function hasParent()
+    public function hasParent(): bool
     {
         return isset($this->parent);
     }
@@ -87,7 +87,7 @@ abstract class FlowAncestryAbstract implements FlowInterface
      *
      * @return FlowInterface
      */
-    public function getRootFlow(FlowInterface $flow)
+    public function getRootFlow(FlowInterface $flow): FlowInterface
     {
         while ($flow->hasParent()) {
             $flow = $flow->getParent();

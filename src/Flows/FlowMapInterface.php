@@ -22,30 +22,30 @@ interface FlowMapInterface
      *
      * @return int|null
      */
-    public function getNodeIndex($nodeId);
+    public function getNodeIndex(string $nodeId): ? int;
 
     /**
      * Triggered right before the flow starts
      *
      * @return $this
      */
-    public function flowStart();
+    public function flowStart(): self;
 
     /**
      * Triggered right after the flow stops
      *
      * @return $this
      */
-    public function flowEnd();
+    public function flowEnd(): self;
 
     /**
      * Let's be fast at incrementing while we are at it
      *
-     * @param string $nodeHash
+     * @param string $nodeId
      *
      * @return array
      */
-    public function &getNodeStat($nodeHash);
+    public function &getNodeStat(string $nodeId): array;
 
     /**
      * @param NodeInterface $node
@@ -56,34 +56,34 @@ interface FlowMapInterface
      *
      * @return $this
      */
-    public function register(NodeInterface $node, $index, $replace = false);
+    public function register(NodeInterface $node, int $index, bool $replace = false): self;
 
     /**
-     * @param string $nodeHash
+     * @param string $nodeId
      * @param string $key
      *
      * @return $this
      */
-    public function incrementNode($nodeHash, $key);
+    public function incrementNode(string $nodeId, string $key): self;
 
     /**
      * @param string $key
      *
      * @return $this
      */
-    public function incrementFlow($key);
+    public function incrementFlow(string $key): self;
 
     /**
      * Get/Generate Node Map
      *
      * @return array
      */
-    public function getNodeMap();
+    public function getNodeMap(): array;
 
     /**
      * Get the latest Node stats
      *
      * @return array<string,integer|string>
      */
-    public function getStats();
+    public function getStats(): array;
 }

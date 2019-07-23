@@ -34,7 +34,7 @@ abstract class PayloadNodeAbstract extends NodeAbstract implements PayloadNodeIn
      *
      * @throws NodalFlowException
      */
-    public function __construct($payload, $isAReturningVal, $isATraversable = false)
+    public function __construct($payload, bool $isAReturningVal, bool $isATraversable = false)
     {
         $this->payload         = $payload;
         $this->isAFlow         = (bool) ($payload instanceof FlowInterface);

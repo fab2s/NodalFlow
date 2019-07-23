@@ -54,7 +54,7 @@ class FlowRegistry implements FlowRegistryInterface
      *
      * @return $this
      */
-    public function load(FlowInterface $flow, array $entry)
+    public function load(FlowInterface $flow, array $entry): FlowRegistryInterface
     {
         $this->registerFlow($flow);
         $flowId                    = $flow->getId();
@@ -74,7 +74,7 @@ class FlowRegistry implements FlowRegistryInterface
      *
      * @return $this
      */
-    public function registerFlow(FlowInterface $flow)
+    public function registerFlow(FlowInterface $flow): FlowRegistryInterface
     {
         $flowId = $flow->getId();
         if (isset(static::$flows[$flowId])) {
@@ -96,7 +96,7 @@ class FlowRegistry implements FlowRegistryInterface
      *
      * @return $this
      */
-    public function registerNode(NodeInterface $node)
+    public function registerNode(NodeInterface $node): FlowRegistryInterface
     {
         $nodeId = $node->getId();
         if (isset(static::$nodes[$nodeId])) {
@@ -116,7 +116,7 @@ class FlowRegistry implements FlowRegistryInterface
      *
      * @return FlowInterface|null
      */
-    public function getFlow($flowId)
+    public function getFlow($flowId): ? FlowInterface
     {
         return isset(static::$flows[$flowId]) ? static::$flows[$flowId] : null;
     }
@@ -126,7 +126,7 @@ class FlowRegistry implements FlowRegistryInterface
      *
      * @return NodeInterface|null
      */
-    public function getNode($nodeId)
+    public function getNode($nodeId): ? NodeInterface
     {
         return isset(static::$nodes[$nodeId]) ? static::$nodes[$nodeId] : null;
     }
@@ -136,7 +136,7 @@ class FlowRegistry implements FlowRegistryInterface
      *
      * @return $this
      */
-    public function removeNode(NodeInterface $node)
+    public function removeNode(NodeInterface $node): FlowRegistryInterface
     {
         static::$nodes[$node->getId()] = null;
 

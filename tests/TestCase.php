@@ -15,6 +15,7 @@ use fab2s\NodalFlow\Nodes\BranchNodeInterface;
 use fab2s\NodalFlow\Nodes\CallableNode;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 use fab2s\NodalFlow\Nodes\TraversableNodeInterface;
+use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
 
 /**
  * abstract Class TestCase
@@ -110,6 +111,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws ReflectionException
+     *
      * @return array
      */
     public function getExecInstance()
@@ -410,13 +413,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string                                                $type
-     * @param object                                                $payloadMock
-     * @param \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount $spy
+     * @param string          $type
+     * @param object          $payloadMock
+     * @param AnyInvokedCount $spy
      *
      * @return array
      */
-    protected function registerPayloadMock($type, $payloadMock, \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount $spy)
+    protected function registerPayloadMock($type, $payloadMock, AnyInvokedCount $spy)
     {
         $hash                  = $this->getObjectHash($payloadMock);
         $this->payloads[$hash] = [

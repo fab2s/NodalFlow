@@ -22,21 +22,21 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return array
      */
-    public function getNodeMap();
+    public function getNodeMap(): array;
 
     /**
      * Get the stats array with latest Node stats
      *
      * @return FlowMapInterface
      */
-    public function getFlowMap();
+    public function getFlowMap(): FlowMapInterface;
 
     /**
      * Get the latest Node stats
      *
      * @return array
      */
-    public function getStats();
+    public function getStats(): array;
 
     /**
      * Adds a Node to the Flow
@@ -47,7 +47,7 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return $this
      */
-    public function add(NodeInterface $node);
+    public function add(NodeInterface $node): self;
 
     /**
      * Replaces a node with another one
@@ -59,7 +59,7 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return $this
      */
-    public function replace($nodeIdx, NodeInterface $node);
+    public function replace(int $nodeIdx, NodeInterface $node): self;
 
     /**
      * Execute the Flow
@@ -77,7 +77,7 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return $this
      */
-    public function rewind();
+    public function rewind(): self;
 
     /**
      * Used to set the eventual Node Target of an Interrupt signal
@@ -92,7 +92,7 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return $this
      */
-    public function setInterruptNodeId($interruptNodeId);
+    public function setInterruptNodeId($interruptNodeId): self;
 
     /**
      * Set parent Flow, happens only when branched
@@ -101,30 +101,30 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return $this
      */
-    public function setParent(self $flow);
+    public function setParent(self $flow): self;
 
     /**
      * Get eventual parent Flow
      *
-     * @return FlowInterface
+     * @return $this
      */
-    public function getParent();
+    public function getParent(): self;
 
     /**
      * Tells if this flow has a parent
      *
      * @return bool
      */
-    public function hasParent();
+    public function hasParent(): bool;
 
     /**
      * Get this Flow's root Flow
      *
      * @param FlowInterface $flow Root Flow, or self if root flow
      *
-     * @return FlowInterface
+     * @return $this
      */
-    public function getRootFlow(self $flow);
+    public function getRootFlow(self $flow): self;
 
     /**
      * @param string|null $nodeId
@@ -134,7 +134,7 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return mixed
      */
-    public function sendTo($nodeId = null, $param = null);
+    public function sendTo(string $nodeId = null, $param = null);
 
     /**
      * The Flow status can either indicate be:
@@ -144,14 +144,14 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return FlowStatusInterface
      */
-    public function getFlowStatus();
+    public function getFlowStatus(): ? FlowStatusInterface;
 
     /**
      * Get the underlying node array
      *
      * @return NodeInterface[]
      */
-    public function getNodes();
+    public function getNodes(): array;
 
     /**
      * Nodes may call breakFlow() on their carrier to
@@ -161,7 +161,7 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return $this
      */
-    public function breakFlow(InterrupterInterface $flowInterrupt = null);
+    public function breakFlow(InterrupterInterface $flowInterrupt = null): self;
 
     /**
      * Nodes may call breakFlow() on their carrier to
@@ -172,7 +172,7 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return $this
      */
-    public function continueFlow(InterrupterInterface $flowInterrupt = null);
+    public function continueFlow(InterrupterInterface $flowInterrupt = null): self;
 
     /**
      * @param string                    $interruptType
@@ -180,5 +180,5 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return $this
      */
-    public function interruptFlow($interruptType, InterrupterInterface $flowInterrupt = null);
+    public function interruptFlow(string $interruptType, InterrupterInterface $flowInterrupt = null): self;
 }
