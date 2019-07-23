@@ -131,6 +131,8 @@ class FlowMap implements FlowMapInterface
      * If you don't feel like doing this at home, I completely
      * understand, I'd be very happy to hear about a better and
      * more efficient way
+     *
+     * @throws NodalFlowException
      */
     public function __wakeup()
     {
@@ -147,7 +149,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return $this
      */
-    public function register(NodeInterface $node, $index, $replace = false)
+    public function register(NodeInterface $node, int $index, bool $replace = false): FlowMapInterface
     {
         if (!$replace) {
             $this->registry->registerNode($node);
@@ -183,7 +185,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return int|null
      */
-    public function getNodeIndex($nodeId)
+    public function getNodeIndex(string $nodeId): ? int
     {
         return isset($this->nodeMap[$nodeId]) ? $this->nodeMap[$nodeId]['index'] : null;
     }
@@ -193,7 +195,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return $this
      */
-    public function flowStart()
+    public function flowStart(): FlowMapInterface
     {
         $this->flowStats['start'] = microtime(true);
 
@@ -205,7 +207,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return $this
      */
-    public function flowEnd()
+    public function flowEnd(): FlowMapInterface
     {
         $this->flowStats['end']     = microtime(true);
         $this->flowStats['mib']     = memory_get_peak_usage(true) / 1048576;
@@ -223,7 +225,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return array
      */
-    public function &getNodeStat($nodeHash)
+    public function &getNodeStat($nodeHash): array
     {
         return $this->nodeMap[$nodeHash];
     }
@@ -233,7 +235,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return array
      */
-    public function getNodeMap()
+    public function getNodeMap(): array
     {
         foreach ($this->flow->getNodes() as $node) {
             $nodeId = $node->getId();
@@ -251,7 +253,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return array<string,integer|string>
      */
-    public function getStats()
+    public function getStats(): array
     {
         $this->resetTotals();
         foreach ($this->flow->getNodes() as $node) {
@@ -282,14 +284,14 @@ class FlowMap implements FlowMapInterface
     }
 
     /**
-     * @param string $nodeHash
+     * @param string $nodeId
      * @param string $key
      *
      * @return $this
      */
-    public function incrementNode($nodeHash, $key)
+    public function incrementNode(string $nodeId, $key): FlowMapInterface
     {
-        ++$this->nodeMap[$nodeHash][$key];
+        ++$this->nodeMap[$nodeId][$key];
 
         return $this;
     }
@@ -299,7 +301,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return $this
      */
-    public function incrementFlow($key)
+    public function incrementFlow(string $key): FlowMapInterface
     {
         ++$this->flowStats[$key];
 
@@ -311,7 +313,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return $this
      */
-    public function resetNodeStats()
+    public function resetNodeStats(): FlowMapInterface
     {
         foreach ($this->nodeMap as &$nodeStat) {
             foreach ($this->nodeIncrements as $key => $value) {
@@ -331,7 +333,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return array<string,integer|string>
      */
-    public function duration($seconds)
+    public function duration($seconds): array
     {
         $result = [
             'hour'     => (int) floor($seconds / 3600),

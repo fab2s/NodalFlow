@@ -12,7 +12,6 @@ namespace fab2s\NodalFlow\Flows;
 use fab2s\NodalFlow\Callbacks\CallbackInterface;
 use fab2s\NodalFlow\Events\CallbackWrapper;
 use fab2s\NodalFlow\Events\FlowEvent;
-use fab2s\NodalFlow\Events\FlowEventInterface;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -42,16 +41,26 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
     protected $activeEvents;
 
     /**
-     * @var FlowEventInterface
+     * @var array
      */
-    protected $sharedEvent;
+    protected $dispatchArgs = [];
+
+    /**
+     * @var int
+     */
+    protected $eventInstanceKey = 0;
+
+    /**
+     * @var int
+     */
+    protected $eventNameKey = 1;
 
     /**
      * Get current $progressMod
      *
      * @return int
      */
-    public function getProgressMod()
+    public function getProgressMod(): int
     {
         return $this->progressMod;
     }
@@ -64,20 +73,23 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
      *
      * @return $this
      */
-    public function setProgressMod($progressMod)
+    public function setProgressMod(int $progressMod): self
     {
-        $this->progressMod = max(1, (int) $progressMod);
+        $this->progressMod = max(1, $progressMod);
 
         return $this;
     }
 
     /**
+     * @throws \ReflectionException
+     *
      * @return EventDispatcherInterface
      */
-    public function getDispatcher()
+    public function getDispatcher(): EventDispatcherInterface
     {
         if ($this->dispatcher === null) {
             $this->dispatcher = new EventDispatcher;
+            $this->initDispatchArgs(EventDispatcher::class);
         }
 
         return $this->dispatcher;
@@ -86,25 +98,29 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
     /**
      * @param EventDispatcherInterface $dispatcher
      *
-     * @return FlowEventAbstract
+     * @throws \ReflectionException
+     *
+     * @return $this
      */
-    public function setDispatcher(EventDispatcherInterface $dispatcher)
+    public function setDispatcher(EventDispatcherInterface $dispatcher): self
     {
         $this->dispatcher = $dispatcher;
 
-        return $this;
+        return $this->initDispatchArgs(\get_class($dispatcher));
     }
 
     /**
      * Register callback class
      *
-     * @deprecated Use Flow events & dispatcher instead
-     *
      * @param CallbackInterface $callBack
      *
+     * @throws \ReflectionException
+     *
      * @return $this
+     *
+     * @deprecated Use Flow events & dispatcher instead
      */
-    public function setCallBack(CallbackInterface $callBack)
+    public function setCallBack(CallbackInterface $callBack): self
     {
         $this->getDispatcher()->addSubscriber(new CallbackWrapper($callBack));
 
@@ -117,10 +133,12 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
      *
      * @return $this
      */
-    protected function triggerEvent($eventName, NodeInterface $node = null)
+    protected function triggerEvent(string $eventName, NodeInterface $node = null): self
     {
         if (isset($this->activeEvents[$eventName])) {
-            $this->dispatcher->dispatch($eventName, $this->sharedEvent->setNode($node));
+            $this->dispatchArgs[$this->eventNameKey] = $eventName;
+            $this->dispatchArgs[$this->eventInstanceKey]->setNode($node);
+            $this->dispatcher->dispatch(...$this->dispatchArgs);
         }
 
         return $this;
@@ -131,7 +149,7 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
      *
      * @return $this
      */
-    protected function listActiveEvent($reload = false)
+    protected function listActiveEvent(bool $reload = false): self
     {
         if (!isset($this->dispatcher) || (isset($this->activeEvents) && !$reload)) {
             return $this;
@@ -144,6 +162,57 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
             if (isset($eventList[$eventName]) && !empty($listeners)) {
                 $this->activeEvents[$eventName] = 1;
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * I am really wondering wtf happening in their mind when
+     * they decided to flip argument order on such a low level
+     * foundation.
+     *
+     * This is just one of those cases where usability should win
+     * over academic principles. Setting name upon event instance is
+     * just not more convenient than setting it at call time, it's
+     * just a useless mutation in most IRL cases where the event is
+     * the same throughout many event slots (you know, practice).
+     * It's not even so obvious that coupling event with their
+     * usage is such a good idea, academically speaking.
+     *
+     * Now if you add that this results in:
+     *  - duplicated code in symfony itself
+     *  - hackish tricks to maintain BC
+     *  - loss of argument type hinting
+     *  - making it harder to support multiple version
+     *    while this is supposed to achieve better compatibility
+     *    AND no actual feature was added for so long ...
+     *
+     * This is pretty close to achieving the opposite of the
+     * original purpose IMHO
+     *
+     * PS:
+     * Okay, this is also a tribute to Linus memorable rants, but ...
+     *
+     * @param string $class
+     *
+     * @throws \ReflectionException
+     *
+     * @return FlowEventAbstract
+     */
+    protected function initDispatchArgs(string $class): self
+    {
+        $reflection         = new \ReflectionMethod($class, 'dispatch');
+        $firstParam         = $reflection->getParameters()[0];
+        $this->dispatchArgs = [
+            new FlowEvent($this),
+            null,
+        ];
+
+        if ($firstParam->getName() !== 'event') {
+            $this->eventInstanceKey = 1;
+            $this->eventNameKey     = 0;
+            $this->dispatchArgs     = array_reverse($this->dispatchArgs);
         }
 
         return $this;

@@ -64,7 +64,7 @@ abstract class FlowInterruptAbstract extends FlowEventAbstract
      *
      * @return $this
      */
-    public function breakFlow(InterrupterInterface $flowInterrupt = null)
+    public function breakFlow(InterrupterInterface $flowInterrupt = null): FlowInterface
     {
         return $this->interruptFlow(InterrupterInterface::TYPE_BREAK, $flowInterrupt);
     }
@@ -79,7 +79,7 @@ abstract class FlowInterruptAbstract extends FlowEventAbstract
      *
      * @return $this
      */
-    public function continueFlow(InterrupterInterface $flowInterrupt = null)
+    public function continueFlow(InterrupterInterface $flowInterrupt = null): FlowInterface
     {
         return $this->interruptFlow(InterrupterInterface::TYPE_CONTINUE, $flowInterrupt);
     }
@@ -92,7 +92,7 @@ abstract class FlowInterruptAbstract extends FlowEventAbstract
      *
      * @return $this
      */
-    public function interruptFlow($interruptType, InterrupterInterface $flowInterrupt = null)
+    public function interruptFlow(string $interruptType, InterrupterInterface $flowInterrupt = null): FlowInterface
     {
         $node = isset($this->nodes[$this->nodeIdx]) ? $this->nodes[$this->nodeIdx] : null;
         switch ($interruptType) {
@@ -133,7 +133,7 @@ abstract class FlowInterruptAbstract extends FlowEventAbstract
      *
      * @return $this
      */
-    public function setInterruptNodeId($interruptNodeId)
+    public function setInterruptNodeId($interruptNodeId): FlowInterface
     {
         if ($interruptNodeId !== null && !is_bool($interruptNodeId) && !$this->registry->getNode($interruptNodeId)) {
             throw new NodalFlowException('Targeted Node not found in target Flow for Interruption', 1, null, [
@@ -152,7 +152,7 @@ abstract class FlowInterruptAbstract extends FlowEventAbstract
      *
      * @return bool
      */
-    protected function interruptNode(NodeInterface $node)
+    protected function interruptNode(NodeInterface $node): bool
     {
         // if we have an interruptNodeId, bubble up until we match a node
         // else stop propagation

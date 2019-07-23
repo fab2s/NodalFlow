@@ -23,5 +23,5 @@ interface PayloadNodeFactoryInterface
      *
      * @return PayloadNodeInterface
      */
-    public static function create($payload, $isAReturningVal, $isATraversable = false);
+    public static function create($payload, bool $isAReturningVal, bool $isATraversable = false);
 }

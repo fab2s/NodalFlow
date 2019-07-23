@@ -21,5 +21,5 @@ interface AggregateNodeInterface extends TraversableNodeInterface, PayloadNodeIn
      *
      * @return $this
      */
-    public function addTraversable(TraversableNodeInterface $node);
+    public function addTraversable(TraversableNodeInterface $node): self;
 }

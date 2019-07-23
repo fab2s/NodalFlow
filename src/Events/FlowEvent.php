@@ -11,7 +11,7 @@ namespace fab2s\NodalFlow\Events;
 
 use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\Nodes\NodeInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Class FlowEvent
@@ -58,15 +58,15 @@ class FlowEvent extends Event implements FlowEventInterface
     /**
      * @return FlowInterface
      */
-    public function getFlow()
+    public function getFlow(): FlowInterface
     {
         return $this->flow;
     }
 
     /**
-     * @return NodeInterface
+     * @return NodeInterface|null
      */
-    public function getNode()
+    public function getNode(): ? NodeInterface
     {
         return $this->node;
     }
@@ -76,7 +76,7 @@ class FlowEvent extends Event implements FlowEventInterface
      *
      * @return $this
      */
-    public function setNode(NodeInterface $node = null)
+    public function setNode(NodeInterface $node = null): FlowEventInterface
     {
         $this->node = $node;
 
@@ -86,7 +86,7 @@ class FlowEvent extends Event implements FlowEventInterface
     /**
      * @return array
      */
-    public static function getEventList()
+    public static function getEventList(): array
     {
         if (!isset(static::$eventList)) {
             static::$eventList = [

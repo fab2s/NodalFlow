@@ -20,14 +20,14 @@ interface FlowStatusInterface
      * @param string          $status The flow status
      * @param \Exception|null $e
      */
-    public function __construct($status, \Exception $e = null);
+    public function __construct(string $status, \Exception $e = null);
 
     /**
      * Get a string representation of the Flow status
      *
      * @return string The flow status
      */
-    public function __toString();
+    public function __toString(): string;
 
     /**
      * Indicate that the flow is currently running
@@ -37,40 +37,40 @@ interface FlowStatusInterface
      *
      * @return bool True If the flow is currently running
      */
-    public function isRunning();
+    public function isRunning(): bool;
 
     /**
      * Tells if the Flow went smoothly
      *
      * @return bool True If everything went well during the flow
      */
-    public function isClean();
+    public function isClean(): bool;
 
     /**
      * Indicate that the flow was interrupted by a Node
      *
      * @return bool True If the flow was interrupted without exception
      */
-    public function isDirty();
+    public function isDirty(): bool;
 
     /**
      * Indicate that an exception was raised during the Flow execution
      *
      * @return bool True If the flow was interrupted with exception
      */
-    public function isException();
+    public function isException(): bool;
 
     /**
      * Return the Flow status
      *
      * @return string The flow status
      */
-    public function getStatus();
+    public function getStatus(): string;
 
     /**
      * Return the eventual exception throw during the flow execution
      *
      * @return \Exception|null
      */
-    public function getException();
+    public function getException(): ? \Exception;
 }

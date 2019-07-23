@@ -43,11 +43,9 @@ abstract class InterruptNodeAbstract extends NodeAbstract implements InterruptNo
      *      - return true to continue
      *      - return void|null (whatever) to proceed with the flow
      *
-     * @param mixed $param
-     *
-     * @return mixed|void
+     * @param mixed|null $param
      */
-    public function exec($param)
+    public function exec($param = null)
     {
         $flowInterrupt = $this->interrupt($param);
         if ($flowInterrupt === null) {

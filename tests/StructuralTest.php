@@ -21,7 +21,7 @@ class StructuralTest extends \TestCase
     {
         $this->expectException(NodalFlowException::class);
         $flow = new NodalFlow;
-        $flow->add(new BranchNode($flow, 1));
+        $flow->add(new BranchNode($flow, true));
     }
 
     /**
@@ -32,8 +32,8 @@ class StructuralTest extends \TestCase
         $this->expectException(NodalFlowException::class);
         $rootFlow   = new NodalFlow;
         $branchFlow = new NodalFlow;
-        $rootFlow->add(new BranchNode($branchFlow, 1));
-        $rootFlow->add(new BranchNode($branchFlow, 1));
+        $rootFlow->add(new BranchNode($branchFlow, true));
+        $rootFlow->add(new BranchNode($branchFlow, true));
     }
 
     /**
@@ -45,9 +45,9 @@ class StructuralTest extends \TestCase
         $rootFlow    = new NodalFlow;
         $branchFlow1 = new NodalFlow;
         $branchFlow2 = new NodalFlow;
-        $rootFlow->add(new BranchNode($branchFlow1, 1));
-        $rootFlow->add(new BranchNode($branchFlow2, 1));
-        $branchFlow2->add(new BranchNode($rootFlow, 1));
+        $rootFlow->add(new BranchNode($branchFlow1, true));
+        $rootFlow->add(new BranchNode($branchFlow2, true));
+        $branchFlow2->add(new BranchNode($rootFlow, true));
     }
 
     /**
@@ -93,7 +93,7 @@ class StructuralTest extends \TestCase
             return $record;
         }, true, false);
 
-        $flow->add($node)->add(new BranchNode($branchFlow, 1));
+        $flow->add($node)->add(new BranchNode($branchFlow, true));
         $branchFlow->add($node);
     }
 
@@ -110,8 +110,8 @@ class StructuralTest extends \TestCase
             return $record;
         }, true, false);
 
-        $flow->add($node)->add(new BranchNode($branchFlow1, 1));
-        $branchFlow1->add(new BranchNode($branchFlow2, 1));
+        $flow->add($node)->add(new BranchNode($branchFlow1, true));
+        $branchFlow1->add(new BranchNode($branchFlow2, true));
         $branchFlow2->add($node);
     }
 }

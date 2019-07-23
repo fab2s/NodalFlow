@@ -23,14 +23,14 @@ interface NodeInterface extends FlowIdInterface
      *
      * @return bool
      */
-    public function isTraversable();
+    public function isTraversable(): bool;
 
     /**
      * Indicate if the Node is a Flow (branch)
      *
      * @return bool true if this node is an instanceof FlowInterface
      */
-    public function isFlow();
+    public function isFlow(): bool;
 
     /**
      * Indicate if the Node is returning a value
@@ -41,7 +41,7 @@ interface NodeInterface extends FlowIdInterface
      *              returned value will be use as param
      *              for next nodes.
      */
-    public function isReturningVal();
+    public function isReturningVal(): bool;
 
     /**
      * Set/Reset carrying Flow
@@ -50,14 +50,14 @@ interface NodeInterface extends FlowIdInterface
      *
      * @return $this
      */
-    public function setCarrier(FlowInterface $flow = null);
+    public function setCarrier(FlowInterface $flow = null): self;
 
     /**
      * Return the carrying Flow
      *
-     * @return FlowInterface
+     * @return FlowInterface|null
      */
-    public function getCarrier();
+    public function getCarrier(): ? FlowInterface;
 
     /**
      * Get this Node's hash, must be deterministic and unique
@@ -66,18 +66,18 @@ interface NodeInterface extends FlowIdInterface
      *
      * @return string
      */
-    public function getNodeHash();
+    public function getNodeHash(): string;
 
     /**
      * @param string      $flowId
      * @param string|null $nodeId
-     * @param string|null $param
+     * @param mixed|null  $param
      *
      * @throws NodalFlowException
      *
      * @return mixed
      */
-    public function sendTo($flowId, $nodeId = null, $param = null);
+    public function sendTo(string $flowId, string $nodeId = null, $param = null);
 
     /**
      * Get the custom Node increments to be considered during
@@ -91,5 +91,5 @@ interface NodeInterface extends FlowIdInterface
      *
      * @return array
      */
-    public function getNodeIncrements();
+    public function getNodeIncrements(): array;
 }

@@ -34,7 +34,7 @@ interface FlowRegistryInterface
      *
      * @return $this
      */
-    public function load(FlowInterface $flow, array $entry);
+    public function load(FlowInterface $flow, array $entry): self;
 
     /**
      * @param FlowInterface $flow
@@ -43,7 +43,7 @@ interface FlowRegistryInterface
      *
      * @return $this
      */
-    public function registerFlow(FlowInterface $flow);
+    public function registerFlow(FlowInterface $flow): self;
 
     /**
      * @param NodeInterface $node
@@ -52,26 +52,26 @@ interface FlowRegistryInterface
      *
      * @return $this
      */
-    public function registerNode(NodeInterface $node);
+    public function registerNode(NodeInterface $node): self;
 
     /**
      * @param string $flowId
      *
      * @return FlowInterface|null
      */
-    public function getFlow($flowId);
+    public function getFlow($flowId): ? FlowInterface;
 
     /**
      * @param string $nodeId
      *
      * @return NodeInterface|null
      */
-    public function getNode($nodeId);
+    public function getNode($nodeId): ? NodeInterface;
 
     /**
      * @param NodeInterface $node
      *
      * @return $this
      */
-    public function removeNode(NodeInterface $node);
+    public function removeNode(NodeInterface $node): self;
 }

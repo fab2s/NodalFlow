@@ -25,7 +25,7 @@ class ClosureNode extends CallableNode
      *
      * @throws NodalFlowException
      */
-    public function __construct(\Closure $payload, $isAReturningVal, $isATraversable = false)
+    public function __construct(\Closure $payload, bool $isAReturningVal, bool $isATraversable = false)
     {
         parent::__construct($payload, $isAReturningVal, $isATraversable);
     }
@@ -37,7 +37,7 @@ class ClosureNode extends CallableNode
      *
      * @return \Generator
      */
-    public function getTraversable($param)
+    public function getTraversable($param = null)
     {
         $callable = $this->payload;
         foreach ($callable($param) as $value) {
@@ -48,11 +48,11 @@ class ClosureNode extends CallableNode
     /**
      * Execute this Node (payload must be consistent for the usage)
      *
-     * @param mixed $param
+     * @param mixed|null $param
      *
      * @return mixed
      */
-    public function exec($param)
+    public function exec($param = null)
     {
         $callable = $this->payload;
 

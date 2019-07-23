@@ -76,7 +76,7 @@ abstract class NodeAbstract implements NodeInterface
      *
      * @return bool
      */
-    public function isTraversable()
+    public function isTraversable(): bool
     {
         return (bool) $this->isATraversable;
     }
@@ -86,7 +86,7 @@ abstract class NodeAbstract implements NodeInterface
      *
      * @return bool true if this node instanceof FlowInterface
      */
-    public function isFlow()
+    public function isFlow(): bool
     {
         return (bool) $this->isAFlow;
     }
@@ -100,7 +100,7 @@ abstract class NodeAbstract implements NodeInterface
      *              returned value will be use as param
      *              for next nodes.
      */
-    public function isReturningVal()
+    public function isReturningVal(): bool
     {
         return (bool) $this->isAReturningVal;
     }
@@ -112,7 +112,7 @@ abstract class NodeAbstract implements NodeInterface
      *
      * @return $this
      */
-    public function setCarrier(FlowInterface $flow = null)
+    public function setCarrier(FlowInterface $flow = null): NodeInterface
     {
         $this->carrier = $flow;
 
@@ -124,7 +124,7 @@ abstract class NodeAbstract implements NodeInterface
      *
      * @return FlowInterface
      */
-    public function getCarrier()
+    public function getCarrier(): ? FlowInterface
     {
         return $this->carrier;
     }
@@ -136,7 +136,7 @@ abstract class NodeAbstract implements NodeInterface
      *
      * @return string
      */
-    public function getNodeHash()
+    public function getNodeHash(): string
     {
         return $this->getId();
     }
@@ -153,7 +153,7 @@ abstract class NodeAbstract implements NodeInterface
      *
      * @return array
      */
-    public function getNodeIncrements()
+    public function getNodeIncrements(): array
     {
         return $this->nodeIncrements;
     }
@@ -161,13 +161,13 @@ abstract class NodeAbstract implements NodeInterface
     /**
      * @param string      $flowId
      * @param string|null $nodeId
-     * @param string|null $param
+     * @param mixed|null  $param
      *
      * @throws NodalFlowException
      *
      * @return mixed
      */
-    public function sendTo($flowId, $nodeId = null, $param = null)
+    public function sendTo($flowId, string $nodeId = null, $param = null)
     {
         if (!($flow = $this->registry->getFlow($flowId))) {
             throw new NodalFlowException('Cannot sendTo without valid Flow target', 1, null, [
@@ -186,7 +186,7 @@ abstract class NodeAbstract implements NodeInterface
      *
      * @return $this
      */
-    protected function enforceIsATraversable()
+    protected function enforceIsATraversable(): self
     {
         if ($this->isFlow()) {
             if ($this->isATraversable) {

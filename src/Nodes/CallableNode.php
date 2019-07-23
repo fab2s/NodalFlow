@@ -32,7 +32,7 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
      *
      * @throws NodalFlowException
      */
-    public function __construct(callable $payload, $isAReturningVal, $isATraversable = false)
+    public function __construct(callable $payload, bool $isAReturningVal, bool $isATraversable = false)
     {
         parent::__construct($payload, $isAReturningVal, $isATraversable);
     }
@@ -40,11 +40,11 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
     /**
      * Execute this node
      *
-     * @param mixed $param
+     * @param mixed|null $param
      *
      * @return mixed
      */
-    public function exec($param)
+    public function exec($param = null)
     {
         return \call_user_func($this->payload, $param);
     }
@@ -56,7 +56,7 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
      *
      * @return \Generator
      */
-    public function getTraversable($param)
+    public function getTraversable($param = null)
     {
         foreach (\call_user_func($this->payload, $param) as $value) {
             yield $value;

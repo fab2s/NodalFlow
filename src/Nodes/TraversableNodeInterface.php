@@ -17,9 +17,14 @@ interface TraversableNodeInterface extends NodeInterface
     /**
      * get the traversable to traverse within the Flow
      *
-     * @param mixed $param
+     * Until PHP agrees that a Generator DOES implement the
+     * Traversable pseudo interface, or allows us to further
+     * restrict interfaces, we are left with the impossibility
+     * to properly type the return of this
+     *
+     * @param mixed|null $param
      *
      * @return \Traversable
      */
-    public function getTraversable($param);
+    public function getTraversable($param = null);
 }

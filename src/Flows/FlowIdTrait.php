@@ -54,7 +54,7 @@ trait FlowIdTrait
      *
      * @return string immutable unique id
      */
-    public function getId()
+    public function getId(): string
     {
         if ($this->id === null) {
             return $this->id = SoUuid::generate()->getString();

@@ -37,7 +37,7 @@ class BranchNode extends PayloadNodeAbstract implements BranchNodeInterface
      *
      * @throws NodalFlowException
      */
-    public function __construct(FlowInterface $payload, $isAReturningVal)
+    public function __construct(FlowInterface $payload, bool $isAReturningVal)
     {
         // branch Node does not (yet) support traversing
         parent::__construct($payload, $isAReturningVal, false);
@@ -46,11 +46,11 @@ class BranchNode extends PayloadNodeAbstract implements BranchNodeInterface
     /**
      * Execute the BranchNode
      *
-     * @param mixed $param
+     * @param mixed|null $param
      *
      * @return mixed
      */
-    public function exec($param)
+    public function exec($param = null)
     {
         // in the branch case, we actually exec a Flow
         return $this->payload->exec($param);

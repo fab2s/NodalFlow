@@ -20,22 +20,22 @@ interface FlowEventInterface
     /**
      * @return FlowInterface
      */
-    public function getFlow();
+    public function getFlow(): FlowInterface;
 
     /**
-     * @return NodeInterface
+     * @return NodeInterface|null
      */
-    public function getNode();
+    public function getNode(): ? NodeInterface;
 
     /**
      * @param NodeInterface|null $node
      *
      * @return $this
      */
-    public function setNode(NodeInterface $node = null);
+    public function setNode(NodeInterface $node = null): self;
 
     /**
      * @return array
      */
-    public static function getEventList();
+    public static function getEventList(): array;
 }

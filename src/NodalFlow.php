@@ -46,7 +46,6 @@ class NodalFlow extends FlowAbstract
     {
         $this->flowMap     = new FlowMap($this, $this->flowIncrements);
         $this->registry    = new FlowRegistry;
-        $this->sharedEvent = new FlowEvent($this);
     }
 
     /**
@@ -58,7 +57,7 @@ class NodalFlow extends FlowAbstract
      *
      * @return $this
      */
-    public function add(NodeInterface $node)
+    public function add(NodeInterface $node): FlowInterface
     {
         if ($node instanceof BranchNodeInterface) {
             // this node is a branch
@@ -88,7 +87,7 @@ class NodalFlow extends FlowAbstract
      *
      * @return $this
      */
-    public function addPayload(callable $payload, $isAReturningVal, $isATraversable = false)
+    public function addPayload(callable $payload, bool $isAReturningVal, bool $isATraversable = false): FlowInterface
     {
         $node = PayloadNodeFactory::create($payload, $isAReturningVal, $isATraversable);
 
@@ -107,7 +106,7 @@ class NodalFlow extends FlowAbstract
      *
      * @return $this
      */
-    public function replace($nodeIdx, NodeInterface $node)
+    public function replace($nodeIdx, NodeInterface $node): FlowInterface
     {
         if (!isset($this->nodes[$nodeIdx])) {
             throw new NodalFlowException('Argument 1 should be a valid index in nodes', 1, null, [
@@ -131,7 +130,7 @@ class NodalFlow extends FlowAbstract
      *
      * @return mixed
      */
-    public function sendTo($nodeId = null, $param = null)
+    public function sendTo(string $nodeId = null, $param = null)
     {
         $nodeIndex = 0;
         if ($nodeId !== null) {
@@ -193,7 +192,7 @@ class NodalFlow extends FlowAbstract
      *
      * @return $this
      */
-    public function rewind()
+    public function rewind(): FlowInterface
     {
         $this->nodeCount       = count($this->nodes);
         $this->lastIdx         = $this->nodeCount - 1;
@@ -232,7 +231,7 @@ class NodalFlow extends FlowAbstract
      *
      * @return $this
      */
-    protected function flowStart()
+    protected function flowStart(): self
     {
         $this->flowMap->incrementFlow('num_exec')->flowStart();
         $this->listActiveEvent(!$this->hasParent())->triggerEvent(FlowEvent::FLOW_START);
@@ -249,7 +248,7 @@ class NodalFlow extends FlowAbstract
      *
      * @return $this
      */
-    protected function flowEnd()
+    protected function flowEnd(): self
     {
         $this->flowMap->flowEnd();
         $eventName = FlowEvent::FLOW_SUCCESS;
@@ -287,7 +286,7 @@ class NodalFlow extends FlowAbstract
      * @return mixed the last value returned by the last
      *               returning value Node in the flow
      */
-    protected function recurse($param = null, $nodeIdx = 0)
+    protected function recurse($param = null, int $nodeIdx = 0)
     {
         while ($nodeIdx <= $this->lastIdx) {
             $node          = $this->nodes[$nodeIdx];

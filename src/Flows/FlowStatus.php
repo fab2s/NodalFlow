@@ -56,7 +56,7 @@ class FlowStatus implements FlowStatusInterface
      *
      * @throws NodalFlowException
      */
-    public function __construct($status, \Exception $e = null)
+    public function __construct(string $status, \Exception $e = null)
     {
         if (!isset($this->flowStatuses[$status])) {
             throw new NodalFlowException('$status must be one of :' . \implode(', ', $this->flowStatuses));
@@ -71,7 +71,7 @@ class FlowStatus implements FlowStatusInterface
      *
      * @return string The flow status
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getStatus();
     }
@@ -84,7 +84,7 @@ class FlowStatus implements FlowStatusInterface
      *
      * @return bool True If the flow is currently running
      */
-    public function isRunning()
+    public function isRunning(): bool
     {
         return $this->status === static::FLOW_RUNNING;
     }
@@ -94,7 +94,7 @@ class FlowStatus implements FlowStatusInterface
      *
      * @return bool True If everything went well during the flow
      */
-    public function isClean()
+    public function isClean(): bool
     {
         return $this->status === static::FLOW_CLEAN;
     }
@@ -105,7 +105,7 @@ class FlowStatus implements FlowStatusInterface
      *
      * @return bool True If the flow was interrupted without exception
      */
-    public function isDirty()
+    public function isDirty(): bool
     {
         return $this->status === static::FLOW_DIRTY;
     }
@@ -115,7 +115,7 @@ class FlowStatus implements FlowStatusInterface
      *
      * @return bool True If the flow was interrupted with exception
      */
-    public function isException()
+    public function isException(): bool
     {
         return $this->status === static::FLOW_EXCEPTION;
     }
@@ -125,7 +125,7 @@ class FlowStatus implements FlowStatusInterface
      *
      * @return string The flow status
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
@@ -135,7 +135,7 @@ class FlowStatus implements FlowStatusInterface
      *
      * @return \Exception|null
      */
-    public function getException()
+    public function getException(): ? \Exception
     {
         return $this->exception;
     }
