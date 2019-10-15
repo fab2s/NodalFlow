@@ -104,7 +104,7 @@ class NodalFlow extends FlowAbstract
      *
      * @throws NodalFlowException
      *
-     * @return $this
+     * @return static
      */
     public function replace(int $nodeIdx, NodeInterface $node): FlowInterface
     {
