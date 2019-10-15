@@ -56,7 +56,7 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
      *
      * @return \Generator
      */
-    public function getTraversable($param = null)
+    public function getTraversable($param = null): iterable
     {
         foreach (\call_user_func($this->payload, $param) as $value) {
             yield $value;

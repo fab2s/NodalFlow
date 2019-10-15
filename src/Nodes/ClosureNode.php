@@ -37,7 +37,7 @@ class ClosureNode extends CallableNode
      *
      * @return \Generator
      */
-    public function getTraversable($param = null)
+    public function getTraversable($param = null): iterable
     {
         $callable = $this->payload;
         foreach ($callable($param) as $value) {

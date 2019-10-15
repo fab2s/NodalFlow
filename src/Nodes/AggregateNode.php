@@ -61,7 +61,7 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
      *
      * @return \Generator
      */
-    public function getTraversable($param = null)
+    public function getTraversable($param = null): iterable
     {
         $value = null;
         /** @var $nodes TraversableNodeInterface[] */
