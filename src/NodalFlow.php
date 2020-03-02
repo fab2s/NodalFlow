@@ -9,7 +9,7 @@
 
 namespace fab2s\NodalFlow;
 
-use fab2s\NodalFlow\Events\FlowEvent;
+use fab2s\NodalFlow\Events\FlowEventInterface;
 use fab2s\NodalFlow\Flows\FlowAbstract;
 use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\Flows\FlowMap;
@@ -234,7 +234,7 @@ class NodalFlow extends FlowAbstract
     protected function flowStart(): self
     {
         $this->flowMap->incrementFlow('num_exec')->flowStart();
-        $this->listActiveEvent(!$this->hasParent())->triggerEvent(FlowEvent::FLOW_START);
+        $this->listActiveEvent(!$this->hasParent())->triggerEvent(FlowEventInterface::FLOW_START);
         // flow started status kicks in after Event start to hint eventual children
         // this way, root flow is only running when a record hits a branch
         // and triggers a child flow flowStart() call
@@ -251,10 +251,10 @@ class NodalFlow extends FlowAbstract
     protected function flowEnd(): self
     {
         $this->flowMap->flowEnd();
-        $eventName = FlowEvent::FLOW_SUCCESS;
+        $eventName = FlowEventInterface::FLOW_SUCCESS;
         $node      = null;
         if ($this->flowStatus->isException()) {
-            $eventName = FlowEvent::FLOW_FAIL;
+            $eventName = FlowEventInterface::FLOW_FAIL;
             $node      = $this->nodes[$this->nodeIdx];
         }
 
@@ -304,7 +304,7 @@ class NodalFlow extends FlowAbstract
 
                     ++$nodeStats['num_iterate'];
                     if (!($nodeStats['num_iterate'] % $this->progressMod)) {
-                        $this->triggerEvent(FlowEvent::FLOW_PROGRESS, $node);
+                        $this->triggerEvent(FlowEventInterface::FLOW_PROGRESS, $node);
                     }
 
                     $param = $this->recurse($param, $nodeIdx + 1);

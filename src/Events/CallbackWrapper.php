@@ -40,10 +40,10 @@ class CallbackWrapper implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FlowEvent::FLOW_START    => ['start', 0],
-            FlowEvent::FLOW_PROGRESS => ['progress', 0],
-            FlowEvent::FLOW_SUCCESS  => ['success', 0],
-            FlowEvent::FLOW_FAIL     => ['fail', 0],
+            FlowEventInterface::FLOW_START    => ['start', 0],
+            FlowEventInterface::FLOW_PROGRESS => ['progress', 0],
+            FlowEventInterface::FLOW_SUCCESS  => ['success', 0],
+            FlowEventInterface::FLOW_FAIL     => ['fail', 0],
         ];
     }
 
