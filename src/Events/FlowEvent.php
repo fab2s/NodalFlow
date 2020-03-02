@@ -11,23 +11,14 @@ namespace fab2s\NodalFlow\Events;
 
 use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\Nodes\NodeInterface;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class FlowEvent
+ * trait FlowEventProxy
+ *
+ * A good example on how BC could use the S from Symfony
  */
-class FlowEvent extends Event implements FlowEventInterface
+trait FlowEventProxy
 {
-    /**
-     * Flow Events
-     */
-    const FLOW_START    = 'flow.start';
-    const FLOW_PROGRESS = 'flow.progress';
-    const FLOW_CONTINUE = 'flow.continue';
-    const FLOW_BREAK    = 'flow.break';
-    const FLOW_SUCCESS  = 'flow.success';
-    const FLOW_FAIL     = 'flow.fail';
-
     /**
      * @var array
      */
@@ -100,5 +91,17 @@ class FlowEvent extends Event implements FlowEventInterface
         }
 
         return static::$eventList;
+    }
+}
+
+if (class_exists('Symfony\Component\EventDispatcher\Event')) {
+    class FlowEvent extends \Symfony\Component\EventDispatcher\Event implements FlowEventInterface
+    {
+        use FlowEventProxy;
+    }
+} else {
+    class FlowEvent extends \Symfony\Contracts\EventDispatcher\Event implements FlowEventInterface
+    {
+        use FlowEventProxy;
     }
 }
