@@ -18,6 +18,18 @@ use fab2s\NodalFlow\Nodes\NodeInterface;
 interface FlowEventInterface
 {
     /**
+     * Flow Events
+     * These are removed from the implementation due to
+     * Symfony BC mess (it is one)
+     */
+    const FLOW_START    = 'flow.start';
+    const FLOW_PROGRESS = 'flow.progress';
+    const FLOW_CONTINUE = 'flow.continue';
+    const FLOW_BREAK    = 'flow.break';
+    const FLOW_SUCCESS  = 'flow.success';
+    const FLOW_FAIL     = 'flow.fail';
+
+    /**
      * @return FlowInterface
      */
     public function getFlow(): FlowInterface;
