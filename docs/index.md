@@ -1,8 +1,8 @@
 # NodalFlow
 
-[![Documentation Status](https://readthedocs.org/projects/nodalflow/badge/?version=latest)](http://nodalflow.readthedocs.io/en/latest/?badge=latest) [![Build Status](https://travis-ci.org/fab2s/NodalFlow.svg?branch=master)](https://travis-ci.org/fab2s/NodalFlow) [![Total Downloads](https://poser.pugx.org/fab2s/nodalflow/downloads)](https://packagist.org/packages/fab2s/nodalflow) [![Latest Stable Version](https://poser.pugx.org/fab2s/nodalflow/v/stable)](https://packagist.org/packages/fab2s/nodalflow) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/b75124fb-5efd-4182-9ec5-42cd8cd2bb25/mini.png)](https://insight.sensiolabs.com/projects/b75124fb-5efd-4182-9ec5-42cd8cd2bb25) [![Code Climate](https://codeclimate.com/github/fab2s/NodalFlow/badges/gpa.svg)](https://codeclimate.com/github/fab2s/NodalFlow) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a68622246734a16983616188eeefa01)](https://www.codacy.com/app/fab2s/NodalFlow) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fab2s/NodalFlow/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fab2s/NodalFlow/?branch=master) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com) [![PHPPackages Referenced By](http://phppackages.org/p/fab2s/nodalflow/badge/referenced-by.svg)](http://phppackages.org/p/fab2s/nodalflow) [![License](https://poser.pugx.org/fab2s/nodalflow/license)](https://packagist.org/packages/fab2s/nodalflow)
+[![Documentation Status](https://readthedocs.org/projects/nodalflow/badge/?version=latest)](http://nodalflow.readthedocs.io/en/latest/?badge=latest) [![Build Status](https://travis-ci.org/fab2s/NodalFlow.svg?branch=master)](https://travis-ci.org/fab2s/NodalFlow) [![Total Downloads](https://poser.pugx.org/fab2s/nodalflow/downloads)](https://packagist.org/packages/fab2s/nodalflow) [![Monthly Downloads](https://poser.pugx.org/fab2s/nodalflow/d/monthly)](https://packagist.org/packages/fab2s/nodalflow) [![Latest Stable Version](https://poser.pugx.org/fab2s/nodalflow/v/stable)](https://packagist.org/packages/fab2s/nodalflow) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/b75124fb-5efd-4182-9ec5-42cd8cd2bb25/mini.png)](https://insight.sensiolabs.com/projects/b75124fb-5efd-4182-9ec5-42cd8cd2bb25) [![Code Climate](https://codeclimate.com/github/fab2s/NodalFlow/badges/gpa.svg)](https://codeclimate.com/github/fab2s/NodalFlow) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a68622246734a16983616188eeefa01)](https://www.codacy.com/app/fab2s/NodalFlow) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fab2s/NodalFlow/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fab2s/NodalFlow/?branch=master) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com) [![PHPPackages Referenced By](http://phppackages.org/p/fab2s/nodalflow/badge/referenced-by.svg)](http://phppackages.org/p/fab2s/nodalflow) [![License](https://poser.pugx.org/fab2s/nodalflow/license)](https://packagist.org/packages/fab2s/nodalflow)
 
-NodalFlow is a generic Workflow that can execute chained tasks. It is designed around simple interfaces that specifies a flow composed of executable Nodes and Flows. Nodes can be executed or traversed. They accept a single parameter as argument and can be set to pass or not their result as an argument for the next node.
+`NodalFlow` is a generic Workflow that can execute chained tasks. It is designed around simple interfaces that specifies a flow composed of executable Nodes and Flows. Nodes can be executed or traversed. They accept a single parameter as argument and can be set to pass or not their result as an argument for the next node.
 Flows also accept one argument and may be set to pass their result to be used or not as an argument for their first Node.
 
 ```
@@ -40,9 +40,9 @@ Nodes are linked together by the fact they return a value or not. When a node is
 
 In this flow, as node 2 (which may as well be a whole flow or branch) is not returning a value, it is executed "outside" of the main execution line.
 
-In other words, NodalFlow implements a directed graph structure in the form of a tree composed of nodes that can be, but not always are, branches or leaves. 
+In other words, `NodalFlow` implements a directed graph structure in the form of a tree composed of nodes that can be, but not always are, branches or leaves. 
 
-NodalFlow also goes beyond that by allowing any Flow or Node to send whatever parameter to any part of any Flow alive within the same PHP process. The feature shares similarities with the `Generator`'s [`sendTo()`](/docs/usage.md#the-sendto-methods) method and makes it possible to turn Flows into _executable networks_ of Nodes (and Flows).
+`NodalFlow` also goes beyond that by allowing any Flow or Node to send whatever parameter to any part of any Flow alive within the same PHP process. The feature shares similarities with the `Generator`'s [`sendTo()`](/docs/usage.md#the-sendto-methods) method and makes it possible to turn Flows into _executable networks_ of Nodes (and Flows).
 
 ```
 +-------------------------+-------+----------+
@@ -76,13 +76,13 @@ NodalFlow also goes beyond that by allowing any Flow or Node to send whatever pa
  +------------------------------+
 ```
 
-NodalFlow aims at organizing and simplifying data processing workflow's where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. But it can as well be the foundation to organizing pretty much any sequence of tasks (NodalFlow could easily become Turing complete after all). It makes it possible to dynamically configure and execute complex scenario in an organized and repeatable manner (NodalFlow is [serializable](/docs/serialization.md)). And even more important, to write Nodes that will be reusable in any other workflow you may think of.
+`NodalFlow` aims at organizing and simplifying data processing workflow's where arbitrary amount of data may come from various generators, pass through several data processors and / or end up in various places and formats. But it can as well be the foundation to organizing pretty much any sequence of tasks (`NodalFlow` could easily become Turing complete after all). It makes it possible to dynamically configure and execute complex scenario in an organized and repeatable manner (`NodalFlow` is [serializable](/docs/serialization.md)). And even more important, to write Nodes that will be reusable in any other workflow you may think of.
 
-NodalFlow enforces minimalistic requirements upon nodes. This means that in most cases, you should extend `NodalFlow` to implement the required constraints and grammar for your use case.
+`NodalFlow` enforces minimalistic requirements upon nodes. This means that in most cases, you should extend `NodalFlow` to implement the required constraints and grammar for your use case.
 
 [YaEtl](https://github.com/fab2s/YaEtl) is an example of a more specified workflow build upon [NodalFlow](https://github.com/fab2s/NodalFlow).
 
-NodalFlow shares conceptual similarities with [Transduction](https://en.wikipedia.org/wiki/Transduction) as it allow basic interaction chaining, especially when dealing with `ExecNodes`, but the comparison diverges quickly.
+`NodalFlow` shares conceptual similarities with [Transducers](https://clojure.org/reference/transducers) (if you are interested, also have a look at [Transducers PHP](https://github.com/mtdowling/transducers.php)) as it allow basic interaction chaining, especially when dealing with `ExecNodes`, but the comparison diverges quickly.
 
 ## NodalFlow Documentation
 
@@ -90,13 +90,24 @@ NodalFlow shares conceptual similarities with [Transduction](https://en.wikipedi
 
 ## Installation
 
-NodalFlow can be installed using composer :
+`NodalFlow` can be installed using composer:
 
 ```
-composer require "fab2s/NodalFlow"
+composer require "fab2s/nodalflow"
+```
+If you want to specifically install the php >=7.1.0 version, use:
+
+```
+composer require "fab2s/nodalflow" ^2
 ```
 
-Once done, you can start playing :
+If you want to specifically install the php 5.6/7.0 version, use:
+
+```
+composer require "fab2s/nodalflow" ^1
+```
+
+Once done, you can start playing:
 
 ```php
 $nodalFlow = new NodalFlow;
@@ -121,7 +132,7 @@ $result = $nodalFlow->addPayload(('SomeClass::someTraversableMethod', true, true
 
 ## Requirements
 
-NodalFlow is tested against php 7.1, 7.2 and 7.3, but it may run bellow that (might up to 7.0).
+`NodalFlow` is tested against php 7.1, 7.2, 7.3 and 7.4
 
 ## Contributing
 
@@ -129,4 +140,4 @@ Contributions are welcome, do not hesitate to open issues and submit pull reques
 
 ## License
 
-NodalFlow is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+`NodalFlow` is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
