@@ -138,7 +138,7 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
         if (isset($this->activeEvents[$eventName])) {
             $this->dispatchArgs[$this->eventNameKey] = $eventName;
             $this->dispatchArgs[$this->eventInstanceKey]->setNode($node);
-            $this->dispatcher->dispatch(...$this->dispatchArgs);
+            $this->dispatcher->dispatch(/* @scrutinizer ignore-type */ ...$this->dispatchArgs);
         }
 
         return $this;

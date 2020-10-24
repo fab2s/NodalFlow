@@ -65,12 +65,13 @@ trait FlowEventProxy
     /**
      * @param NodeInterface|null $node
      *
-     * @return $this
+     * @return FlowEventInterface
      */
     public function setNode(NodeInterface $node = null): FlowEventInterface
     {
         $this->node = $node;
 
+        /* @var FlowEventInterface $this */
         return $this;
     }
 
@@ -79,6 +80,7 @@ trait FlowEventProxy
      */
     public static function getEventList(): array
     {
+        /* @var FlowEventInterface $this */
         if (!isset(static::$eventList)) {
             static::$eventList = [
                 static::FLOW_START    => static::FLOW_START,
@@ -95,7 +97,7 @@ trait FlowEventProxy
 }
 
 if (class_exists('Symfony\Component\EventDispatcher\Event')) {
-    class FlowEvent extends \Symfony\Component\EventDispatcher\Event implements FlowEventInterface
+    class FlowEvent extends /* @scrutinizer ignore-deprecated */ \Symfony\Component\EventDispatcher\Event implements FlowEventInterface
     {
         use FlowEventProxy;
     }

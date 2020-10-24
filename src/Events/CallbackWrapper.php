@@ -65,7 +65,7 @@ class CallbackWrapper implements EventSubscriberInterface
      */
     public function progress(FlowEventInterface $event)
     {
-        $this->callBack->progress($event->getFlow(), $event->getNode());
+        $this->callBack->progress($event->getFlow(), /* @scrutinizer ignore-type */ $event->getNode());
     }
 
     /**
