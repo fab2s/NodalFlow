@@ -59,8 +59,13 @@ class FlowBranchTest extends \TestCase
             if (isset($nodeSetup['payloadSetup'])) {
                 $payloadSetup   = $nodeSetup['payloadSetup'];
                 // get spy's invocations
-                $invocations    = $payloadSetup['spy']->getInvocations();
-                $spyInvocations = count($invocations);
+                // check multi phpunit versions support
+                if (is_callable([$payloadSetup['spy'], 'getInvocations'])) {
+                    $invocations    = $payloadSetup['spy']->getInvocations();
+                    $spyInvocations = count($invocations);
+                } else {
+                    $spyInvocations = $payloadSetup['spy']->getInvocationCount();
+                }
 
                 $nodeMap[$nodeSetup['hash']] += [
                     'isAReturningVal' => $nodeSetup['isAReturningVal'],

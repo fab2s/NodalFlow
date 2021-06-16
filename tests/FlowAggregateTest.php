@@ -59,8 +59,13 @@ class FlowAggregateTest extends \TestCase
                 $payloads = $nodeSetup['payloads'];
                 foreach ($payloads as $payloadSetup) {
                     // get spy's invocations
-                    $invocations    = $payloadSetup['spy']->getInvocations();
-                    $spyInvocations = count($invocations);
+                    // check multi phpunit versions support
+                    if (is_callable([$payloadSetup['spy'], 'getInvocations'])) {
+                        $invocations    = $payloadSetup['spy']->getInvocations();
+                        $spyInvocations = count($invocations);
+                    } else {
+                        $spyInvocations = $payloadSetup['spy']->getInvocationCount();
+                    }
 
                     // assert that each node in the aggregate did exec as many time as the aggregate node
                     $this->assertSame($spyInvocations, $nodeStats['num_exec'], "Node num_exec {$nodeStats['num_exec']} does not match spy's invocation $spyInvocations");
@@ -70,8 +75,13 @@ class FlowAggregateTest extends \TestCase
             } elseif (isset($nodeSetup['payloadSetup'])) {
                 $payloadSetup   = $nodeSetup['payloadSetup'];
                 // get spy's invocations
-                $invocations    = $payloadSetup['spy']->getInvocations();
-                $spyInvocations = count($invocations);
+                // check multi phpunit versions support
+                if (is_callable([$payloadSetup['spy'], 'getInvocations'])) {
+                    $invocations    = $payloadSetup['spy']->getInvocations();
+                    $spyInvocations = count($invocations);
+                } else {
+                    $spyInvocations = $payloadSetup['spy']->getInvocationCount();
+                }
 
                 $nodeMap[$nodeSetup['hash']] += [
                     'isAReturningVal' => $nodeSetup['isAReturningVal'],
