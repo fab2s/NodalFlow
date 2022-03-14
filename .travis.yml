@@ -1,11 +1,11 @@
 language: php
-
+dist: bionic
 php:
-    - 7.1
     - 7.2
     - 7.3
     - 7.4
     - 8.0
+    - 8.1.0
 
 cache:
   directories:
@@ -21,13 +21,19 @@ env:
   - SYMFONY_DISPATCHER_VERSION=4.4.*
   - SYMFONY_DISPATCHER_VERSION=5.0.*
   - SYMFONY_DISPATCHER_VERSION=5.1.*
+  - SYMFONY_DISPATCHER_VERSION=5.2.*
+  - SYMFONY_DISPATCHER_VERSION=5.3.*
+  - SYMFONY_DISPATCHER_VERSION=5.4.*
+  - SYMFONY_DISPATCHER_VERSION=6.0.*
 
 matrix:
   exclude:
-    - php: 7.1
-      env: SYMFONY_DISPATCHER_VERSION=5.0.*
-    - php: 7.1
-      env: SYMFONY_DISPATCHER_VERSION=5.1.*
+    - php: 7.2
+      env: SYMFONY_DISPATCHER_VERSION=6.0.*
+    - php: 7.3
+      env: SYMFONY_DISPATCHER_VERSION=6.0.*
+    - php: 7.4
+      env: SYMFONY_DISPATCHER_VERSION=6.0.*
     - php: 8.0
       env: SYMFONY_DISPATCHER_VERSION=4.0.*
     - php: 8.0
@@ -35,6 +41,14 @@ matrix:
     - php: 8.0
       env: SYMFONY_DISPATCHER_VERSION=4.2.*
     - php: 8.0
+      env: SYMFONY_DISPATCHER_VERSION=4.3.*
+    - php: 8.1.0
+      env: SYMFONY_DISPATCHER_VERSION=4.0.*
+    - php: 8.1.0
+      env: SYMFONY_DISPATCHER_VERSION=4.1.*
+    - php: 8.1.0
+      env: SYMFONY_DISPATCHER_VERSION=4.2.*
+    - php: 8.1.0
       env: SYMFONY_DISPATCHER_VERSION=4.3.*
 
 before_script:

@@ -337,8 +337,8 @@ class FlowMap implements FlowMapInterface
     {
         $result = [
             'hour'     => (int) floor($seconds / 3600),
-            'min'      => (int) floor(($seconds / 60) % 60),
-            'sec'      => $seconds % 60,
+            'min'      => (int) floor(\fmod($seconds / 60, 60)),
+            'sec'      => (int) \fmod($seconds, 60),
             'ms'       => (int) round(\fmod($seconds, 1) * 1000),
         ];
 

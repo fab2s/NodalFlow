@@ -1,6 +1,6 @@
 # NodalFlow
 
-[![Documentation Status](https://readthedocs.org/projects/nodalflow/badge/?version=latest)](http://nodalflow.readthedocs.io/en/latest/?badge=latest) [![Build Status](https://travis-ci.com/fab2s/NodalFlow.svg?branch=master)](https://travis-ci.com/fab2s/NodalFlow) [![Total Downloads](https://poser.pugx.org/fab2s/nodalflow/downloads)](https://packagist.org/packages/fab2s/nodalflow) [![Monthly Downloads](https://poser.pugx.org/fab2s/nodalflow/d/monthly)](https://packagist.org/packages/fab2s/nodalflow) [![Latest Stable Version](https://poser.pugx.org/fab2s/nodalflow/v/stable)](https://packagist.org/packages/fab2s/nodalflow) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/b75124fb-5efd-4182-9ec5-42cd8cd2bb25/mini.png)](https://insight.sensiolabs.com/projects/b75124fb-5efd-4182-9ec5-42cd8cd2bb25) [![Code Climate](https://codeclimate.com/github/fab2s/NodalFlow/badges/gpa.svg)](https://codeclimate.com/github/fab2s/NodalFlow) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a68622246734a16983616188eeefa01)](https://www.codacy.com/app/fab2s/NodalFlow) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fab2s/NodalFlow/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fab2s/NodalFlow/?branch=master) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com) [![PHPPackages Referenced By](http://phppackages.org/p/fab2s/nodalflow/badge/referenced-by.svg)](http://phppackages.org/p/fab2s/nodalflow) [![License](https://poser.pugx.org/fab2s/nodalflow/license)](https://packagist.org/packages/fab2s/nodalflow)
+[![Documentation Status](https://readthedocs.org/projects/nodalflow/badge/?version=latest)](http://nodalflow.readthedocs.io/en/latest/?badge=latest) [![Build Status](https://travis-ci.com/fab2s/NodalFlow.svg?branch=master)](https://app.travis-ci.com/fab2s/NodalFlow) [![Total Downloads](https://poser.pugx.org/fab2s/nodalflow/downloads)](https://packagist.org/packages/fab2s/nodalflow) [![Monthly Downloads](https://poser.pugx.org/fab2s/nodalflow/d/monthly)](https://packagist.org/packages/fab2s/nodalflow) [![Latest Stable Version](https://poser.pugx.org/fab2s/nodalflow/v/stable)](https://packagist.org/packages/fab2s/nodalflow) [![SymfonyInsight](https://insight.symfony.com/projects/7f025fbb-2cb8-4e21-8f12-2870027fe53a/mini.svg)](https://insight.symfony.com/projects/7f025fbb-2cb8-4e21-8f12-2870027fe53a) [![Code Climate](https://codeclimate.com/github/fab2s/NodalFlow/badges/gpa.svg)](https://codeclimate.com/github/fab2s/NodalFlow) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fab2s/NodalFlow/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fab2s/NodalFlow/?branch=master) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)  [![License](https://poser.pugx.org/fab2s/nodalflow/license)](https://packagist.org/packages/fab2s/nodalflow)
 
 `NodalFlow` is a generic Workflow that can execute chained tasks. It is designed around simple interfaces that specifies a flow composed of executable Nodes and Flows. Nodes can be executed or traversed. They accept a single parameter as argument and can be set to pass or not their result as an argument for the next node.
 Flows also accept one argument and may be set to pass their result to be used or not as an argument for their first Node.
@@ -95,13 +95,13 @@ In other words, `NodalFlow` implements a directed graph structure in the form of
 ```
 composer require "fab2s/nodalflow"
 ```
-If you want to specifically install the php >=7.1.0 version, use:
+If you want to specifically install the php >=7.2.0 version, use:
 
 ```
 composer require "fab2s/nodalflow" ^2
 ```
 
-If you want to specifically install the php 5.6/7.0 version, use:
+If you want to specifically install the php 5.6/7.1 version, use:
 
 ```
 composer require "fab2s/nodalflow" ^1
@@ -132,7 +132,7 @@ $result = $nodalFlow->addPayload(('SomeClass::someTraversableMethod', true, true
 
 ## Requirements
 
-`NodalFlow` is tested against php 7.1, 7.2, 7.3 and 7.4
+`NodalFlow` is tested against php 7.2, 7.3 and 7.4 and 8.0
 
 ## Contributing
 

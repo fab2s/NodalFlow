@@ -22,7 +22,7 @@
         "MIT"
     ],
     "require" : {
-        "php": "^7.1|^8.0",
+        "php": "^7.2|^8.0",
         "fab2s/context-exception": "^2.0",
         "fab2s/souuid": "^1.0",
         "symfony/contracts": "^1.1|^2.0"
