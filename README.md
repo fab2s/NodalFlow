@@ -1,6 +1,6 @@
 # NodalFlow
 
-[![Documentation Status](https://readthedocs.org/projects/nodalflow/badge/?version=latest)](http://nodalflow.readthedocs.io/en/latest/?badge=latest) [![Build Status](https://travis-ci.com/fab2s/NodalFlow.svg?branch=master)](https://app.travis-ci.com/fab2s/NodalFlow) [![Total Downloads](https://poser.pugx.org/fab2s/nodalflow/downloads)](https://packagist.org/packages/fab2s/nodalflow) [![Monthly Downloads](https://poser.pugx.org/fab2s/nodalflow/d/monthly)](https://packagist.org/packages/fab2s/nodalflow) [![Latest Stable Version](https://poser.pugx.org/fab2s/nodalflow/v/stable)](https://packagist.org/packages/fab2s/nodalflow) [![SymfonyInsight](https://insight.symfony.com/projects/7f025fbb-2cb8-4e21-8f12-2870027fe53a/mini.svg)](https://insight.symfony.com/projects/7f025fbb-2cb8-4e21-8f12-2870027fe53a) [![Code Climate](https://codeclimate.com/github/fab2s/NodalFlow/badges/gpa.svg)](https://codeclimate.com/github/fab2s/NodalFlow) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fab2s/NodalFlow/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fab2s/NodalFlow/?branch=master) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)  [![License](https://poser.pugx.org/fab2s/nodalflow/license)](https://packagist.org/packages/fab2s/nodalflow)
+[![Documentation Status](https://readthedocs.org/projects/nodalflow/badge/?version=latest)](http://nodalflow.readthedocs.io/en/latest/?badge=latest) ![Build Status](https://github.com/fab2s/YaEtl/actions/workflows/ci.yml/badge.svg) [![Total Downloads](https://poser.pugx.org/fab2s/nodalflow/downloads)](https://packagist.org/packages/fab2s/nodalflow) [![Monthly Downloads](https://poser.pugx.org/fab2s/nodalflow/d/monthly)](https://packagist.org/packages/fab2s/nodalflow) [![Latest Stable Version](https://poser.pugx.org/fab2s/nodalflow/v/stable)](https://packagist.org/packages/fab2s/nodalflow) [![SymfonyInsight](https://insight.symfony.com/projects/7f025fbb-2cb8-4e21-8f12-2870027fe53a/mini.svg)](https://insight.symfony.com/projects/7f025fbb-2cb8-4e21-8f12-2870027fe53a) [![Code Climate](https://codeclimate.com/github/fab2s/NodalFlow/badges/gpa.svg)](https://codeclimate.com/github/fab2s/NodalFlow) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fab2s/NodalFlow/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fab2s/NodalFlow/?branch=master) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)  [![License](https://poser.pugx.org/fab2s/nodalflow/license)](https://packagist.org/packages/fab2s/nodalflow)
 
 `NodalFlow` is a generic Workflow that can execute chained tasks. It is designed around simple interfaces that specifies a flow composed of executable Nodes and Flows. Nodes can be executed or traversed. They accept a single parameter as argument and can be set to pass or not their result as an argument for the next node.
 Flows also accept one argument and may be set to pass their result to be used or not as an argument for their first Node.
@@ -132,7 +132,7 @@ $result = $nodalFlow->addPayload(('SomeClass::someTraversableMethod', true, true
 
 ## Requirements
 
-`NodalFlow` is tested against php 7.2, 7.3 and 7.4 and 8.0
+`NodalFlow` is tested against php 7.2, 7.3 and 7.4, 8.0 and 8.1
 
 ## Contributing
 
