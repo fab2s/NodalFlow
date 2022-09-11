@@ -9,6 +9,7 @@
 
 namespace fab2s\NodalFlow\Flows;
 
+use Exception;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 use fab2s\SoUuid\SoUuid;
 
@@ -52,7 +53,9 @@ trait FlowIdTrait
      * And it's more convenient to lazy generate as this
      * trait does not need any init/construct logic.
      *
-     * @return string immutable unique id
+     * @throws Exception
+     *
+     * @return string Immutable unique id
      */
     public function getId(): string
     {

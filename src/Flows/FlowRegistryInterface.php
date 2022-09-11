@@ -24,7 +24,7 @@ interface FlowRegistryInterface
      *
      * @return mixed
      */
-    public function &get($flowId);
+    public function &get(string $flowId);
 
     /**
      * Used upon FlowMap un-serialization
@@ -59,14 +59,14 @@ interface FlowRegistryInterface
      *
      * @return FlowInterface|null
      */
-    public function getFlow($flowId): ? FlowInterface;
+    public function getFlow(string $flowId): ? FlowInterface;
 
     /**
      * @param string $nodeId
      *
      * @return NodeInterface|null
      */
-    public function getNode($nodeId): ? NodeInterface;
+    public function getNode(string $nodeId): ? NodeInterface;
 
     /**
      * @param NodeInterface $node

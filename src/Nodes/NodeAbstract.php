@@ -132,9 +132,11 @@ abstract class NodeAbstract implements NodeInterface
     /**
      * Get this Node's hash, must be deterministic and unique
      *
-     * @deprecated use `getId` instead
+     * @throws \Exception
      *
      * @return string
+     *
+     * @deprecated use `getId` instead
      */
     public function getNodeHash(): string
     {

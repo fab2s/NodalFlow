@@ -167,6 +167,7 @@ class FlowInterruptTest extends \TestCase
     }
 
     /**
+     * @throws Exception
      * @throws NodalFlowException
      *
      * @return array

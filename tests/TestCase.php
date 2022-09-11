@@ -110,8 +110,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws ReflectionException
-     *
      * @return array
      */
     public function getExecInstance()
@@ -135,8 +133,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws ReflectionException
-     *
      * @return array
      */
     public function getTraversableInstance()
@@ -166,6 +162,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws Exception
      * @throws NodalFlowException
      *
      * @return array

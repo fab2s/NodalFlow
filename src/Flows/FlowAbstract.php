@@ -9,6 +9,7 @@
 
 namespace fab2s\NodalFlow\Flows;
 
+use Exception;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 
 /**
@@ -74,9 +75,11 @@ abstract class FlowAbstract extends FlowInterruptAbstract
     /**
      * getId() alias for backward compatibility
      *
-     * @deprecated use `getId` instead
+     * @throws Exception
      *
      * @return string
+     *
+     * @deprecated use `getId` instead
      */
     public function getFlowId(): string
     {

@@ -9,6 +9,7 @@
 
 namespace fab2s\NodalFlow;
 
+use Exception;
 use fab2s\NodalFlow\Events\FlowEventInterface;
 use fab2s\NodalFlow\Flows\FlowAbstract;
 use fab2s\NodalFlow\Flows\FlowInterface;
@@ -126,6 +127,7 @@ class NodalFlow extends FlowAbstract
      * @param string|null $nodeId
      * @param mixed|null  $param
      *
+     * @throws Exception
      * @throws NodalFlowException
      *
      * @return mixed
@@ -174,7 +176,7 @@ class NodalFlow extends FlowAbstract
             $this->flowEnd();
 
             return $result;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->flowStatus = new FlowStatus(FlowStatus::FLOW_EXCEPTION, $e);
             $this->flowEnd();
             if ($e instanceof NodalFlowException) {
@@ -227,7 +229,6 @@ class NodalFlow extends FlowAbstract
     /**
      * Triggered just before the flow starts
      *
-     * @throws NodalFlowException
      *
      * @return $this
      */

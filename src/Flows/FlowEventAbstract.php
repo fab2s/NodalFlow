@@ -13,6 +13,8 @@ use fab2s\NodalFlow\Callbacks\CallbackInterface;
 use fab2s\NodalFlow\Events\CallbackWrapper;
 use fab2s\NodalFlow\Events\FlowEvent;
 use fab2s\NodalFlow\Nodes\NodeInterface;
+use ReflectionException;
+use ReflectionMethod;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -81,7 +83,7 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return EventDispatcherInterface
      */
@@ -98,7 +100,7 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
     /**
      * @param EventDispatcherInterface $dispatcher
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return $this
      */
@@ -114,7 +116,7 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
      *
      * @param CallbackInterface $callBack
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return $this
      *
@@ -196,13 +198,13 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
      *
      * @param string $class
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return FlowEventAbstract
      */
     protected function initDispatchArgs(string $class): self
     {
-        $reflection         = new \ReflectionMethod($class, 'dispatch');
+        $reflection         = new ReflectionMethod($class, 'dispatch');
         $firstParam         = $reflection->getParameters()[0];
         $this->dispatchArgs = [
             new FlowEvent($this),

@@ -12,6 +12,7 @@ namespace fab2s\NodalFlow\Nodes;
 use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\NodalFlow;
 use fab2s\NodalFlow\NodalFlowException;
+use Generator;
 
 /**
  * class AggregateNode
@@ -59,7 +60,7 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
      *
      * @param mixed $param
      *
-     * @return \Generator
+     * @return Generator
      */
     public function getTraversable($param = null): iterable
     {
