@@ -39,7 +39,7 @@ class FlowRegistry implements FlowRegistryInterface
      *
      * @return mixed
      */
-    public function &get($flowId)
+    public function &get(string $flowId)
     {
         return static::$registry[$flowId];
     }
@@ -112,21 +112,21 @@ class FlowRegistry implements FlowRegistryInterface
     }
 
     /**
-     * @param $flowId
+     * @param string $flowId
      *
      * @return FlowInterface|null
      */
-    public function getFlow($flowId): ? FlowInterface
+    public function getFlow(string $flowId): ? FlowInterface
     {
         return isset(static::$flows[$flowId]) ? static::$flows[$flowId] : null;
     }
 
     /**
-     * @param $nodeId
+     * @param string $nodeId
      *
      * @return NodeInterface|null
      */
-    public function getNode($nodeId): ? NodeInterface
+    public function getNode(string $nodeId): ? NodeInterface
     {
         return isset(static::$nodes[$nodeId]) ? static::$nodes[$nodeId] : null;
     }

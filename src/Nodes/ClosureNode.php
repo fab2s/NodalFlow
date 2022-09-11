@@ -9,7 +9,9 @@
 
 namespace fab2s\NodalFlow\Nodes;
 
+use Closure;
 use fab2s\NodalFlow\NodalFlowException;
+use Generator;
 
 /**
  * Class ClosureNode
@@ -19,13 +21,13 @@ class ClosureNode extends CallableNode
     /**
      * Instantiate a Closure Node
      *
-     * @param \Closure $payload
-     * @param bool     $isAReturningVal
-     * @param bool     $isATraversable
+     * @param Closure $payload
+     * @param bool    $isAReturningVal
+     * @param bool    $isATraversable
      *
      * @throws NodalFlowException
      */
-    public function __construct(\Closure $payload, bool $isAReturningVal, bool $isATraversable = false)
+    public function __construct(Closure $payload, bool $isAReturningVal, bool $isATraversable = false)
     {
         parent::__construct($payload, $isAReturningVal, $isATraversable);
     }
@@ -35,7 +37,7 @@ class ClosureNode extends CallableNode
      *
      * @param mixed $param
      *
-     * @return \Generator
+     * @return Generator
      */
     public function getTraversable($param = null): iterable
     {

@@ -9,6 +9,7 @@
 
 namespace fab2s\NodalFlow\Flows;
 
+use Exception;
 use fab2s\NodalFlow\NodalFlowException;
 
 /**
@@ -32,7 +33,7 @@ class FlowStatus implements FlowStatusInterface
     protected $status;
 
     /**
-     * @var \Exception
+     * @var Exception
      */
     protected $exception;
 
@@ -51,12 +52,12 @@ class FlowStatus implements FlowStatusInterface
     /**
      * Instantiate a Flow Status
      *
-     * @param string          $status The flow status
-     * @param \Exception|null $e
+     * @param string         $status The flow status
+     * @param Exception|null $e
      *
      * @throws NodalFlowException
      */
-    public function __construct(string $status, \Exception $e = null)
+    public function __construct(string $status, Exception $e = null)
     {
         if (!isset($this->flowStatuses[$status])) {
             throw new NodalFlowException('$status must be one of :' . \implode(', ', $this->flowStatuses));
@@ -133,9 +134,9 @@ class FlowStatus implements FlowStatusInterface
     /**
      * Return the eventual exception throw during the flow execution
      *
-     * @return \Exception|null
+     * @return Exception|null
      */
-    public function getException(): ? \Exception
+    public function getException(): ? Exception
     {
         return $this->exception;
     }

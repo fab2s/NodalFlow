@@ -35,9 +35,9 @@
         "symfony/event-dispatcher": "To use FlowEvents"
     },
     "autoload": {
-        "classmap": [
-            "src"
-        ]
+        "psr-4": {
+            "fab2s\\NodalFlow\\": "src"
+        }
     },
     "scripts": {
         "post-update-cmd": [

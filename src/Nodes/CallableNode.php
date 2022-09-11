@@ -10,6 +10,7 @@
 namespace fab2s\NodalFlow\Nodes;
 
 use fab2s\NodalFlow\NodalFlowException;
+use Generator;
 
 /**
  * Class CallableNode
@@ -54,7 +55,7 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
      *
      * @param mixed $param
      *
-     * @return \Generator
+     * @return Generator
      */
     public function getTraversable($param = null): iterable
     {

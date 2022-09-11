@@ -7,6 +7,8 @@
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
  */
 
+use fab2s\NodalFlow\Nodes\TraversableNodeInterface;
+
 /**
  * Class DummyClass
  */
@@ -59,11 +61,11 @@ class DummyClass
     }
 
     /**
-     * @param \fab2s\NodalFlow\Nodes\TraversableNodeInterface $node
+     * @param TraversableNodeInterface $node
      *
      * @return bool
      */
-    public static function dummyYielderValidator(\fab2s\NodalFlow\Nodes\TraversableNodeInterface $node)
+    public static function dummyYielderValidator(TraversableNodeInterface $node)
     {
         $i      = 1;
         $result = true;

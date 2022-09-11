@@ -44,6 +44,7 @@ class SendToTest extends \TestCase
 
     /**
      * @throws NodalFlowException
+     * @throws Exception
      */
     public function testSendNode()
     {

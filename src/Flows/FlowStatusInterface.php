@@ -9,6 +9,8 @@
 
 namespace fab2s\NodalFlow\Flows;
 
+use Exception;
+
 /**
  * Interface FlowStatusInterface
  */
@@ -17,10 +19,10 @@ interface FlowStatusInterface
     /**
      * Instantiate a Flow status
      *
-     * @param string          $status The flow status
-     * @param \Exception|null $e
+     * @param string         $status The flow status
+     * @param Exception|null $e
      */
-    public function __construct(string $status, \Exception $e = null);
+    public function __construct(string $status, Exception $e = null);
 
     /**
      * Get a string representation of the Flow status
@@ -70,7 +72,7 @@ interface FlowStatusInterface
     /**
      * Return the eventual exception throw during the flow execution
      *
-     * @return \Exception|null
+     * @return Exception|null
      */
-    public function getException(): ? \Exception;
+    public function getException(): ? Exception;
 }

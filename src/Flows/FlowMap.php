@@ -241,7 +241,6 @@ class FlowMap implements FlowMapInterface
             $nodeId = $node->getId();
             if ($node instanceof BranchNodeInterface || $node instanceof AggregateNodeInterface) {
                 $this->nodeMap[$nodeId]['nodes'] = $node->getPayload()->getNodeMap();
-                continue;
             }
         }
 
@@ -333,7 +332,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return array<string,integer|string>
      */
-    public function duration($seconds): array
+    public function duration(float $seconds): array
     {
         $result = [
             'hour'     => (int) floor($seconds / 3600),
@@ -357,7 +356,7 @@ class FlowMap implements FlowMapInterface
     /**
      * @return $this
      */
-    protected function setRefs()
+    protected function setRefs(): self
     {
         $this->registryData              = &$this->registry->get($this->flowId);
         $this->registryData['flowStats'] = &$this->flowStats;
@@ -370,7 +369,7 @@ class FlowMap implements FlowMapInterface
     /**
      * @return $this
      */
-    protected function initDefaults()
+    protected function initDefaults(): self
     {
         $this->flowIncrements = $this->nodeIncrements;
         foreach (array_keys($this->flowIncrements) as $key) {
@@ -392,7 +391,7 @@ class FlowMap implements FlowMapInterface
     /**
      * @return $this
      */
-    protected function resetTotals()
+    protected function resetTotals(): self
     {
         foreach ($this->incrementTotals as $totalKey) {
             $this->flowStats[$totalKey] = 0;
@@ -415,7 +414,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return $this
      */
-    protected function setFlowIncrement(array $flowIncrements)
+    protected function setFlowIncrement(array $flowIncrements): self
     {
         foreach ($flowIncrements as $incrementKey => $target) {
             if (is_string($target)) {
@@ -443,7 +442,7 @@ class FlowMap implements FlowMapInterface
      *
      * @return $this
      */
-    protected function setNodeIncrement(NodeInterface $node)
+    protected function setNodeIncrement(NodeInterface $node): self
     {
         $nodeId = $node->getId();
         foreach ($node->getNodeIncrements() as $incrementKey => $target) {

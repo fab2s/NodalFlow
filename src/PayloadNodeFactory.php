@@ -9,6 +9,7 @@
 
 namespace fab2s\NodalFlow;
 
+use Closure;
 use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\Nodes\BranchNode;
 use fab2s\NodalFlow\Nodes\CallableNode;
@@ -38,7 +39,7 @@ class PayloadNodeFactory implements PayloadNodeFactoryInterface
             return new CallableNode($payload, $isAReturningVal, $isATraversable);
         }
 
-        if ($payload instanceof \Closure) {
+        if ($payload instanceof Closure) {
             // distinguishing Closures actually is surrealistic
             return new ClosureNode($payload, $isAReturningVal, $isATraversable);
         }
