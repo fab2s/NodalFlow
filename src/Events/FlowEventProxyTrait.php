@@ -83,12 +83,12 @@ trait FlowEventProxyTrait
         /* @var FlowEventInterface $this */
         if (!isset(static::$eventList)) {
             static::$eventList = [
-                static::FLOW_START    => static::FLOW_START,
-                static::FLOW_PROGRESS => static::FLOW_PROGRESS,
-                static::FLOW_CONTINUE => static::FLOW_CONTINUE,
-                static::FLOW_BREAK    => static::FLOW_BREAK,
-                static::FLOW_SUCCESS  => static::FLOW_SUCCESS,
-                static::FLOW_FAIL     => static::FLOW_FAIL,
+                FlowEventInterface::FLOW_START    => FlowEventInterface::FLOW_START,
+                FlowEventInterface::FLOW_PROGRESS => FlowEventInterface::FLOW_PROGRESS,
+                FlowEventInterface::FLOW_CONTINUE => FlowEventInterface::FLOW_CONTINUE,
+                FlowEventInterface::FLOW_BREAK    => FlowEventInterface::FLOW_BREAK,
+                FlowEventInterface::FLOW_SUCCESS  => FlowEventInterface::FLOW_SUCCESS,
+                FlowEventInterface::FLOW_FAIL     => FlowEventInterface::FLOW_FAIL,
             ];
         }
 
