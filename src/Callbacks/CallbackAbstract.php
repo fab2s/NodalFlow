@@ -16,6 +16,8 @@ use fab2s\NodalFlow\Nodes\NodeInterface;
  * Abstract Class CallbackAbstract
  * Provide with dummy implementations to allow partial
  * and DRY usage (eg actually use some of the events)
+ *
+ * @deprecated use FlowEvent or implement FlowEventInterface instead
  */
 abstract class CallbackAbstract implements CallbackInterface
 {
