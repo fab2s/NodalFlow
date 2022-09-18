@@ -14,6 +14,8 @@ use fab2s\NodalFlow\Nodes\NodeInterface;
 
 /**
  * Interface CallbackInterface
+ *
+ * @deprecated use FlowEvent or implement FlowEventInterface instead
  */
 interface CallbackInterface
 {
