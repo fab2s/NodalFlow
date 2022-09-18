@@ -148,7 +148,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             ->method('exec')
             ->will($this->returnCallback(
                 function ($param = null) use ($traversableIterations) {
-                    $param = max(0, (int) $param);
+                    $param  = max(0, (int) $param);
                     $result = [];
                     for ($i = $param; $i < $param + $traversableIterations; ++$i) {
                         $result[] = $i + 1;

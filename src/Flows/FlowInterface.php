@@ -106,7 +106,7 @@ interface FlowInterface extends FlowIdInterface
     /**
      * Get eventual parent Flow
      *
-     * @return $this
+     * @return static
      */
     public function getParent(): self;
 

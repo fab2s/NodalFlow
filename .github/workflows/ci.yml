@@ -1,8 +1,8 @@
-name: NodalFlow Test Suite
-on: [push, pull_request]
+name: CI
+on: [pull_request]
 jobs:
   tests:
-    name: NodalFlow (PHP ${{ matrix.php-versions }})
+    name: NodalFlow (PHP ${{ matrix.php-versions }} / dispatcher ${{ matrix.dispatcher-versions }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -56,7 +56,7 @@ jobs:
 
       - name: Get composer cache directory
         id: composer-cache
-        run: echo "::set-output name=dir::${{ matrix.php-versions }}"
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache composer dependencies
         uses: actions/cache@v3

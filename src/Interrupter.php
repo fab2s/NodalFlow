@@ -129,7 +129,7 @@ class Interrupter implements InterrupterInterface
             // Set interruptNodeId to true in order to make sure
             // we do not match any nodes in this flow (as it is not the target)
             $flow->setInterruptNodeId(true)->interruptFlow($this->type);
-        } while ($flow = $flow->getParent());
+        } while ($flow->hasParent() && $flow = $flow->getParent());
 
         if ($this->flowTarget !== InterrupterInterface::TARGET_TOP) {
             throw new NodalFlowException('Interruption target missed', 1, null, [
@@ -163,7 +163,7 @@ class Interrupter implements InterrupterInterface
             (
                 // asked to stop right here
                 $this->flowTarget === InterrupterInterface::TARGET_SELF ||
-                $this->flowTarget === $flow->getId() ||
+                $this->flowTarget === $flow->getId()                    ||
                 (
                     // target root when this Flow is root already
                     $this->flowTarget === InterrupterInterface::TARGET_TOP &&
