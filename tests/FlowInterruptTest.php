@@ -1539,15 +1539,15 @@ class FlowInterruptTest extends \TestCase
             static $invocations = 0;
             ++$invocations;
             if (
-                    $interruptAt &&
-                    ((
-                        $interrupt === 'break' &&
-                        $invocations >= $interruptAt
-                    ) ||
-                    (
-                        $interrupt === 'continue' &&
-                        $invocations === $interruptAt
-                    ))
+                $interruptAt &&
+                ((
+                    $interrupt === 'break' &&
+                    $invocations >= $interruptAt
+                ) ||
+                (
+                    $interrupt   === 'continue' &&
+                    $invocations === $interruptAt
+                ))
             ) {
                 if ($debug) {
                     echo str_repeat('    ', $generationOrder) . "#$generationOrder execInterruptPayload INTERRUPT. invocations: $invocations, interrupt: $interrupt, interruptAt: $interruptAt,  param: $param result: $param\n";

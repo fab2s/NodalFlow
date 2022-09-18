@@ -42,7 +42,7 @@ abstract class FlowAncestryAbstract implements FlowInterface
     /**
      * The parent Flow, only set when branched
      *
-     * @var FlowInterface
+     * @var FlowInterface|null
      */
     protected $parent;
 
