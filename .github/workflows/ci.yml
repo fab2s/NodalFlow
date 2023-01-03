@@ -6,21 +6,27 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: [ '7.2', '7.3', '7.4', '8.0', '8.1' ]
-        dispatcher-versions: ['3.4.*', '4.0.*', '4.1.*', '4.2.*', '4.3.*', '4.4.*', '5.0.*', '5.1.*', '5.2.*', '5.3.*', '5.4.*', '6.0.*', '6.1.*']
+        php-versions: [ '7.2', '7.3', '7.4', '8.0', '8.1', '8.2' ]
+        dispatcher-versions: ['3.4.*', '4.0.*', '4.1.*', '4.2.*', '4.3.*', '4.4.*', '5.0.*', '5.1.*', '5.2.*', '5.3.*', '5.4.*', '6.0.*', '6.1.*', '6.2.*']
         exclude:
           - php-versions: 7.2
             dispatcher-versions: 6.0.*
           - php-versions: 7.2
             dispatcher-versions: 6.1.*
+          - php-versions: 7.2
+            dispatcher-versions: 6.2.*
           - php-versions: 7.3
             dispatcher-versions: 6.0.*
           - php-versions: 7.3
             dispatcher-versions: 6.1.*
+          - php-versions: 7.3
+            dispatcher-versions: 6.2.*
           - php-versions: 7.4
             dispatcher-versions: 6.0.*
           - php-versions: 7.4
             dispatcher-versions: 6.1.*
+          - php-versions: 7.4
+            dispatcher-versions: 6.2.*
           - php-versions: 8.0
             dispatcher-versions: 3.4.*
           - php-versions: 8.0
@@ -33,6 +39,8 @@ jobs:
             dispatcher-versions: 4.3.*
           - php-versions: 8.0
             dispatcher-versions: 6.1.*
+          - php-versions: 8.0
+            dispatcher-versions: 6.2.*
           - php-versions: 8.1
             dispatcher-versions: 3.4.*
           - php-versions: 8.1
@@ -42,6 +50,16 @@ jobs:
           - php-versions: 8.1
             dispatcher-versions: 4.2.*
           - php-versions: 8.1
+            dispatcher-versions: 4.3.*
+          - php-versions: 8.2
+            dispatcher-versions: 3.4.*
+          - php-versions: 8.2
+            dispatcher-versions: 4.0.*
+          - php-versions: 8.2
+            dispatcher-versions: 4.1.*
+          - php-versions: 8.2
+            dispatcher-versions: 4.2.*
+          - php-versions: 8.2
             dispatcher-versions: 4.3.*
 
     steps:
@@ -64,6 +82,9 @@ jobs:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
+
+      - name: Remove php-cs-fixer dependency
+        run: composer remove "friendsofphp/php-cs-fixer" --dev --no-update
 
       - name: Remove composer.lock
         run: rm -f composer.lock

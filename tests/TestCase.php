@@ -261,17 +261,17 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     public function getTestNodes()
     {
         $testNodes = [
-            'traversableInstance' => [
+            'traversableInstance'  => [
                 'nodeName'         => 'CallableNode',
                 'payloadGenerator' => 'getTraversableInstance',
                 'isATraversable'   => true,
             ],
-            'execInstance' => [
+            'execInstance'         => [
                 'nodeName'         => 'CallableNode',
                 'payloadGenerator' => 'getExecInstance',
                 'isATraversable'   => false,
             ],
-            'execClosure' => [
+            'execClosure'          => [
                 'nodeName'       => 'CallableNode',
                 'payload'        => $this->getExecClosure(true),
                 'isATraversable' => false,

@@ -40,7 +40,7 @@ class NodeTest extends \TestCase
                     'payload'         => $lambda,
                 ],
                 [
-                    'payload'         => function () {
+                    'payload'           => function () {
                         return 42;
                     },
                     // forcing these two will bypass comboing
@@ -51,7 +51,7 @@ class NodeTest extends \TestCase
                     },
                 ],
                 [
-                    'payload'         => function () {
+                    'payload'           => function () {
                         for ($i = 1; $i < 6; ++$i) {
                             yield $i;
                         }
@@ -62,7 +62,7 @@ class NodeTest extends \TestCase
                 ],
                 $closure,
                 [
-                    'payload'         => function () use ($use) {
+                    'payload'           => function () use ($use) {
                         return $use;
                     },
                     'isAReturningVal'   => true,
