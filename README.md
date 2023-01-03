@@ -132,7 +132,7 @@ $result = $nodalFlow->addPayload(('SomeClass::someTraversableMethod', true, true
 
 ## Requirements
 
-`NodalFlow` is tested against php 7.2, 7.3 and 7.4 8.0 and 8.1
+`NodalFlow` is tested against php 7.2, 7.3 and 7.4 8.0, 8.1 and 8.2
 
 ## Contributing
 
