@@ -179,13 +179,8 @@ class NodalFlow extends FlowAbstract
         } catch (Exception $e) {
             $this->flowStatus = new FlowStatus(FlowStatus::FLOW_EXCEPTION, $e);
             $this->flowEnd();
-            if ($e instanceof NodalFlowException) {
-                throw $e;
-            }
 
-            throw new NodalFlowException('Flow execution failed', 0, $e, [
-                'nodeMap' => $this->getNodeMap(),
-            ]);
+            throw $e;
         }
     }
 
