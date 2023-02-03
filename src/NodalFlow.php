@@ -9,7 +9,6 @@
 
 namespace fab2s\NodalFlow;
 
-use Exception;
 use fab2s\NodalFlow\Events\FlowEventInterface;
 use fab2s\NodalFlow\Flows\FlowAbstract;
 use fab2s\NodalFlow\Flows\FlowInterface;
@@ -19,7 +18,9 @@ use fab2s\NodalFlow\Flows\FlowStatus;
 use fab2s\NodalFlow\Nodes\BranchNodeInterface;
 use fab2s\NodalFlow\Nodes\ExecNodeInterface;
 use fab2s\NodalFlow\Nodes\NodeInterface;
+use fab2s\NodalFlow\Nodes\OnFlowStartInterface;
 use fab2s\NodalFlow\Nodes\TraversableNodeInterface;
+use Throwable;
 
 /**
  * Class NodalFlow
@@ -127,7 +128,7 @@ class NodalFlow extends FlowAbstract
      * @param string|null $nodeId
      * @param mixed|null  $param
      *
-     * @throws Exception
+     * @throws Throwable
      * @throws NodalFlowException
      *
      * @return mixed
@@ -154,7 +155,7 @@ class NodalFlow extends FlowAbstract
      *                          or, in case of a branch, the last relevant
      *                          argument from upstream Flow
      *
-     * @throws NodalFlowException
+     *@throws NodalFlowException|Throwable
      *
      * @return mixed the last result of the
      *               last returning value node
@@ -176,7 +177,7 @@ class NodalFlow extends FlowAbstract
             $this->flowEnd();
 
             return $result;
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $this->flowStatus = new FlowStatus(FlowStatus::FLOW_EXCEPTION, $e);
             $this->flowEnd();
 
@@ -230,11 +231,24 @@ class NodalFlow extends FlowAbstract
     protected function flowStart(): self
     {
         $this->flowMap->incrementFlow('num_exec')->flowStart();
-        $this->listActiveEvent(!$this->hasParent())->triggerEvent(FlowEventInterface::FLOW_START);
-        // flow started status kicks in after Event start to hint eventual children
-        // this way, root flow is only running when a record hits a branch
-        // and triggers a child flow flowStart() call
+        $this->onFlowStart()
+            ->listActiveEvent(!$this->hasParent())
+            ->triggerEvent(FlowEventInterface::FLOW_START);
+        // flow started status kicks in after Event start to hint eventual
+        // children this way, root flow is only running when a record hits
+        // a branch and triggers a child flow flowStart() call
         $this->flowStatus = new FlowStatus(FlowStatus::FLOW_RUNNING);
+
+        return $this;
+    }
+
+    protected function onFlowStart(): self
+    {
+        foreach ($this->nodes as $node) {
+            if ($node instanceof OnFlowStartInterface) {
+                $this->onFlowStart();
+            }
+        }
 
         return $this;
     }
