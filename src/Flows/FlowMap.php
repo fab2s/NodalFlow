@@ -250,7 +250,7 @@ class FlowMap implements FlowMapInterface
     /**
      * Get the latest Node stats
      *
-     * @return array<string,integer|string>
+     * @return array<string,int|string>
      */
     public function getStats(): array
     {
@@ -330,7 +330,7 @@ class FlowMap implements FlowMapInterface
      *
      * @param float $seconds
      *
-     * @return array<string,integer|string>
+     * @return array<string,int|string>
      */
     public function duration(float $seconds): array
     {

@@ -135,7 +135,7 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
      *
      * @return $this
      */
-    protected function triggerEvent(string $eventName, NodeInterface $node = null): self
+    protected function triggerEvent(string $eventName, ?NodeInterface $node = null): self
     {
         if (isset($this->activeEvents[$eventName])) {
             $this->dispatchArgs[$this->eventNameKey] = $eventName;

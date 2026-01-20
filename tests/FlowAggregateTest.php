@@ -14,7 +14,7 @@ use fab2s\NodalFlow\Nodes\NodeInterface;
 /**
  * Class FlowAggregateTest
  */
-class FlowAggregateTest extends \TestCase
+class FlowAggregateTest extends TestCase
 {
     /**
      * @dataProvider flowCasesProvider

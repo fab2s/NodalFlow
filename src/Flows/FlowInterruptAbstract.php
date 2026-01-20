@@ -64,7 +64,7 @@ abstract class FlowInterruptAbstract extends FlowEventAbstract
      *
      * @return $this
      */
-    public function breakFlow(InterrupterInterface $flowInterrupt = null): FlowInterface
+    public function breakFlow(?InterrupterInterface $flowInterrupt = null): FlowInterface
     {
         return $this->interruptFlow(InterrupterInterface::TYPE_BREAK, $flowInterrupt);
     }
@@ -79,7 +79,7 @@ abstract class FlowInterruptAbstract extends FlowEventAbstract
      *
      * @return $this
      */
-    public function continueFlow(InterrupterInterface $flowInterrupt = null): FlowInterface
+    public function continueFlow(?InterrupterInterface $flowInterrupt = null): FlowInterface
     {
         return $this->interruptFlow(InterrupterInterface::TYPE_CONTINUE, $flowInterrupt);
     }
@@ -92,7 +92,7 @@ abstract class FlowInterruptAbstract extends FlowEventAbstract
      *
      * @return $this
      */
-    public function interruptFlow(string $interruptType, InterrupterInterface $flowInterrupt = null): FlowInterface
+    public function interruptFlow(string $interruptType, ?InterrupterInterface $flowInterrupt = null): FlowInterface
     {
         $node = isset($this->nodes[$this->nodeIdx]) ? $this->nodes[$this->nodeIdx] : null;
         switch ($interruptType) {

@@ -50,7 +50,7 @@ interface NodeInterface extends FlowIdInterface
      *
      * @return $this
      */
-    public function setCarrier(FlowInterface $flow = null): self;
+    public function setCarrier(?FlowInterface $flow = null): self;
 
     /**
      * Return the carrying Flow
@@ -77,7 +77,7 @@ interface NodeInterface extends FlowIdInterface
      *
      * @return mixed
      */
-    public function sendTo(string $flowId, string $nodeId = null, $param = null);
+    public function sendTo(string $flowId, ?string $nodeId = null, $param = null);
 
     /**
      * Get the custom Node increments to be considered during

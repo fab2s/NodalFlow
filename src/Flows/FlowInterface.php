@@ -134,7 +134,7 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return mixed
      */
-    public function sendTo(string $nodeId = null, $param = null);
+    public function sendTo(?string $nodeId = null, $param = null);
 
     /**
      * The Flow status can either indicate be:
@@ -161,7 +161,7 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return $this
      */
-    public function breakFlow(InterrupterInterface $flowInterrupt = null): self;
+    public function breakFlow(?InterrupterInterface $flowInterrupt = null): self;
 
     /**
      * Nodes may call breakFlow() on their carrier to
@@ -172,7 +172,7 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return $this
      */
-    public function continueFlow(InterrupterInterface $flowInterrupt = null): self;
+    public function continueFlow(?InterrupterInterface $flowInterrupt = null): self;
 
     /**
      * @param string                    $interruptType
@@ -180,5 +180,5 @@ interface FlowInterface extends FlowIdInterface
      *
      * @return $this
      */
-    public function interruptFlow(string $interruptType, InterrupterInterface $flowInterrupt = null): self;
+    public function interruptFlow(string $interruptType, ?InterrupterInterface $flowInterrupt = null): self;
 }
