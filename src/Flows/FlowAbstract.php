@@ -22,7 +22,7 @@ abstract class FlowAbstract extends FlowInterruptAbstract
     /**
      * Get the stats array with latest Node stats
      *
-     * @return array<string,integer|string>
+     * @return array<string,int|string>
      */
     public function getStats(): array
     {

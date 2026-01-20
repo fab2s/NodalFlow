@@ -22,7 +22,7 @@ interface FlowStatusInterface
      * @param string         $status The flow status
      * @param Exception|null $e
      */
-    public function __construct(string $status, Exception $e = null);
+    public function __construct(string $status, ?Exception $e = null);
 
     /**
      * Get a string representation of the Flow status

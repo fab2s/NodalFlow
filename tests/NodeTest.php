@@ -13,7 +13,7 @@ use fab2s\NodalFlow\Nodes\ExecNodeInterface;
 /**
  * Class NodeTest
  */
-class NodeTest extends \TestCase
+class NodeTest extends TestCase
 {
     /**
      * @return array

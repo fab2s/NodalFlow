@@ -20,7 +20,7 @@ use fab2s\NodalFlow\PayloadNodeFactory;
 /**
  * Class FlowInterruptTest
  */
-class FlowInterruptTest extends \TestCase
+class FlowInterruptTest extends TestCase
 {
     /**
      * @var int
@@ -1556,6 +1556,7 @@ class FlowInterruptTest extends \TestCase
                 $interrupt = $interrupt . 'Flow';
 
                 $flow->$interrupt();
+
                 // return param as it came
                 return $param;
             }

@@ -112,7 +112,7 @@ abstract class NodeAbstract implements NodeInterface
      *
      * @return $this
      */
-    public function setCarrier(FlowInterface $flow = null): NodeInterface
+    public function setCarrier(?FlowInterface $flow = null): NodeInterface
     {
         $this->carrier = $flow;
 
@@ -169,7 +169,7 @@ abstract class NodeAbstract implements NodeInterface
      *
      * @return mixed
      */
-    public function sendTo(string $flowId, string $nodeId = null, $param = null)
+    public function sendTo(string $flowId, ?string $nodeId = null, $param = null)
     {
         if (!($flow = $this->registry->getFlow($flowId))) {
             throw new NodalFlowException('Cannot sendTo without valid Flow target', 1, null, [

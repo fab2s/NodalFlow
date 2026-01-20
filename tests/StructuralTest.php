@@ -12,7 +12,7 @@ use fab2s\NodalFlow\NodalFlowException;
 use fab2s\NodalFlow\Nodes\BranchNode;
 use fab2s\NodalFlow\PayloadNodeFactory;
 
-class StructuralTest extends \TestCase
+class StructuralTest extends TestCase
 {
     /**
      * @throws NodalFlowException

@@ -132,7 +132,7 @@ class NodalFlow extends FlowAbstract
      *
      * @return mixed
      */
-    public function sendTo(string $nodeId = null, $param = null)
+    public function sendTo(?string $nodeId = null, $param = null)
     {
         $nodeIndex = 0;
         if ($nodeId !== null) {
@@ -347,6 +347,7 @@ class NodalFlow extends FlowAbstract
 
             if ($this->break) {
                 ++$nodeStats['num_break'];
+
                 // a break always need to bubble up to the first upstream Traversable if any
                 return $param;
             }
