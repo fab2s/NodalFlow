@@ -83,7 +83,7 @@ interface FlowMapInterface
     /**
      * Get the latest Node stats
      *
-     * @return array<string,integer|string>
+     * @return array<string,int|string>
      */
     public function getStats(): array;
 }

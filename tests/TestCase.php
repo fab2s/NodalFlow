@@ -19,7 +19,7 @@ use fab2s\NodalFlow\Nodes\TraversableNodeInterface;
 /**
  * abstract Class TestCase
  */
-abstract class TestCase extends \PHPUnit\Framework\TestCase
+abstract class TestCase extends PHPUnit\Framework\TestCase
 {
     const PAYLOAD_TYPE_INSTANCE_TRAVERSABLE = 'instance_traversable';
     const PAYLOAD_TYPE_INSTANCE_EXEC        = 'instance_exec';
@@ -96,7 +96,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param NodeInterface $node
      * @param bool          $isAReturningVal
      * @param bool          $isATraversable
-     * @param \Closure|null $closureAssertTrue
+     * @param Closure|null  $closureAssertTrue
      */
     public function validateNode(NodeInterface $node, $isAReturningVal, $isATraversable, $closureAssertTrue = null)
     {
@@ -331,7 +331,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * @param bool $debug
      *
-     * @return \Closure
+     * @return Closure
      */
     protected function getTraversableValidator($debug = false)
     {
@@ -361,7 +361,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * @param bool $debug
      *
-     * @return \Closure
+     * @return Closure
      */
     protected function getTraversableClosure($debug = false)
     {
@@ -388,7 +388,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * @param bool $debug
      *
-     * @return \Closure
+     * @return Closure
      */
     protected function getExecClosure($debug = false)
     {

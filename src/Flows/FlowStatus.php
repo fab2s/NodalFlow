@@ -57,7 +57,7 @@ class FlowStatus implements FlowStatusInterface
      *
      * @throws NodalFlowException
      */
-    public function __construct(string $status, Exception $e = null)
+    public function __construct(string $status, ?Exception $e = null)
     {
         if (!isset($this->flowStatuses[$status])) {
             throw new NodalFlowException('$status must be one of :' . \implode(', ', $this->flowStatuses));

@@ -47,7 +47,7 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
      */
     public function exec($param = null)
     {
-        return \call_user_func($this->payload, $param);
+        return ($this->payload)($param);
     }
 
     /**
@@ -59,7 +59,7 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
      */
     public function getTraversable($param = null): iterable
     {
-        foreach (\call_user_func($this->payload, $param) as $value) {
+        foreach (($this->payload)($param) as $value) {
             yield $value;
         }
     }

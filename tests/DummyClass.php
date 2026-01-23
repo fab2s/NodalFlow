@@ -29,7 +29,7 @@ class DummyClass
     /**
      * @param null|mixed $param
      *
-     * @return \Generator
+     * @return Generator
      */
     public function dummyInstanceYielder($param = null)
     {
@@ -51,7 +51,7 @@ class DummyClass
     /**
      * @param null|mixed $param
      *
-     * @return \Generator
+     * @return Generator
      */
     public static function dummyStaticYielder($param = null)
     {

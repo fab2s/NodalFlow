@@ -6,65 +6,38 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: [ '7.2', '7.3', '7.4', '8.0', '8.1', '8.2' ]
-        dispatcher-versions: ['3.4.*', '4.0.*', '4.1.*', '4.2.*', '4.3.*', '4.4.*', '5.0.*', '5.1.*', '5.2.*', '5.3.*', '5.4.*', '6.0.*', '6.1.*', '6.2.*']
+        php-versions: [ '8.0', '8.1', '8.2', '8.3', '8.4' ]
+        dispatcher-versions: ['5.4.*', '6.0.*', '6.1.*', '6.2.*', '6.3.*', '6.4.*', '7.0.*', '7.1.*', '7.2.*']
         exclude:
-          - php-versions: 7.2
-            dispatcher-versions: 6.0.*
-          - php-versions: 7.2
-            dispatcher-versions: 6.1.*
-          - php-versions: 7.2
-            dispatcher-versions: 6.2.*
-          - php-versions: 7.3
-            dispatcher-versions: 6.0.*
-          - php-versions: 7.3
-            dispatcher-versions: 6.1.*
-          - php-versions: 7.3
-            dispatcher-versions: 6.2.*
-          - php-versions: 7.4
-            dispatcher-versions: 6.0.*
-          - php-versions: 7.4
-            dispatcher-versions: 6.1.*
-          - php-versions: 7.4
-            dispatcher-versions: 6.2.*
-          - php-versions: 8.0
-            dispatcher-versions: 3.4.*
-          - php-versions: 8.0
-            dispatcher-versions: 4.0.*
-          - php-versions: 8.0
-            dispatcher-versions: 4.1.*
-          - php-versions: 8.0
-            dispatcher-versions: 4.2.*
-          - php-versions: 8.0
-            dispatcher-versions: 4.3.*
+          # PHP 8.0 doesn't support Symfony 6.1+
           - php-versions: 8.0
             dispatcher-versions: 6.1.*
           - php-versions: 8.0
             dispatcher-versions: 6.2.*
+          - php-versions: 8.0
+            dispatcher-versions: 6.3.*
+          - php-versions: 8.0
+            dispatcher-versions: 6.4.*
+          - php-versions: 8.0
+            dispatcher-versions: 7.0.*
+          - php-versions: 8.0
+            dispatcher-versions: 7.1.*
+          - php-versions: 8.0
+            dispatcher-versions: 7.2.*
+          # PHP 8.1 doesn't support Symfony 7.x
           - php-versions: 8.1
-            dispatcher-versions: 3.4.*
+            dispatcher-versions: 7.0.*
           - php-versions: 8.1
-            dispatcher-versions: 4.0.*
+            dispatcher-versions: 7.1.*
           - php-versions: 8.1
-            dispatcher-versions: 4.1.*
-          - php-versions: 8.1
-            dispatcher-versions: 4.2.*
-          - php-versions: 8.1
-            dispatcher-versions: 4.3.*
+            dispatcher-versions: 7.2.*
+          # Symfony 7.x requires PHP 8.2+
           - php-versions: 8.2
-            dispatcher-versions: 3.4.*
-          - php-versions: 8.2
-            dispatcher-versions: 4.0.*
-          - php-versions: 8.2
-            dispatcher-versions: 4.1.*
-          - php-versions: 8.2
-            dispatcher-versions: 4.2.*
-          - php-versions: 8.2
-            dispatcher-versions: 4.3.*
+            dispatcher-versions: 7.2.*
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -77,7 +50,7 @@ jobs:
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}

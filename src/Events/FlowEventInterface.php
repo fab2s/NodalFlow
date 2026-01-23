@@ -44,7 +44,7 @@ interface FlowEventInterface
      *
      * @return $this
      */
-    public function setNode(NodeInterface $node = null): self;
+    public function setNode(?NodeInterface $node = null): self;
 
     /**
      * @return array

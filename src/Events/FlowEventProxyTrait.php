@@ -40,7 +40,7 @@ trait FlowEventProxyTrait
      * @param FlowInterface      $flow
      * @param NodeInterface|null $node
      */
-    public function __construct(FlowInterface $flow, NodeInterface $node = null)
+    public function __construct(FlowInterface $flow, ?NodeInterface $node = null)
     {
         $this->flow = $flow;
         $this->node = $node;
@@ -67,7 +67,7 @@ trait FlowEventProxyTrait
      *
      * @return FlowEventInterface
      */
-    public function setNode(NodeInterface $node = null): FlowEventInterface
+    public function setNode(?NodeInterface $node = null): FlowEventInterface
     {
         $this->node = $node;
 

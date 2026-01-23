@@ -147,7 +147,7 @@ class Interrupter implements InterrupterInterface
      *
      * @return bool
      */
-    public function interruptNode(NodeInterface $node = null): bool
+    public function interruptNode(?NodeInterface $node = null): bool
     {
         return $node ? $this->nodeTarget === $node->getId() : false;
     }

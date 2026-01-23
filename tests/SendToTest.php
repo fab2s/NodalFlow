@@ -14,7 +14,7 @@ use fab2s\NodalFlow\PayloadNodeFactory;
 /**
  * Class SendToTest
  */
-class SendToTest extends \TestCase
+class SendToTest extends TestCase
 {
     /**
      * @throws NodalFlowException
