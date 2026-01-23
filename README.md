@@ -98,7 +98,7 @@ composer require "fab2s/nodalflow"
 If you want to specifically install the php >=7.2.0 version, use:
 
 ```
-composer require "fab2s/nodalflow" ^2
+composer require "fab2s/nodalflow" ^2.0
 ```
 
 If you want to specifically install the php 5.6/7.1 version, use:
@@ -132,7 +132,7 @@ $result = $nodalFlow->addPayload(('SomeClass::someTraversableMethod', true, true
 
 ## Requirements
 
-`NodalFlow` is tested against php 7.2, 7.3 and 7.4 8.0, 8.1 and 8.2
+`NodalFlow` is tested against php 8.0, 8.1, 8.2, 8.3 and 8.4
 
 ## Contributing
 
