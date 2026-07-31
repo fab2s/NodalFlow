@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -53,9 +53,10 @@ trait FlowIdTrait
      * And it's more convenient to lazy generate as this
      * trait does not need any init/construct logic.
      *
-     * @throws Exception
      *
      * @return string Immutable unique id
+     *
+     * @throws Exception
      */
     public function getId(): string
     {

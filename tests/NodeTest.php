@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -20,11 +20,9 @@ class NodeTest extends TestCase
      */
     public function nodeProvider()
     {
-        $use                 = 'use';
-        $lambda              = function () {
-        };
-        $closure             = function () use ($use) {
-        };
+        $use                   = 'use';
+        $lambda                = function () {};
+        $closure               = function () {};
         $function              = 'trim';
         $callableInstance      = [new DummyClass, 'dummyMethod'];
         $callableStatic        = '\\DummyClass::dummyStatic';
@@ -37,10 +35,10 @@ class NodeTest extends TestCase
         $payloads = [
             'CallableNode' => [
                 [
-                    'payload'         => $lambda,
+                    'payload' => $lambda,
                 ],
                 [
-                    'payload'           => function () {
+                    'payload' => function () {
                         return 42;
                     },
                     // forcing these two will bypass comboing
@@ -51,8 +49,8 @@ class NodeTest extends TestCase
                     },
                 ],
                 [
-                    'payload'           => function () {
-                        for ($i = 1; $i < 6; ++$i) {
+                    'payload' => function () {
+                        for ($i = 1; $i < 6; $i++) {
                             yield $i;
                         }
                     },
@@ -62,7 +60,7 @@ class NodeTest extends TestCase
                 ],
                 $closure,
                 [
-                    'payload'           => function () use ($use) {
+                    'payload' => function () use ($use) {
                         return $use;
                     },
                     'isAReturningVal'   => true,
@@ -73,7 +71,7 @@ class NodeTest extends TestCase
                 ],
                 $function,
                 [
-                    'payload'         => $callableInstance,
+                    'payload' => $callableInstance,
                 ],
                 [
                     'payload'           => $callableInstance,
@@ -97,12 +95,12 @@ class NodeTest extends TestCase
                     'closureAssertTrue' => $yielderValidator,
                 ],
             ],
-            'ClosureNode'  => $closure,
-            'BranchNode'   => [
+            'ClosureNode' => $closure,
+            'BranchNode'  => [
                 [
-                    'payload'           => new NodalFlow,
-                    'isAReturningVal'   => true,
-                    'isATraversable'    => false,
+                    'payload'         => new NodalFlow,
+                    'isAReturningVal' => true,
+                    'isATraversable'  => false,
                 ],
             ],
         ];
@@ -112,7 +110,7 @@ class NodeTest extends TestCase
             $payloadSetup = $payloads[$nodeName];
             $entries      = [];
             $entry        = [
-                'class'   => $className,
+                'class' => $className,
             ];
 
             if (is_array($payloadSetup)) {
@@ -129,7 +127,7 @@ class NodeTest extends TestCase
             }
 
             foreach ($entries as $entry) {
-                if (!isset($entry['isAReturningVal'], $entry['isATraversable'])) {
+                if (! isset($entry['isAReturningVal'], $entry['isATraversable'])) {
                     foreach ($this->iserCombos as $combo) {
                         $result[] = $entry + $combo;
                     }
@@ -146,12 +144,11 @@ class NodeTest extends TestCase
      * @dataProvider nodeProvider
      *
      * @param string     $class
-     * @param mixed      $payload
      * @param bool       $isAReturningVal
      * @param bool       $isATraversable
      * @param null|mixed $closureAssertTrue
      */
-    public function testNodes($class, $payload, $isAReturningVal, $isATraversable, $closureAssertTrue = null)
+    public function test_nodes($class, $payload, $isAReturningVal, $isATraversable, $closureAssertTrue = null)
     {
         $node = new $class($payload, $isAReturningVal, $isATraversable);
         $this->validateNode($node, $isAReturningVal, $isATraversable, $closureAssertTrue);

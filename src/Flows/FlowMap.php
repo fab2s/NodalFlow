@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -114,8 +114,6 @@ class FlowMap implements FlowMapInterface
     /**
      * Instantiate a Flow Status
      *
-     * @param FlowInterface $flow
-     * @param array         $flowIncrements
      *
      * @throws NodalFlowException
      */
@@ -141,17 +139,13 @@ class FlowMap implements FlowMapInterface
     }
 
     /**
-     * @param NodeInterface $node
-     * @param int           $index
-     * @param bool          $replace
+     * @return $this
      *
      * @throws NodalFlowException
-     *
-     * @return $this
      */
     public function register(NodeInterface $node, int $index, bool $replace = false): FlowMapInterface
     {
-        if (!$replace) {
+        if (! $replace) {
             $this->registry->registerNode($node);
         } else {
             $this->registry->removeNode($this->reverseMap[$index]);
@@ -180,12 +174,7 @@ class FlowMap implements FlowMapInterface
         return $this;
     }
 
-    /**
-     * @param string $nodeId
-     *
-     * @return int|null
-     */
-    public function getNodeIndex(string $nodeId): ? int
+    public function getNodeIndex(string $nodeId): ?int
     {
         return isset($this->nodeMap[$nodeId]) ? $this->nodeMap[$nodeId]['index'] : null;
     }
@@ -220,10 +209,6 @@ class FlowMap implements FlowMapInterface
 
     /**
      * Let's be fast at incrementing while we are at it
-     *
-     * @param string $nodeId
-     *
-     * @return array
      */
     public function &getNodeStat(string $nodeId): array
     {
@@ -232,8 +217,6 @@ class FlowMap implements FlowMapInterface
 
     /**
      * Get/Generate Node Map
-     *
-     * @return array
      */
     public function getNodeMap(): array
     {
@@ -283,26 +266,21 @@ class FlowMap implements FlowMapInterface
     }
 
     /**
-     * @param string $nodeId
-     * @param string $key
-     *
      * @return $this
      */
     public function incrementNode(string $nodeId, string $key): FlowMapInterface
     {
-        ++$this->nodeMap[$nodeId][$key];
+        $this->nodeMap[$nodeId][$key]++;
 
         return $this;
     }
 
     /**
-     * @param string $key
-     *
      * @return $this
      */
     public function incrementFlow(string $key): FlowMapInterface
     {
-        ++$this->flowStats[$key];
+        $this->flowStats[$key]++;
 
         return $this;
     }
@@ -328,22 +306,21 @@ class FlowMap implements FlowMapInterface
     /**
      * Computes a human readable duration string from floating seconds
      *
-     * @param float $seconds
      *
      * @return array<string,int|string>
      */
     public function duration(float $seconds): array
     {
         $result = [
-            'hour'     => (int) floor($seconds / 3600),
-            'min'      => (int) floor(\fmod($seconds / 60, 60)),
-            'sec'      => (int) \fmod($seconds, 60),
-            'ms'       => (int) round(\fmod($seconds, 1) * 1000),
+            'hour' => (int) floor($seconds / 3600),
+            'min'  => (int) floor(\fmod($seconds / 60, 60)),
+            'sec'  => (int) \fmod($seconds, 60),
+            'ms'   => (int) round(\fmod($seconds, 1) * 1000),
         ];
 
         $duration = '';
         foreach ($result as $unit => $value) {
-            if (!empty($value) || $unit === 'ms') {
+            if (! empty($value) || $unit === 'ms') {
                 $duration .= $value . "$unit ";
             }
         }
@@ -408,22 +385,23 @@ class FlowMap implements FlowMapInterface
      *      'keyName' => 'existingIncrement'
      * to assign keyName as a reference to existingIncrement
      *
-     * @param array $flowIncrements
      *
-     * @throws NodalFlowException
      *
      * @return $this
+     *
+     * @throws NodalFlowException
      */
     protected function setFlowIncrement(array $flowIncrements): self
     {
         foreach ($flowIncrements as $incrementKey => $target) {
             if (is_string($target)) {
-                if (!isset($this->flowStats[$target])) {
+                if (! isset($this->flowStats[$target])) {
                     throw new NodalFlowException('Cannot set reference on unset target');
                 }
 
                 $this->flowStats[$incrementKey]            = &$this->flowStats[$target];
                 $this->flowStats[$incrementKey . '_total'] = &$this->flowStats[$target . '_total'];
+
                 continue;
             }
 
@@ -436,18 +414,16 @@ class FlowMap implements FlowMapInterface
     }
 
     /**
-     * @param NodeInterface $node
+     * @return $this
      *
      * @throws NodalFlowException
-     *
-     * @return $this
      */
     protected function setNodeIncrement(NodeInterface $node): self
     {
         $nodeId = $node->getId();
         foreach ($node->getNodeIncrements() as $incrementKey => $target) {
             if (is_string($target)) {
-                if (!isset($this->nodeIncrements[$target])) {
+                if (! isset($this->nodeIncrements[$target])) {
                     throw new NodalFlowException('Tried to set an increment alias to an un-registered increment', 1, null, [
                         'aliasKey'  => $incrementKey,
                         'targetKey' => $target,
@@ -455,6 +431,7 @@ class FlowMap implements FlowMapInterface
                 }
 
                 $this->nodeMap[$nodeId][$incrementKey] = &$this->nodeMap[$nodeId][$target];
+
                 continue;
             }
 

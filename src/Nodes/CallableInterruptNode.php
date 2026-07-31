@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -25,7 +25,6 @@ class CallableInterruptNode extends InterruptNodeAbstract
     /**
      * Instantiate a CallableInterruptNode Node
      *
-     * @param callable $interrupter
      *
      * @throws NodalFlowException
      */
@@ -36,8 +35,6 @@ class CallableInterruptNode extends InterruptNodeAbstract
     }
 
     /**
-     * @param mixed $param
-     *
      * @return InterrupterInterface|null|bool `null` do do nothing, eg let the Flow proceed untouched
      *                                        `true` to trigger a continue on the carrier Flow (not ancestors)
      *                                        `false` to trigger a break on the carrier Flow (not ancestors)

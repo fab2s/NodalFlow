@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -18,8 +18,6 @@ class DummyClass
 
     /**
      * @param null|mixed $param
-     *
-     * @return mixed
      */
     public function dummyMethod($param = null)
     {
@@ -33,15 +31,13 @@ class DummyClass
      */
     public function dummyInstanceYielder($param = null)
     {
-        for ($i = 1; $i <= self::YIELDER_ITERATIONS; ++$i) {
+        for ($i = 1; $i <= self::YIELDER_ITERATIONS; $i++) {
             yield $i;
         }
     }
 
     /**
      * @param null|mixed $param
-     *
-     * @return mixed
      */
     public static function dummyStatic($param = null)
     {
@@ -55,14 +51,12 @@ class DummyClass
      */
     public static function dummyStaticYielder($param = null)
     {
-        for ($i = 1; $i <= self::YIELDER_ITERATIONS; ++$i) {
+        for ($i = 1; $i <= self::YIELDER_ITERATIONS; $i++) {
             yield $i;
         }
     }
 
     /**
-     * @param TraversableNodeInterface $node
-     *
      * @return bool
      */
     public static function dummyYielderValidator(TraversableNodeInterface $node)
@@ -71,7 +65,7 @@ class DummyClass
         $result = true;
         foreach ($node->getTraversable(null) as $value) {
             $result = $result && $i === $value;
-            ++$i;
+            $i++;
         }
 
         return $result;

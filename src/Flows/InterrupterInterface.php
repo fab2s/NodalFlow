@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -45,17 +45,12 @@ interface InterrupterInterface
      */
     const TYPE_BREAK = 'break';
 
-    /**
-     * @return string
-     */
     public function getType(): string;
 
     /**
-     * @param string $type
+     * @return $this
      *
      * @throws InvalidArgumentException
-     *
-     * @return $this
      */
     public function setType(string $type): self;
 
@@ -68,11 +63,8 @@ interface InterrupterInterface
      *
      * Throw an exception if we reach the top after bubbling and FlowInterrupt != InterrupterInterface::TARGET_TOP
      *
-     * @param FlowInterface $flow
      *
      * @throws NodalFlowException
-     *
-     * @return FlowInterface
      */
     public function propagate(FlowInterface $flow): FlowInterface;
 }

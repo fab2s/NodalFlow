@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -19,14 +19,9 @@ class FlowBranchTest extends TestCase
     /**
      * @dataProvider flowCasesProvider
      *
-     * @param FlowInterface $flow
-     * @param array         $nodes
-     * @param mixed         $param
-     * @param mixed         $expected
-     *
      * @throws NodalFlowException
      */
-    public function testFlows(FlowInterface $flow, array $nodes, $param, $expected)
+    public function test_flows(FlowInterface $flow, array $nodes, $param, $expected)
     {
         foreach ($nodes as $key => $nodeSetup) {
             if (isset($nodeSetup['aggregate'])) {
@@ -57,7 +52,7 @@ class FlowBranchTest extends TestCase
             // val combos and the result is pretty unique for
             // each combo
             if (isset($nodeSetup['payloadSetup'])) {
-                $payloadSetup   = $nodeSetup['payloadSetup'];
+                $payloadSetup = $nodeSetup['payloadSetup'];
                 // get spy's invocations
                 // check multi phpunit versions support
                 if (is_callable([$payloadSetup['spy'], 'getInvocations'])) {
@@ -96,13 +91,13 @@ class FlowBranchTest extends TestCase
         // two traversable and properly pass the param
         $cases = [
             'single1' => [
-                'flowName'     => 'NodalFlow',
-                'nodes'        => [
+                'flowName' => 'NodalFlow',
+                'nodes'    => [
                     [
-                        'branch'              => true,
-                        'nodes'               => ['getExecInstance', 'getExecInstance'],
-                        'isATraversable'      => false,
-                        'validate'            => null,
+                        'branch'         => true,
+                        'nodes'          => ['getExecInstance', 'getExecInstance'],
+                        'isATraversable' => false,
+                        'validate'       => null,
                     ],
                     'execInstance',
                 ],
@@ -149,14 +144,14 @@ class FlowBranchTest extends TestCase
                 ],
             ],
             'single2' => [
-                'flowName'     => 'NodalFlow',
-                'nodes'        => [
+                'flowName' => 'NodalFlow',
+                'nodes'    => [
                     'execInstance',
                     [
-                        'branch'              => true,
-                        'nodes'               => ['getExecInstance', 'getExecInstance'],
-                        'isATraversable'      => false,
-                        'validate'            => null,
+                        'branch'         => true,
+                        'nodes'          => ['getExecInstance', 'getExecInstance'],
+                        'isATraversable' => false,
+                        'validate'       => null,
                     ],
                 ],
                 'expectations' => [
@@ -202,13 +197,13 @@ class FlowBranchTest extends TestCase
                 ],
             ],
             'single3' => [
-                'flowName'     => 'NodalFlow',
-                'nodes'        => [
+                'flowName' => 'NodalFlow',
+                'nodes'    => [
                     [
-                        'branch'              => true,
-                        'nodes'               => ['getTraversableInstance', 'getTraversableInstance'],
-                        'isATraversable'      => false,
-                        'validate'            => null,
+                        'branch'         => true,
+                        'nodes'          => ['getTraversableInstance', 'getTraversableInstance'],
+                        'isATraversable' => false,
+                        'validate'       => null,
                     ],
                     'execInstance',
                 ],
@@ -255,14 +250,14 @@ class FlowBranchTest extends TestCase
                 ],
             ],
             'single4' => [
-                'flowName'     => 'NodalFlow',
-                'nodes'        => [
+                'flowName' => 'NodalFlow',
+                'nodes'    => [
                     'execInstance',
                     [
-                        'branch'              => true,
-                        'nodes'               => ['getTraversableInstance', 'getTraversableInstance'],
-                        'isATraversable'      => false,
-                        'validate'            => null,
+                        'branch'         => true,
+                        'nodes'          => ['getTraversableInstance', 'getTraversableInstance'],
+                        'isATraversable' => false,
+                        'validate'       => null,
                     ],
                 ],
                 'expectations' => [

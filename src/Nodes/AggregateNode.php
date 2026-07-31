@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -29,7 +29,6 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
     /**
      * Instantiate an Aggregate Node
      *
-     * @param bool $isAReturningVal
      *
      * @throws NodalFlowException
      */
@@ -42,11 +41,11 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
     /**
      * Add a traversable to the aggregate
      *
-     * @param TraversableNodeInterface $node
      *
-     * @throws NodalFlowException
      *
      * @return $this
+     *
+     * @throws NodalFlowException
      */
     public function addTraversable(TraversableNodeInterface $node): AggregateNodeInterface
     {
@@ -58,7 +57,6 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
     /**
      * Get the traversable to traverse within the Flow
      *
-     * @param mixed $param
      *
      * @return Generator
      */
@@ -72,6 +70,7 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
             foreach ($node->getTraversable($param) as $value) {
                 if ($returnVal) {
                     yield $value;
+
                     continue;
                 }
 
@@ -92,7 +91,6 @@ class AggregateNode extends PayloadNodeAbstract implements AggregateNodeInterfac
     /**
      * Execute the BranchNode
      *
-     * @param mixed $param
      *
      * @throws NodalFlowException
      */

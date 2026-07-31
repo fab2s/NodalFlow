@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -17,7 +17,7 @@ class StructuralTest extends TestCase
     /**
      * @throws NodalFlowException
      */
-    public function testFlowReuseSelf()
+    public function test_flow_reuse_self()
     {
         $this->expectException(NodalFlowException::class);
         $flow = new NodalFlow;
@@ -27,7 +27,7 @@ class StructuralTest extends TestCase
     /**
      * @throws NodalFlowException
      */
-    public function testFlowReuse1()
+    public function test_flow_reuse1()
     {
         $this->expectException(NodalFlowException::class);
         $rootFlow   = new NodalFlow;
@@ -39,7 +39,7 @@ class StructuralTest extends TestCase
     /**
      * @throws NodalFlowException
      */
-    public function testFlowReuse2()
+    public function test_flow_reuse2()
     {
         $this->expectException(NodalFlowException::class);
         $rootFlow    = new NodalFlow;
@@ -53,7 +53,7 @@ class StructuralTest extends TestCase
     /**
      * @throws NodalFlowException
      */
-    public function testNodeReuse()
+    public function test_node_reuse()
     {
         $this->expectException(NodalFlowException::class);
         $flow = new NodalFlow;
@@ -68,7 +68,7 @@ class StructuralTest extends TestCase
     /**
      * @throws NodalFlowException
      */
-    public function testNodeReuseInBranch1()
+    public function test_node_reuse_in_branch1()
     {
         $this->expectException(NodalFlowException::class);
         $flow       = new NodalFlow;
@@ -84,7 +84,7 @@ class StructuralTest extends TestCase
     /**
      * @throws NodalFlowException
      */
-    public function testNodeReuseInBranch2()
+    public function test_node_reuse_in_branch2()
     {
         $this->expectException(NodalFlowException::class);
         $flow       = new NodalFlow;
@@ -100,7 +100,7 @@ class StructuralTest extends TestCase
     /**
      * @throws NodalFlowException
      */
-    public function testNodeReuseInBranch3()
+    public function test_node_reuse_in_branch3()
     {
         $this->expectException(NodalFlowException::class);
         $flow        = new NodalFlow;

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -28,9 +28,6 @@ abstract class PayloadNodeAbstract extends NodeAbstract implements PayloadNodeIn
      * A Payload Node is supposed to be immutable, and thus
      * have no setters on $isAReturningVal and $isATraversable
      *
-     * @param mixed $payload
-     * @param bool  $isAReturningVal
-     * @param bool  $isATraversable
      *
      * @throws NodalFlowException
      */
@@ -40,7 +37,7 @@ abstract class PayloadNodeAbstract extends NodeAbstract implements PayloadNodeIn
         $this->isAFlow         = (bool) ($payload instanceof FlowInterface);
         $this->isAReturningVal = (bool) $isAReturningVal;
         // let wrong traversability be enforced by parent
-        $this->isATraversable  = (bool) $isATraversable;
+        $this->isATraversable = (bool) $isATraversable;
 
         parent::__construct();
     }

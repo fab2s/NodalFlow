@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -19,58 +19,36 @@ interface FlowRegistryInterface
 {
     /**
      * Get registry meta data reference
-     *
-     * @param string $flowId
-     *
-     * @return mixed
      */
     public function &get(string $flowId);
 
     /**
      * Used upon FlowMap un-serialization
      *
-     * @param FlowInterface $flow
-     * @param array         $entry
      *
      * @return $this
      */
     public function load(FlowInterface $flow, array $entry): self;
 
     /**
-     * @param FlowInterface $flow
+     * @return $this
      *
      * @throws NodalFlowException
-     *
-     * @return $this
      */
     public function registerFlow(FlowInterface $flow): self;
 
     /**
-     * @param NodeInterface $node
+     * @return $this
      *
      * @throws NodalFlowException
-     *
-     * @return $this
      */
     public function registerNode(NodeInterface $node): self;
 
-    /**
-     * @param string $flowId
-     *
-     * @return FlowInterface|null
-     */
-    public function getFlow(string $flowId): ? FlowInterface;
+    public function getFlow(string $flowId): ?FlowInterface;
+
+    public function getNode(string $nodeId): ?NodeInterface;
 
     /**
-     * @param string $nodeId
-     *
-     * @return NodeInterface|null
-     */
-    public function getNode(string $nodeId): ? NodeInterface;
-
-    /**
-     * @param NodeInterface $node
-     *
      * @return $this
      */
     public function removeNode(NodeInterface $node): self;

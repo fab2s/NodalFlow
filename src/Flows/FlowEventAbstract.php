@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -59,8 +59,6 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
 
     /**
      * Get current $progressMod
-     *
-     * @return int
      */
     public function getProgressMod(): int
     {
@@ -71,7 +69,6 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
      * Define the progress modulo, Progress Callback will be
      * triggered upon each iteration in the flow modulo $progressMod
      *
-     * @param int $progressMod
      *
      * @return $this
      */
@@ -84,8 +81,6 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
 
     /**
      * @throws ReflectionException
-     *
-     * @return EventDispatcherInterface
      */
     public function getDispatcher(): EventDispatcherInterface
     {
@@ -98,11 +93,9 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
     }
 
     /**
-     * @param EventDispatcherInterface $dispatcher
+     * @return $this
      *
      * @throws ReflectionException
-     *
-     * @return $this
      */
     public function setDispatcher(EventDispatcherInterface $dispatcher): self
     {
@@ -114,11 +107,11 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
     /**
      * Register callback class
      *
-     * @param CallbackInterface $callBack
      *
-     * @throws ReflectionException
      *
      * @return $this
+     *
+     * @throws ReflectionException
      *
      * @deprecated Use Flow events & dispatcher instead
      */
@@ -130,9 +123,6 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
     }
 
     /**
-     * @param string             $eventName
-     * @param NodeInterface|null $node
-     *
      * @return $this
      */
     protected function triggerEvent(string $eventName, ?NodeInterface $node = null): self
@@ -147,13 +137,11 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
     }
 
     /**
-     * @param bool $reload
-     *
      * @return $this
      */
     protected function listActiveEvent(bool $reload = false): self
     {
-        if (!isset($this->dispatcher) || (isset($this->activeEvents) && !$reload)) {
+        if (! isset($this->dispatcher) || (isset($this->activeEvents) && ! $reload)) {
             return $this;
         }
 
@@ -161,7 +149,7 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
         $eventList          = FlowEvent::getEventList();
         $sortedListeners    = $this->dispatcher->getListeners();
         foreach ($sortedListeners as $eventName => $listeners) {
-            if (isset($eventList[$eventName]) && !empty($listeners)) {
+            if (isset($eventList[$eventName]) && ! empty($listeners)) {
                 $this->activeEvents[$eventName] = 1;
             }
         }
@@ -196,11 +184,8 @@ abstract class FlowEventAbstract extends FlowAncestryAbstract
      * PS:
      * Okay, this is also a tribute to Linus memorable rants, but ...
      *
-     * @param string $class
      *
      * @throws ReflectionException
-     *
-     * @return FlowEventAbstract
      */
     protected function initDispatchArgs(string $class): self
     {

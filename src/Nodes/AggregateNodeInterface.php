@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -12,7 +12,7 @@ namespace fab2s\NodalFlow\Nodes;
 /**
  * Interface AggregateNodeInterface
  */
-interface AggregateNodeInterface extends TraversableNodeInterface, PayloadNodeInterface, BranchNodeInterface
+interface AggregateNodeInterface extends BranchNodeInterface, PayloadNodeInterface, TraversableNodeInterface
 {
     /**
      * Add a traversable to the aggregate

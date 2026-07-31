@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -58,11 +58,11 @@ abstract class FlowInterruptAbstract extends FlowEventAbstract
      * Break the flow's execution, conceptually similar to breaking
      * a regular loop
      *
-     * @param InterrupterInterface|null $flowInterrupt
      *
-     * @throws NodalFlowException
      *
      * @return $this
+     *
+     * @throws NodalFlowException
      */
     public function breakFlow(?InterrupterInterface $flowInterrupt = null): FlowInterface
     {
@@ -73,11 +73,11 @@ abstract class FlowInterruptAbstract extends FlowEventAbstract
      * Continue the flow's execution, conceptually similar to continuing
      * a regular loop
      *
-     * @param InterrupterInterface|null $flowInterrupt
      *
-     * @throws NodalFlowException
      *
      * @return $this
+     *
+     * @throws NodalFlowException
      */
     public function continueFlow(?InterrupterInterface $flowInterrupt = null): FlowInterface
     {
@@ -85,12 +85,9 @@ abstract class FlowInterruptAbstract extends FlowEventAbstract
     }
 
     /**
-     * @param string                    $interruptType
-     * @param InterrupterInterface|null $flowInterrupt
+     * @return $this
      *
      * @throws NodalFlowException
-     *
-     * @return $this
      */
     public function interruptFlow(string $interruptType, ?InterrupterInterface $flowInterrupt = null): FlowInterface
     {
@@ -129,13 +126,13 @@ abstract class FlowInterruptAbstract extends FlowEventAbstract
      *
      * @param null|string|bool $interruptNodeId
      *
-     * @throws NodalFlowException
-     *
      * @return $this
+     *
+     * @throws NodalFlowException
      */
     public function setInterruptNodeId($interruptNodeId): FlowInterface
     {
-        if ($interruptNodeId !== null && !is_bool($interruptNodeId) && !$this->registry->getNode($interruptNodeId)) {
+        if ($interruptNodeId !== null && ! is_bool($interruptNodeId) && ! $this->registry->getNode($interruptNodeId)) {
             throw new NodalFlowException('Targeted Node not found in target Flow for Interruption', 1, null, [
                 'targetFlow' => $this->getId(),
                 'targetNode' => $interruptNodeId,
@@ -147,11 +144,6 @@ abstract class FlowInterruptAbstract extends FlowEventAbstract
         return $this;
     }
 
-    /**
-     * @param NodeInterface $node
-     *
-     * @return bool
-     */
     protected function interruptNode(NodeInterface $node): bool
     {
         // if we have an interruptNodeId, bubble up until we match a node

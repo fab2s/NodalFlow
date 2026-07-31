@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -20,8 +20,6 @@ interface NodeInterface extends FlowIdInterface
 {
     /**
      * Indicate if the Node is Traversable
-     *
-     * @return bool
      */
     public function isTraversable(): bool;
 
@@ -46,7 +44,6 @@ interface NodeInterface extends FlowIdInterface
     /**
      * Set/Reset carrying Flow
      *
-     * @param FlowInterface|null $flow
      *
      * @return $this
      */
@@ -54,28 +51,20 @@ interface NodeInterface extends FlowIdInterface
 
     /**
      * Return the carrying Flow
-     *
-     * @return FlowInterface|null
      */
-    public function getCarrier(): ? FlowInterface;
+    public function getCarrier(): ?FlowInterface;
 
     /**
      * Get this Node's hash, must be deterministic and unique
      *
      * @deprecated use `getId` instead
-     *
-     * @return string
      */
     public function getNodeHash(): string;
 
     /**
-     * @param string      $flowId
-     * @param string|null $nodeId
-     * @param mixed|null  $param
+     * @param mixed|null $param
      *
      * @throws NodalFlowException
-     *
-     * @return mixed
      */
     public function sendTo(string $flowId, ?string $nodeId = null, $param = null);
 
@@ -88,8 +77,6 @@ interface NodeInterface extends FlowIdInterface
      * or :
      *      'keyName' => 'existingIncrement'
      * to assign keyName as a reference to an existingIncrement
-     *
-     * @return array
      */
     public function getNodeIncrements(): array;
 }

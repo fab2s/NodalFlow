@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -19,14 +19,9 @@ class FlowInstanceTest extends TestCase
     /**
      * @dataProvider flowCasesProvider
      *
-     * @param FlowInterface $flow
-     * @param array         $nodes
-     * @param mixed         $param
-     * @param mixed         $expected
-     *
      * @throws NodalFlowException
      */
-    public function testFlows(FlowInterface $flow, array $nodes, $param, $expected)
+    public function test_flows(FlowInterface $flow, array $nodes, $param, $expected)
     {
         foreach ($nodes as $key => $nodeSetup) {
             /** @var NodeInterface $node */
@@ -42,7 +37,7 @@ class FlowInstanceTest extends TestCase
 
         foreach ($nodes as $nodeSetup) {
             if (isset($nodeSetup['payloadSetup'])) {
-                $payloadSetup   = $nodeSetup['payloadSetup'];
+                $payloadSetup = $nodeSetup['payloadSetup'];
                 // get spy's invocations
                 // check multi phpunit versions support
                 if (is_callable([$payloadSetup['spy'], 'getInvocations'])) {
@@ -52,7 +47,7 @@ class FlowInstanceTest extends TestCase
                     $spyInvocations = $payloadSetup['spy']->getInvocationCount();
                 }
 
-                $nodeStats      = $nodeMap[$nodeSetup['hash']];
+                $nodeStats = $nodeMap[$nodeSetup['hash']];
                 $nodeMap[$nodeSetup['hash']] += [
                     'isAReturningVal' => $nodeSetup['isAReturningVal'],
                     'isATraversable'  => $nodeSetup['isATraversable'],
@@ -94,15 +89,15 @@ class FlowInstanceTest extends TestCase
          */
         $cases = [
             'single1' => [
-                'flowName'     => 'NodalFlow',
-                'nodes'        => ['traversableInstance', 'execInstance'],
+                'flowName' => 'NodalFlow',
+                'nodes'    => ['traversableInstance', 'execInstance'],
                 // expectations are setting combos for this flow
                 'expectations' => [
                     [
                         // will test all nodes with isAReturningVal
                         'isAReturningVal' => [true, true],
                         // and two cases, one with a param an one without
-                        'cases'           => [
+                        'cases' => [
                             [
                                 'param'    => null,
                                 'expected' => $this->traversableIterations + $this->ExecConst,
@@ -229,7 +224,7 @@ class FlowInstanceTest extends TestCase
                             ],
                         ],
                     ],
-                   [
+                    [
                         'isAReturningVal' => [true, false],
                         'cases'           => [
                             [
