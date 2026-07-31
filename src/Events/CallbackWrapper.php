@@ -35,9 +35,12 @@ class CallbackWrapper implements EventSubscriberInterface
     }
 
     /**
+     * Symfony 8 added the array return type to EventSubscriberInterface,
+     * declaring it here stays compatible with symfony 6.4 and 7.x
+     *
      * @return array
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             FlowEventInterface::FLOW_START    => ['start', 0],

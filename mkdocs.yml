@@ -1,5 +1,5 @@
 site_name: 'NodalFlow'
-pages:
+nav:
     - 'NodalFlow Documentation': 'index.md'
     - 'Usage': 'usage.md'
     - 'NodalFlow Citizens': 'citizens.md'

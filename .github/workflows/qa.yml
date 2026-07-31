@@ -17,13 +17,13 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.4
+          php-version: 8.5
           extensions: mbstring, dom, fileinfo, gmp, bcmath
           coverage: xdebug
 
       - name: Get composer cache directory
         id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
         uses: actions/cache@v4
@@ -39,13 +39,13 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Check code style
-        run: vendor/bin/php-cs-fixer fix --config=./.php-cs-fixer.dist.php --verbose --dry-run --using-cache=no
+        run: vendor/bin/pint --ansi --config pint.json --test
 
       - name: Compute Coverage
         run: vendor/bin/phpunit --coverage-clover ./coverage.xml
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           files: ./coverage.xml
           flags: unittests
