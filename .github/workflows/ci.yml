@@ -6,34 +6,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: [ '8.0', '8.1', '8.2', '8.3', '8.4' ]
-        dispatcher-versions: ['5.4.*', '6.0.*', '6.1.*', '6.2.*', '6.3.*', '6.4.*', '7.0.*', '7.1.*', '7.2.*']
+        php-versions: [ '8.5', '8.4', '8.3', '8.2' ]
+        dispatcher-versions: [ '8.1.*', '8.0.*', '7.4.*', '7.0.*', '6.4.*' ]
         exclude:
-          # PHP 8.0 doesn't support Symfony 6.1+
-          - php-versions: 8.0
-            dispatcher-versions: 6.1.*
-          - php-versions: 8.0
-            dispatcher-versions: 6.2.*
-          - php-versions: 8.0
-            dispatcher-versions: 6.3.*
-          - php-versions: 8.0
-            dispatcher-versions: 6.4.*
-          - php-versions: 8.0
-            dispatcher-versions: 7.0.*
-          - php-versions: 8.0
-            dispatcher-versions: 7.1.*
-          - php-versions: 8.0
-            dispatcher-versions: 7.2.*
-          # PHP 8.1 doesn't support Symfony 7.x
-          - php-versions: 8.1
-            dispatcher-versions: 7.0.*
-          - php-versions: 8.1
-            dispatcher-versions: 7.1.*
-          - php-versions: 8.1
-            dispatcher-versions: 7.2.*
-          # Symfony 7.x requires PHP 8.2+
+          # Symfony 8 requires PHP >= 8.4
+          - php-versions: 8.3
+            dispatcher-versions: 8.1.*
+          - php-versions: 8.3
+            dispatcher-versions: 8.0.*
           - php-versions: 8.2
-            dispatcher-versions: 7.2.*
+            dispatcher-versions: 8.1.*
+          - php-versions: 8.2
+            dispatcher-versions: 8.0.*
 
     steps:
       - name: Checkout
@@ -47,7 +31,7 @@ jobs:
 
       - name: Get composer cache directory
         id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
         uses: actions/cache@v4
@@ -56,13 +40,13 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
-      - name: Remove php-cs-fixer dependency
-        run: composer remove "friendsofphp/php-cs-fixer" --dev --no-update
+      - name: Remove QA dependencies
+        run: composer remove "laravel/pint" --dev --no-update
 
       - name: Remove composer.lock
         run: rm -f composer.lock
 
-      - name: Install Symfony dispatcher ${{ matrix.dispatcher-versions }}
+      - name: Install Symfony event-dispatcher ${{ matrix.dispatcher-versions }}
         run: composer require "symfony/event-dispatcher:${{ matrix.dispatcher-versions }}" --dev --no-update
 
       - name: Install Composer dependencies

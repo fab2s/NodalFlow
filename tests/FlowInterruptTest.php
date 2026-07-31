@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -42,11 +42,8 @@ class FlowInterruptTest extends TestCase
 
     /**
      * @dataProvider interruptProvider
-     *
-     * @param FlowInterface $flow
-     * @param array         $expected
      */
-    public function testInterrupt(FlowInterface $flow, array $expected)
+    public function test_interrupt(FlowInterface $flow, array $expected)
     {
         $flow->exec();
         $this->interruptAssertions($flow->getNodeMap(), $expected);
@@ -55,15 +52,11 @@ class FlowInterruptTest extends TestCase
     /**
      * @dataProvider flowCasesProvider
      *
-     * @param FlowInterface $flow
-     * @param array         $nodes
-     * @param mixed         $param
-     * @param mixed         $expected
-     * @param array         $case
+     * @param array $case
      *
      * @throws NodalFlowException
      */
-    public function testInterruptFlows(FlowInterface $flow, array $nodes, $param, $expected, $case)
+    public function test_interrupt_flows(FlowInterface $flow, array $nodes, $param, $expected, $case)
     {
         foreach ($nodes as $key => $nodeSetup) {
             /** @var NodeInterface $node */
@@ -80,7 +73,7 @@ class FlowInterruptTest extends TestCase
 
         foreach ($nodes as $nodeSetup) {
             if (isset($nodeSetup['payloadSetup'])) {
-                $payloadSetup   = $nodeSetup['payloadSetup'];
+                $payloadSetup = $nodeSetup['payloadSetup'];
                 // get spy's invocations
                 // check multi phpunit versions support
                 if (is_callable([$payloadSetup['spy'], 'getInvocations'])) {
@@ -90,7 +83,7 @@ class FlowInterruptTest extends TestCase
                     $spyInvocations = $payloadSetup['spy']->getInvocationCount();
                 }
 
-                $nodeStats      = $nodeMap[$nodeSetup['hash']];
+                $nodeStats = $nodeMap[$nodeSetup['hash']];
                 $nodeMap[$nodeSetup['hash']] += [
                     'isAReturningVal' => $nodeSetup['isAReturningVal'],
                     'isATraversable'  => $nodeSetup['isATraversable'],
@@ -141,12 +134,10 @@ class FlowInterruptTest extends TestCase
     /**
      * @dataProvider interruptProvider
      *
-     * @param NodalFlow $flow
-     *
      * @throws NodalFlowException
      * @throws ReflectionException
      */
-    public function testCallback(NodalFlow $flow)
+    public function test_callback(NodalFlow $flow)
     {
         $dummyCallback = new DummyCallback;
         $flow->setProgressMod($this->progressMod)->setCallback($dummyCallback)->exec();
@@ -167,10 +158,10 @@ class FlowInterruptTest extends TestCase
     }
 
     /**
+     * @return array
+     *
      * @throws Exception
      * @throws NodalFlowException
-     *
-     * @return array
      */
     public function interruptProvider()
     {
@@ -181,7 +172,7 @@ class FlowInterruptTest extends TestCase
 
         $testCases          = [];
         $testCases['flow1'] = [
-            'flow'     => (new NodalFlow)->add($traversableNode1)
+            'flow' => (new NodalFlow)->add($traversableNode1)
                 ->add($noOpNode1)
                 ->add($breakAt5Node1)
                 ->add($noOpNode2),
@@ -192,19 +183,19 @@ class FlowInterruptTest extends TestCase
                     'num_break'    => 1,
                     'num_continue' => 0,
                 ],
-                $noOpNode1->getId()        => [
+                $noOpNode1->getId() => [
                     'num_exec'     => 5,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $breakAt5Node1->getId()    => [
+                $breakAt5Node1->getId() => [
                     'num_exec'     => 5,
                     'num_iterate'  => 0,
                     'num_break'    => 1,
                     'num_continue' => 0,
                 ],
-                $noOpNode2->getId()        => [
+                $noOpNode2->getId() => [
                     'num_exec'     => 4,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -218,7 +209,7 @@ class FlowInterruptTest extends TestCase
         $noOpNode1          = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
         $noOpNode2          = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
         $testCases['flow2'] = [
-            'flow'     => (new NodalFlow)->add($traversableNode1)
+            'flow' => (new NodalFlow)->add($traversableNode1)
                 ->add($noOpNode1)
                 ->add($continueAt5Node1)
                 ->add($noOpNode2),
@@ -229,7 +220,7 @@ class FlowInterruptTest extends TestCase
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $noOpNode1->getId()        => [
+                $noOpNode1->getId() => [
                     'num_exec'     => 10,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -241,7 +232,7 @@ class FlowInterruptTest extends TestCase
                     'num_break'    => 0,
                     'num_continue' => 1,
                 ],
-                $noOpNode2->getId()        => [
+                $noOpNode2->getId() => [
                     'num_exec'     => 9,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -259,18 +250,18 @@ class FlowInterruptTest extends TestCase
                 ->add($noOpNode1)
                 ->add($breakAt5Node1)
                 ->add($noOpNode2),
-            false
+            false,
         );
 
         $noOpNode3 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
         $noOpNode4 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
 
         $testCases['flow3'] = [
-            'flow'     => (new NodalFlow)->add($noOpNode3)
+            'flow' => (new NodalFlow)->add($noOpNode3)
                 ->add($branchNode1)
                 ->add($noOpNode4),
             'expected' => [
-                $noOpNode3->getId()   => [
+                $noOpNode3->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -288,19 +279,19 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getId()        => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $breakAt5Node1->getId()    => [
+                        $breakAt5Node1->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getId()        => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 4,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -308,7 +299,7 @@ class FlowInterruptTest extends TestCase
                         ],
                     ],
                 ],
-                $noOpNode4->getId()   => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -326,18 +317,18 @@ class FlowInterruptTest extends TestCase
                 ->add($noOpNode1)
                 ->add($continueAt5Node1)
                 ->add($noOpNode2),
-            false
+            false,
         );
 
         $noOpNode3 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
         $noOpNode4 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
 
         $testCases['flow4'] = [
-            'flow'     => (new NodalFlow)->add($noOpNode3)
+            'flow' => (new NodalFlow)->add($noOpNode3)
                 ->add($branchNode1)
                 ->add($noOpNode4),
             'expected' => [
-                $noOpNode3->getId()   => [
+                $noOpNode3->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -355,7 +346,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getId()        => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 10,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -367,7 +358,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 0,
                             'num_continue' => 1,
                         ],
-                        $noOpNode2->getId()        => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 9,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -375,7 +366,7 @@ class FlowInterruptTest extends TestCase
                         ],
                     ],
                 ],
-                $noOpNode4->getId()   => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -397,18 +388,18 @@ class FlowInterruptTest extends TestCase
                 ->add($noOpNode2)
                 ->add($breakAt5Node1)
                 ->add($noOpNode3),
-            false
+            false,
         );
 
         $noOpNode4 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
         $noOpNode5 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
 
         $testCases['flow5'] = [
-            'flow'     => (new NodalFlow)->add($noOpNode4)
+            'flow' => (new NodalFlow)->add($noOpNode4)
                 ->add($branchNode1)
                 ->add($noOpNode5),
             'expected' => [
-                $noOpNode4->getId()   => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -426,7 +417,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getId()        => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 10,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -438,19 +429,19 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getId()        => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 95,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $breakAt5Node1->getId()    => [
+                        $breakAt5Node1->getId() => [
                             'num_exec'     => 95,
                             'num_iterate'  => 0,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode3->getId()        => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 94,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -458,7 +449,7 @@ class FlowInterruptTest extends TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getId()   => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -480,18 +471,18 @@ class FlowInterruptTest extends TestCase
                 ->add($noOpNode2)
                 ->add($continueAt5Node1)
                 ->add($noOpNode3),
-            false
+            false,
         );
 
         $noOpNode4 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
         $noOpNode5 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
 
         $testCases['flow6'] = [
-            'flow'     => (new NodalFlow)->add($noOpNode4)
+            'flow' => (new NodalFlow)->add($noOpNode4)
                 ->add($branchNode1)
                 ->add($noOpNode5),
             'expected' => [
-                $noOpNode4->getId()   => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -509,7 +500,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getId()        => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 10,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -521,7 +512,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getId()        => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 100,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -533,7 +524,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 0,
                             'num_continue' => 1,
                         ],
-                        $noOpNode3->getId()        => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 99,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -541,7 +532,7 @@ class FlowInterruptTest extends TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getId()   => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -563,18 +554,18 @@ class FlowInterruptTest extends TestCase
                 ->add($noOpNode2)
                 ->add($breakAt5Node1)
                 ->add($noOpNode3),
-            false
+            false,
         );
 
         $noOpNode4 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
         $noOpNode5 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
 
         $testCases['flow7'] = [
-            'flow'     => (new NodalFlow)->add($noOpNode4)
+            'flow' => (new NodalFlow)->add($noOpNode4)
                 ->add($branchNode1)
                 ->add($noOpNode5),
             'expected' => [
-                $noOpNode4->getId()   => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -592,7 +583,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getId()        => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -604,19 +595,19 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getId()        => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $breakAt5Node1->getId()    => [
+                        $breakAt5Node1->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode3->getId()        => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 4,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -624,7 +615,7 @@ class FlowInterruptTest extends TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getId()   => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -646,18 +637,18 @@ class FlowInterruptTest extends TestCase
                 ->add($noOpNode2)
                 ->add($continueAt5Node1)
                 ->add($noOpNode3),
-            false
+            false,
         );
 
         $noOpNode4 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
         $noOpNode5 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
 
         $testCases['flow8'] = [
-            'flow'     => (new NodalFlow)->add($noOpNode4)
+            'flow' => (new NodalFlow)->add($noOpNode4)
                 ->add($branchNode1)
                 ->add($noOpNode5),
             'expected' => [
-                $noOpNode4->getId()   => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -675,7 +666,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 0,
                             'num_continue' => 1,
                         ],
-                        $noOpNode1->getId()        => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 10,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -687,7 +678,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getId()        => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 95,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -699,7 +690,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 0,
                             'num_continue' => 1,
                         ],
-                        $noOpNode3->getId()        => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 94,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -707,7 +698,7 @@ class FlowInterruptTest extends TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getId()   => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -730,7 +721,7 @@ class FlowInterruptTest extends TestCase
                 ->add($noOpNode2)
                 ->add($breakAt5Node1)
                 ->add($noOpNode3),
-            false
+            false,
         );
 
         $noOpNode4 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
@@ -738,12 +729,13 @@ class FlowInterruptTest extends TestCase
 
         $rootFlow->add($noOpNode4)
             ->add($branchNode1)
-            ->add($noOpNode5);
+            ->add($noOpNode5)
+        ;
 
         $testCases['flow9'] = [
             'flow'     => $rootFlow,
             'expected' => [
-                $noOpNode4->getId()   => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -761,7 +753,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getId()        => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -773,19 +765,19 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getId()        => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $breakAt5Node1->getId()    => [
+                        $breakAt5Node1->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode3->getId()        => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 4,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -793,7 +785,7 @@ class FlowInterruptTest extends TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getId()   => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 0,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -816,7 +808,7 @@ class FlowInterruptTest extends TestCase
                 ->add($noOpNode2)
                 ->add($continueAt5Node1)
                 ->add($noOpNode3),
-            false
+            false,
         );
 
         $noOpNode4 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
@@ -824,12 +816,13 @@ class FlowInterruptTest extends TestCase
 
         $rootFlow->add($noOpNode4)
             ->add($branchNode1)
-            ->add($noOpNode5);
+            ->add($noOpNode5)
+        ;
 
         $testCases['flow10'] = [
             'flow'     => $rootFlow,
             'expected' => [
-                $noOpNode4->getId()   => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -847,7 +840,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getId()        => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -859,7 +852,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getId()        => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -871,7 +864,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 0,
                             'num_continue' => 1,
                         ],
-                        $noOpNode3->getId()        => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 4,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -879,7 +872,7 @@ class FlowInterruptTest extends TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getId()   => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 0,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -904,7 +897,7 @@ class FlowInterruptTest extends TestCase
                 ->add($noOpNode2)
                 ->add($breakAt5Node1)
                 ->add($noOpNode3),
-            false
+            false,
         );
 
         $noOpNode4 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
@@ -916,7 +909,8 @@ class FlowInterruptTest extends TestCase
             ->add($traversableNode4)
             ->add($noOpNode4)
             ->add($branchNode1)
-            ->add($noOpNode5);
+            ->add($noOpNode5)
+        ;
 
         $testCases['flow11'] = [
             'flow'     => $rootFlow,
@@ -927,14 +921,14 @@ class FlowInterruptTest extends TestCase
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $noOpNode6->getId()        => [
+                $noOpNode6->getId() => [
                     'num_exec'     => 10,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
                 $traversableNode4->getId() => [
-                    'num_exec'     => 10,
+                    'num_exec' => 10,
                     // the break signal is sent at rec n°5
                     // it is detected on the 1st records of
                     // this traversable which breaks there
@@ -944,13 +938,13 @@ class FlowInterruptTest extends TestCase
                     'num_break'    => 1,
                     'num_continue' => 0,
                 ],
-                $noOpNode4->getId()        => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 91,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getId()      => [
+                $branchNode1->getId() => [
                     'num_exec'     => 91,
                     'num_iterate'  => 0,
                     'num_break'    => 1,
@@ -962,7 +956,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getId()        => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 901,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -974,19 +968,19 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getId()        => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 9005,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $breakAt5Node1->getId()    => [
+                        $breakAt5Node1->getId() => [
                             'num_exec'     => 9005,
                             'num_iterate'  => 0,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode3->getId()        => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 9004,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -994,7 +988,7 @@ class FlowInterruptTest extends TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getId()        => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 90,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -1019,7 +1013,7 @@ class FlowInterruptTest extends TestCase
                 ->add($noOpNode2)
                 ->add($continueAt5Node1)
                 ->add($noOpNode3),
-            false
+            false,
         );
 
         $noOpNode4 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
@@ -1031,7 +1025,8 @@ class FlowInterruptTest extends TestCase
             ->add($traversableNode4)
             ->add($noOpNode4)
             ->add($branchNode1)
-            ->add($noOpNode5);
+            ->add($noOpNode5)
+        ;
 
         $testCases['flow12'] = [
             'flow'     => $rootFlow,
@@ -1042,14 +1037,14 @@ class FlowInterruptTest extends TestCase
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $noOpNode6->getId()        => [
+                $noOpNode6->getId() => [
                     'num_exec'     => 10,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
                 $traversableNode4->getId() => [
-                    'num_exec'     => 10,
+                    'num_exec' => 10,
                     // the break signal is sent at rec n°5
                     // it is detected on the 1st records of
                     // this traversable which breaks there
@@ -1059,13 +1054,13 @@ class FlowInterruptTest extends TestCase
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $noOpNode4->getId()        => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 100,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getId()      => [
+                $branchNode1->getId() => [
                     'num_exec'     => 100,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -1077,7 +1072,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getId()        => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 991,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -1089,7 +1084,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getId()        => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 9905,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -1101,7 +1096,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 0,
                             'num_continue' => 1,
                         ],
-                        $noOpNode3->getId()        => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 9904,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -1109,7 +1104,7 @@ class FlowInterruptTest extends TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getId()        => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 99,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -1134,7 +1129,7 @@ class FlowInterruptTest extends TestCase
                 ->add($noOpNode2)
                 ->add($breakAt5Node1)
                 ->add($noOpNode3),
-            false
+            false,
         );
 
         $noOpNode4 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
@@ -1146,7 +1141,8 @@ class FlowInterruptTest extends TestCase
             ->add($traversableNode4)
             ->add($noOpNode4)
             ->add($branchNode1)
-            ->add($noOpNode5);
+            ->add($noOpNode5)
+        ;
 
         $testCases['flow13'] = [
             'flow'     => $rootFlow,
@@ -1157,7 +1153,7 @@ class FlowInterruptTest extends TestCase
                     'num_break'    => 1,
                     'num_continue' => 0,
                 ],
-                $noOpNode6->getId()        => [
+                $noOpNode6->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -1169,13 +1165,13 @@ class FlowInterruptTest extends TestCase
                     'num_break'    => 1,
                     'num_continue' => 0,
                 ],
-                $noOpNode4->getId()        => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getId()      => [
+                $branchNode1->getId() => [
                     'num_exec'     => 1,
                     'num_iterate'  => 0,
                     'num_break'    => 1,
@@ -1187,7 +1183,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getId()        => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 1,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -1199,19 +1195,19 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getId()        => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $breakAt5Node1->getId()    => [
+                        $breakAt5Node1->getId() => [
                             'num_exec'     => 5,
                             'num_iterate'  => 0,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode3->getId()        => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 4,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -1219,7 +1215,7 @@ class FlowInterruptTest extends TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getId()        => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 0,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -1244,7 +1240,7 @@ class FlowInterruptTest extends TestCase
                 ->add($noOpNode2)
                 ->add($continueAt5Node1)
                 ->add($noOpNode3),
-            false
+            false,
         );
 
         $noOpNode4 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
@@ -1256,7 +1252,8 @@ class FlowInterruptTest extends TestCase
             ->add($traversableNode4)
             ->add($noOpNode4)
             ->add($branchNode1)
-            ->add($noOpNode5);
+            ->add($noOpNode5)
+        ;
 
         $testCases['flow14'] = [
             'flow'     => $rootFlow,
@@ -1267,7 +1264,7 @@ class FlowInterruptTest extends TestCase
                     'num_break'    => 0,
                     'num_continue' => 1,
                 ],
-                $noOpNode6->getId()        => [
+                $noOpNode6->getId() => [
                     'num_exec'     => 10,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -1279,13 +1276,13 @@ class FlowInterruptTest extends TestCase
                     'num_break'    => 1,
                     'num_continue' => 0,
                 ],
-                $noOpNode4->getId()        => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 91,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getId()      => [
+                $branchNode1->getId() => [
                     'num_exec'     => 91,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -1297,7 +1294,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getId()        => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 901,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -1309,7 +1306,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getId()        => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 9005,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -1321,7 +1318,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 0,
                             'num_continue' => 1,
                         ],
-                        $noOpNode3->getId()        => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 9004,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -1329,7 +1326,7 @@ class FlowInterruptTest extends TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getId()        => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 90,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -1354,7 +1351,7 @@ class FlowInterruptTest extends TestCase
                 ->add($noOpNode2)
                 ->add($breakAt5Node1)
                 ->add($noOpNode3),
-            false
+            false,
         );
 
         $noOpNode4 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
@@ -1366,7 +1363,8 @@ class FlowInterruptTest extends TestCase
             ->add($traversableNode4)
             ->add($noOpNode4)
             ->add($branchNode1)
-            ->add($noOpNode5);
+            ->add($noOpNode5)
+        ;
 
         $testCases['flow15'] = [
             'flow'     => $rootFlow,
@@ -1377,7 +1375,7 @@ class FlowInterruptTest extends TestCase
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $noOpNode6->getId()        => [
+                $noOpNode6->getId() => [
                     'num_exec'     => 10,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -1389,13 +1387,13 @@ class FlowInterruptTest extends TestCase
                     'num_break'    => 1,
                     'num_continue' => 0,
                 ],
-                $noOpNode4->getId()        => [
+                $noOpNode4->getId() => [
                     'num_exec'     => 91,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
                     'num_continue' => 0,
                 ],
-                $branchNode1->getId()      => [
+                $branchNode1->getId() => [
                     'num_exec'     => 91,
                     'num_iterate'  => 0,
                     'num_break'    => 1,
@@ -1407,7 +1405,7 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode1->getId()        => [
+                        $noOpNode1->getId() => [
                             'num_exec'     => 901,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -1419,19 +1417,19 @@ class FlowInterruptTest extends TestCase
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode2->getId()        => [
+                        $noOpNode2->getId() => [
                             'num_exec'     => 9005,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
                             'num_continue' => 0,
                         ],
-                        $breakAt5Node1->getId()    => [
+                        $breakAt5Node1->getId() => [
                             'num_exec'     => 9005,
                             'num_iterate'  => 0,
                             'num_break'    => 1,
                             'num_continue' => 0,
                         ],
-                        $noOpNode3->getId()        => [
+                        $noOpNode3->getId() => [
                             'num_exec'     => 9004,
                             'num_iterate'  => 0,
                             'num_break'    => 0,
@@ -1439,7 +1437,7 @@ class FlowInterruptTest extends TestCase
                         ],
                     ],
                 ],
-                $noOpNode5->getId()        => [
+                $noOpNode5->getId() => [
                     'num_exec'     => 90,
                     'num_iterate'  => 0,
                     'num_break'    => 0,
@@ -1457,7 +1455,7 @@ class FlowInterruptTest extends TestCase
     protected function getTraversable10Closure()
     {
         return function () {
-            for ($i = 1; $i <= 10; ++$i) {
+            for ($i = 1; $i <= 10; $i++) {
                 yield $i;
             }
         };
@@ -1473,12 +1471,12 @@ class FlowInterruptTest extends TestCase
         return function () use ($return) {
             static $cnt = 1;
             if ($cnt === 5) {
-                ++$cnt;
+                $cnt++;
 
                 return $return;
             }
 
-            ++$cnt;
+            $cnt++;
         };
     }
 
@@ -1492,19 +1490,15 @@ class FlowInterruptTest extends TestCase
         return function () use ($return) {
             static $cnt = 1;
             if ($cnt === 5) {
-                ++$cnt;
+                $cnt++;
 
                 return $return;
             }
 
-            ++$cnt;
+            $cnt++;
         };
     }
 
-    /**
-     * @param array $nodeMap
-     * @param array $expected
-     */
     protected function interruptAssertions(array $nodeMap, array $expected)
     {
         foreach ($nodeMap as $nodeId => $data) {
@@ -1524,10 +1518,7 @@ class FlowInterruptTest extends TestCase
     }
 
     /**
-     * @param mixed         $interrupt
-     * @param mixed         $interruptAt
-     * @param FlowInterface $flow
-     * @param bool          $debug
+     * @param bool $debug
      *
      * @return Closure
      */
@@ -1537,16 +1528,16 @@ class FlowInterruptTest extends TestCase
         $execConst       = $this->ExecConst;
         $closure         = function ($param = null) use ($generationOrder, $execConst, $interrupt, $interruptAt, $flow, $debug) {
             static $invocations = 0;
-            ++$invocations;
+            $invocations++;
             if (
-                $interruptAt &&
-                ((
-                    $interrupt === 'break' &&
-                    $invocations >= $interruptAt
-                ) ||
-                (
-                    $interrupt   === 'continue' &&
-                    $invocations === $interruptAt
+                $interruptAt
+                && ((
+                    $interrupt === 'break'
+                    && $invocations >= $interruptAt
+                )
+                || (
+                    $interrupt      === 'continue'
+                    && $invocations === $interruptAt
                 ))
             ) {
                 if ($debug) {
@@ -1570,7 +1561,7 @@ class FlowInterruptTest extends TestCase
             return $result;
         };
 
-        ++self::$generationOrder;
+        self::$generationOrder++;
 
         return $closure;
     }

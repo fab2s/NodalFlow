@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -53,7 +53,7 @@ abstract class InterruptNodeAbstract extends NodeAbstract implements InterruptNo
             return;
         }
 
-        if ($flowInterrupt instanceof  InterrupterInterface) {
+        if ($flowInterrupt instanceof InterrupterInterface) {
             $flowInterruptType = $flowInterrupt->getType();
         } elseif ($flowInterrupt) {
             $flowInterruptType = InterrupterInterface::TYPE_CONTINUE;

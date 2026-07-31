@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -15,6 +15,7 @@ use fab2s\NodalFlow\Nodes\BranchNodeInterface;
 use fab2s\NodalFlow\Nodes\CallableNode;
 use fab2s\NodalFlow\Nodes\NodeInterface;
 use fab2s\NodalFlow\Nodes\TraversableNodeInterface;
+use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
 
 /**
  * abstract Class TestCase
@@ -93,16 +94,15 @@ abstract class TestCase extends PHPUnit\Framework\TestCase
     protected $interruptPos = 4;
 
     /**
-     * @param NodeInterface $node
-     * @param bool          $isAReturningVal
-     * @param bool          $isATraversable
-     * @param Closure|null  $closureAssertTrue
+     * @param bool         $isAReturningVal
+     * @param bool         $isATraversable
+     * @param Closure|null $closureAssertTrue
      */
     public function validateNode(NodeInterface $node, $isAReturningVal, $isATraversable, $closureAssertTrue = null)
     {
         $this->assertEquals($isAReturningVal, $node->isReturningVal(), 'isReturningVal for: ' . get_class($node));
 
-        $this->assertEquals($node->isFlow(), $node instanceof  BranchNodeInterface, 'BranchNode isFlow for: ' . get_class($node));
+        $this->assertEquals($node->isFlow(), $node instanceof BranchNodeInterface, 'BranchNode isFlow for: ' . get_class($node));
 
         if ($closureAssertTrue !== null) {
             $this->assertTrue($closureAssertTrue($node), 'Node failing: ' . get_class($node));
@@ -117,8 +117,9 @@ abstract class TestCase extends PHPUnit\Framework\TestCase
         static $nonce = 0;
         $class        = 'ExecInstance' . $nonce++;
         $stub         = $this->getMockBuilder($class)
-                ->setMethods(['exec'])
-                ->getMock();
+            ->setMethods(['exec'])
+            ->getMock()
+        ;
 
         $ExecConst = $this->ExecConst;
         $stub->expects($spy = $this->any())
@@ -126,8 +127,9 @@ abstract class TestCase extends PHPUnit\Framework\TestCase
             ->will($this->returnCallback(
                 function ($param = null) use ($ExecConst) {
                     return max(0, (int) $param) + $ExecConst;
-                }
-            ));
+                },
+            ))
+        ;
 
         return $this->registerPayloadMock(self::PAYLOAD_TYPE_INSTANCE_EXEC, $stub, $spy);
     }
@@ -140,8 +142,9 @@ abstract class TestCase extends PHPUnit\Framework\TestCase
         static $nonce = 0;
         $class        = 'TraversableInstance' . $nonce++;
         $stub         = $this->getMockBuilder($class)
-                ->setMethods(['exec'])
-                ->getMock();
+            ->setMethods(['exec'])
+            ->getMock()
+        ;
 
         $traversableIterations = $this->traversableIterations;
         $stub->expects($spy = $this->any())
@@ -150,22 +153,23 @@ abstract class TestCase extends PHPUnit\Framework\TestCase
                 function ($param = null) use ($traversableIterations) {
                     $param  = max(0, (int) $param);
                     $result = [];
-                    for ($i = $param; $i < $param + $traversableIterations; ++$i) {
+                    for ($i = $param; $i < $param + $traversableIterations; $i++) {
                         $result[] = $i + 1;
                     }
 
                     return $result;
-                }
-            ));
+                },
+            ))
+        ;
 
         return $this->registerPayloadMock(self::PAYLOAD_TYPE_INSTANCE_TRAVERSABLE, $stub, $spy);
     }
 
     /**
+     * @return array
+     *
      * @throws Exception
      * @throws NodalFlowException
-     *
-     * @return array
      */
     public function flowCasesProvider()
     {
@@ -193,7 +197,7 @@ abstract class TestCase extends PHPUnit\Framework\TestCase
                     foreach ($case['nodes'] as $idx => $nodeName) {
                         if (is_array($nodeName)) {
                             $nodeSetup = $nodeName;
-                            if (!empty($nodeSetup['aggregate'])) {
+                            if (! empty($nodeSetup['aggregate'])) {
                                 $aggregateNode = new AggregateNode($expectation['isAReturningVal'][$idx]);
                                 foreach ($nodeSetup['nodes'] as $subIdx => $payloadGenerator) {
                                     $isAReturningVal         = $nodeSetup['nodeIsAReturningVal'][$subIdx];
@@ -207,7 +211,7 @@ abstract class TestCase extends PHPUnit\Framework\TestCase
                                 $nodeSetup['aggregate'] = $aggregateNode;
                             }
 
-                            if (!empty($nodeSetup['branch'])) {
+                            if (! empty($nodeSetup['branch'])) {
                                 $flow = new NodalFlow;
                                 foreach ($nodeSetup['nodes'] as $subIdx => $payloadGenerator) {
                                     // in the branch case, we only test returning val case
@@ -261,17 +265,17 @@ abstract class TestCase extends PHPUnit\Framework\TestCase
     public function getTestNodes()
     {
         $testNodes = [
-            'traversableInstance'  => [
+            'traversableInstance' => [
                 'nodeName'         => 'CallableNode',
                 'payloadGenerator' => 'getTraversableInstance',
                 'isATraversable'   => true,
             ],
-            'execInstance'         => [
+            'execInstance' => [
                 'nodeName'         => 'CallableNode',
                 'payloadGenerator' => 'getExecInstance',
                 'isATraversable'   => false,
             ],
-            'execClosure'          => [
+            'execClosure' => [
                 'nodeName'       => 'CallableNode',
                 'payload'        => $this->getExecClosure(true),
                 'isATraversable' => false,
@@ -340,20 +344,20 @@ abstract class TestCase extends PHPUnit\Framework\TestCase
             static $invocations = 0;
             $result             = true;
             $i                  = max(0, (int) $param);
-            ++$invocations;
+            $invocations++;
             foreach ($node->getTraversable(null) as $value) {
                 $result = $result && ($i === $value);
                 if ($debug) {
                     echo str_repeat('    ', $generationOrder) . "#$generationOrder TraversableValidator invocations: $invocations, param: $param value: $value, i: $i, result:" . ($result ? 'true' : 'false') . "\n";
                 }
 
-                ++$i;
+                $i++;
             }
 
             return $result;
         };
 
-        ++self::$generationOrder;
+        self::$generationOrder++;
 
         return $closure;
     }
@@ -368,10 +372,10 @@ abstract class TestCase extends PHPUnit\Framework\TestCase
         $generationOrder = self::$generationOrder;
         $closure         = function ($param = null) use ($generationOrder, $debug) {
             static $invocations = 0;
-            ++$invocations;
+            $invocations++;
             $param = max(0, (int) $param);
             $limit = $param + 5;
-            for ($i = $param; $i < $limit; ++$i) {
+            for ($i = $param; $i < $limit; $i++) {
                 if ($debug) {
                     echo str_repeat('    ', $generationOrder) . "#$generationOrder traversablePayload invocations: $invocations, param: $param yield: $i\n";
                 }
@@ -380,7 +384,7 @@ abstract class TestCase extends PHPUnit\Framework\TestCase
             }
         };
 
-        ++self::$generationOrder;
+        self::$generationOrder++;
 
         return $closure;
     }
@@ -395,7 +399,7 @@ abstract class TestCase extends PHPUnit\Framework\TestCase
         $generationOrder = self::$generationOrder;
         $closure         = function ($param = null) use ($generationOrder, $debug) {
             static $invocations = 0;
-            ++$invocations;
+            $invocations++;
             $param  = max(0, (int) $param);
             $result = $param + 1;
             if ($debug) {
@@ -405,15 +409,15 @@ abstract class TestCase extends PHPUnit\Framework\TestCase
             return $result;
         };
 
-        ++self::$generationOrder;
+        self::$generationOrder++;
 
         return $closure;
     }
 
     /**
-     * @param string                                                                                                 $type
-     * @param object                                                                                                 $payloadMock
-     * @param PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount|PHPUnit\Framework\MockObject\Rule\AnyInvokedCount $spy
+     * @param string                                                            $type
+     * @param object                                                            $payloadMock
+     * @param AnyInvokedCount|PHPUnit\Framework\MockObject\Rule\AnyInvokedCount $spy
      *
      * @return array
      */

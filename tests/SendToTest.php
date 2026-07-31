@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -19,7 +19,7 @@ class SendToTest extends TestCase
     /**
      * @throws NodalFlowException
      */
-    public function testSendFlow()
+    public function test_send_flow()
     {
         $noOpNode1 = PayloadNodeFactory::create($this->getNoOpClosure(), true, false);
         $node1Id   = $noOpNode1->getId();
@@ -30,7 +30,8 @@ class SendToTest extends TestCase
 
         $flow = (new NodalFlow)->add($noOpNode1)
             ->add($noOpNode2)
-            ->add($noOpNode3);
+            ->add($noOpNode3)
+        ;
 
         $this->assertSame(42, $flow->sendTo($node2Id, 42));
         $nodeMap   = $flow->getNodeMap();
@@ -46,7 +47,7 @@ class SendToTest extends TestCase
      * @throws NodalFlowException
      * @throws Exception
      */
-    public function testSendNode()
+    public function test_send_node()
     {
         $flow   = new NodalFlow;
         $sendTo = function ($record) use ($flow) {

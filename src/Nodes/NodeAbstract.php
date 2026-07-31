@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -9,6 +9,7 @@
 
 namespace fab2s\NodalFlow\Nodes;
 
+use Exception;
 use fab2s\NodalFlow\Flows\FlowIdTrait;
 use fab2s\NodalFlow\Flows\FlowInterface;
 use fab2s\NodalFlow\Flows\FlowRegistry;
@@ -73,8 +74,6 @@ abstract class NodeAbstract implements NodeInterface
 
     /**
      * Indicate if this Node is Traversable
-     *
-     * @return bool
      */
     public function isTraversable(): bool
     {
@@ -108,7 +107,6 @@ abstract class NodeAbstract implements NodeInterface
     /**
      * Set/Reset carrying Flow
      *
-     * @param FlowInterface|null $flow
      *
      * @return $this
      */
@@ -121,10 +119,8 @@ abstract class NodeAbstract implements NodeInterface
 
     /**
      * Get carrying Flow
-     *
-     * @return FlowInterface
      */
-    public function getCarrier(): ? FlowInterface
+    public function getCarrier(): ?FlowInterface
     {
         return $this->carrier;
     }
@@ -132,9 +128,7 @@ abstract class NodeAbstract implements NodeInterface
     /**
      * Get this Node's hash, must be deterministic and unique
      *
-     * @throws \Exception
-     *
-     * @return string
+     * @throws Exception
      *
      * @deprecated use `getId` instead
      */
@@ -152,8 +146,6 @@ abstract class NodeAbstract implements NodeInterface
      * or :
      *      'keyName' => 'existingIncrement'
      * to assign keyName as a reference to an existingIncrement
-     *
-     * @return array
      */
     public function getNodeIncrements(): array
     {
@@ -161,17 +153,13 @@ abstract class NodeAbstract implements NodeInterface
     }
 
     /**
-     * @param string      $flowId
-     * @param string|null $nodeId
-     * @param mixed|null  $param
+     * @param mixed|null $param
      *
      * @throws NodalFlowException
-     *
-     * @return mixed
      */
     public function sendTo(string $flowId, ?string $nodeId = null, $param = null)
     {
-        if (!($flow = $this->registry->getFlow($flowId))) {
+        if (! ($flow = $this->registry->getFlow($flowId))) {
             throw new NodalFlowException('Cannot sendTo without valid Flow target', 1, null, [
                 'flowId' => $flowId,
                 'nodeId' => $nodeId,
@@ -184,9 +172,10 @@ abstract class NodeAbstract implements NodeInterface
     /**
      * Make sure this Node is consistent
      *
-     * @throws NodalFlowException
      *
      * @return $this
+     *
+     * @throws NodalFlowException
      */
     protected function enforceIsATraversable(): self
     {
@@ -199,14 +188,14 @@ abstract class NodeAbstract implements NodeInterface
         }
 
         if ($this->isATraversable) {
-            if (!($this instanceof TraversableNodeInterface)) {
+            if (! ($this instanceof TraversableNodeInterface)) {
                 throw new NodalFlowException('Cannot Traverse a Node that does not implement TraversableNodeInterface');
             }
 
             return $this;
         }
 
-        if (!($this instanceof ExecNodeInterface)) {
+        if (! ($this instanceof ExecNodeInterface)) {
             throw new NodalFlowException('Cannot Exec a Node that does not implement ExecNodeInterface');
         }
 

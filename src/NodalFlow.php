@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -45,18 +45,18 @@ class NodalFlow extends FlowAbstract
      */
     public function __construct()
     {
-        $this->flowMap     = new FlowMap($this, $this->flowIncrements);
-        $this->registry    = new FlowRegistry;
+        $this->flowMap  = new FlowMap($this, $this->flowIncrements);
+        $this->registry = new FlowRegistry;
     }
 
     /**
      * Adds a Node to the flow
      *
-     * @param NodeInterface $node
      *
-     * @throws NodalFlowException
      *
      * @return $this
+     *
+     * @throws NodalFlowException
      */
     public function add(NodeInterface $node): FlowInterface
     {
@@ -72,7 +72,7 @@ class NodalFlow extends FlowAbstract
         $this->flowMap->register($node, $this->nodeIdx);
         $this->nodes[$this->nodeIdx] = $node;
 
-        ++$this->nodeIdx;
+        $this->nodeIdx++;
 
         return $this;
     }
@@ -80,13 +80,12 @@ class NodalFlow extends FlowAbstract
     /**
      * Adds a Payload Node to the Flow
      *
-     * @param callable $payload
-     * @param mixed    $isAReturningVal
-     * @param mixed    $isATraversable
-     *
-     * @throws NodalFlowException
+     * @param mixed $isAReturningVal
+     * @param mixed $isATraversable
      *
      * @return $this
+     *
+     * @throws NodalFlowException
      */
     public function addPayload(callable $payload, bool $isAReturningVal, bool $isATraversable = false): FlowInterface
     {
@@ -100,16 +99,15 @@ class NodalFlow extends FlowAbstract
     /**
      * Replaces a node with another one
      *
-     * @param int           $nodeIdx
-     * @param NodeInterface $node
      *
-     * @throws NodalFlowException
      *
      * @return static
+     *
+     * @throws NodalFlowException
      */
     public function replace(int $nodeIdx, NodeInterface $node): FlowInterface
     {
-        if (!isset($this->nodes[$nodeIdx])) {
+        if (! isset($this->nodes[$nodeIdx])) {
             throw new NodalFlowException('Argument 1 should be a valid index in nodes', 1, null, [
                 'nodeIdx' => $nodeIdx,
                 'node'    => get_class($node),
@@ -124,19 +122,16 @@ class NodalFlow extends FlowAbstract
     }
 
     /**
-     * @param string|null $nodeId
-     * @param mixed|null  $param
+     * @param mixed|null $param
      *
      * @throws Exception
      * @throws NodalFlowException
-     *
-     * @return mixed
      */
     public function sendTo(?string $nodeId = null, $param = null)
     {
         $nodeIndex = 0;
         if ($nodeId !== null) {
-            if (!($nodeIndex = $this->flowMap->getNodeIndex($nodeId))) {
+            if (! ($nodeIndex = $this->flowMap->getNodeIndex($nodeId))) {
                 throw new NodalFlowException('Cannot sendTo without valid Node target', 1, null, [
                     'flowId' => $this->getId(),
                     'nodeId' => $nodeId,
@@ -154,17 +149,18 @@ class NodalFlow extends FlowAbstract
      *                          or, in case of a branch, the last relevant
      *                          argument from upstream Flow
      *
-     * @throws NodalFlowException
-     *
      * @return mixed the last result of the
      *               last returning value node
+     *
+     * @throws NodalFlowException
      */
     public function exec($param = null)
     {
         try {
             $result = $this->rewind()
                 ->flowStart()
-                ->recurse($param);
+                ->recurse($param)
+            ;
 
             // set flowStatus to make sure that we have the proper
             // value in flowEnd even when overridden without (or when
@@ -201,17 +197,15 @@ class NodalFlow extends FlowAbstract
     }
 
     /**
-     * @param FlowInterface $flow
-     *
      * @throws NodalFlowException
      */
     protected function branchFlowCheck(FlowInterface $flow)
     {
         if (
             // this flow has parent already
-            $flow->hasParent() ||
+            $flow->hasParent()
             // adding root flow in itself
-            $this->getRootFlow($flow)->getId() === $this->getRootFlow($this)->getId()
+            || $this->getRootFlow($flow)->getId() === $this->getRootFlow($this)->getId()
         ) {
             throw new NodalFlowException('Cannot reuse Flow within Branches', 1, null, [
                 'flowId'             => $this->getId(),
@@ -230,7 +224,7 @@ class NodalFlow extends FlowAbstract
     protected function flowStart(): self
     {
         $this->flowMap->incrementFlow('num_exec')->flowStart();
-        $this->listActiveEvent(!$this->hasParent())->triggerEvent(FlowEventInterface::FLOW_START);
+        $this->listActiveEvent(! $this->hasParent())->triggerEvent(FlowEventInterface::FLOW_START);
         // flow started status kicks in after Event start to hint eventual children
         // this way, root flow is only running when a record hits a branch
         // and triggers a child flow flowStart() call
@@ -276,8 +270,6 @@ class NodalFlow extends FlowAbstract
      * The size of the recursion context is kept to a minimum
      * as pretty much everything is done by the iterating instance
      *
-     * @param mixed $param
-     * @param int   $nodeIdx
      *
      * @return mixed the last value returned by the last
      *               returning value Node in the flow
@@ -298,8 +290,8 @@ class NodalFlow extends FlowAbstract
                         $param = $value;
                     }
 
-                    ++$nodeStats['num_iterate'];
-                    if (!($nodeStats['num_iterate'] % $this->progressMod)) {
+                    $nodeStats['num_iterate']++;
+                    if (! ($nodeStats['num_iterate'] % $this->progressMod)) {
                         $this->triggerEvent(FlowEventInterface::FLOW_PROGRESS, $node);
                     }
 
@@ -308,35 +300,36 @@ class NodalFlow extends FlowAbstract
                         if ($this->continue = $this->interruptNode($node)) {
                             // since we want to bubble the continue upstream
                             // we break here waiting for next $param if any
-                            ++$nodeStats['num_break'];
+                            $nodeStats['num_break']++;
                             break;
                         }
 
                         // we drop one iteration
-                        ++$nodeStats['num_continue'];
+                        $nodeStats['num_continue']++;
+
                         continue;
                     }
 
                     if ($this->break) {
                         // we drop all subsequent iterations
-                        ++$nodeStats['num_break'];
+                        $nodeStats['num_break']++;
                         $this->break = $this->interruptNode($node);
                         break;
                     }
                 }
 
                 // we reached the end of this Traversable and executed all its downstream Nodes
-                ++$nodeStats['num_exec'];
+                $nodeStats['num_exec']++;
 
                 return $param;
             }
 
             /** @var ExecNodeInterface $node */
             $value = $node->exec($param);
-            ++$nodeStats['num_exec'];
+            $nodeStats['num_exec']++;
 
             if ($this->continue) {
-                ++$nodeStats['num_continue'];
+                $nodeStats['num_continue']++;
                 // a continue does not need to bubble up unless
                 // it specifically targets a node in this flow
                 // or targets an upstream flow
@@ -346,7 +339,7 @@ class NodalFlow extends FlowAbstract
             }
 
             if ($this->break) {
-                ++$nodeStats['num_break'];
+                $nodeStats['num_break']++;
 
                 // a break always need to bubble up to the first upstream Traversable if any
                 return $param;
@@ -357,7 +350,7 @@ class NodalFlow extends FlowAbstract
                 $param = $value;
             }
 
-            ++$nodeIdx;
+            $nodeIdx++;
         }
 
         // we reached the end of this recursion

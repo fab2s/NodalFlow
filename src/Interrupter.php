@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -49,7 +49,6 @@ class Interrupter implements InterrupterInterface
      *
      * @param null|string|FlowInterface $flowTarget , target up to Targeted Flow id or InterrupterInterface::TARGET_TOP to interrupt every parent
      * @param null|string|NodeInterface $nodeTarget
-     * @param null|string               $type
      */
     public function __construct($flowTarget = null, $nodeTarget = null, ?string $type = null)
     {
@@ -61,24 +60,19 @@ class Interrupter implements InterrupterInterface
         }
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
     /**
-     * @param string $type
+     * @return $this
      *
      * @throws InvalidArgumentException
-     *
-     * @return $this
      */
     public function setType(string $type): InterrupterInterface
     {
-        if (!isset($this->types[$type])) {
+        if (! isset($this->types[$type])) {
             throw new InvalidArgumentException('type must be one of:' . implode(', ', array_keys($this->types)));
         }
 
@@ -97,11 +91,8 @@ class Interrupter implements InterrupterInterface
      *
      * Throw an exception if we reach the top after bubbling and FlowInterrupt != InterrupterInterface::TARGET_TOP
      *
-     * @param FlowInterface $flow
      *
      * @throws NodalFlowException
-     *
-     * @return FlowInterface
      */
     public function propagate(FlowInterface $flow): FlowInterface
     {
@@ -113,7 +104,7 @@ class Interrupter implements InterrupterInterface
         }
 
         $InterrupterFlowId = $flow->getId();
-        if (!$this->type) {
+        if (! $this->type) {
             throw new NodalFlowException('No interrupt type set', 1, null, [
                 'InterrupterFlowId' => $InterrupterFlowId,
             ]);
@@ -142,32 +133,22 @@ class Interrupter implements InterrupterInterface
         return $flow;
     }
 
-    /**
-     * @param NodeInterface|null $node
-     *
-     * @return bool
-     */
     public function interruptNode(?NodeInterface $node = null): bool
     {
         return $node ? $this->nodeTarget === $node->getId() : false;
     }
 
-    /**
-     * @param FlowInterface $flow
-     *
-     * @return bool
-     */
     protected function isEdgeInterruptCase(FlowInterface $flow): bool
     {
-        return !$this->flowTarget ||
-            (
+        return ! $this->flowTarget
+            || (
                 // asked to stop right here
-                $this->flowTarget === InterrupterInterface::TARGET_SELF ||
-                $this->flowTarget === $flow->getId()                    ||
-                (
+                $this->flowTarget    === InterrupterInterface::TARGET_SELF
+                || $this->flowTarget === $flow->getId()
+                || (
                     // target root when this Flow is root already
-                    $this->flowTarget === InterrupterInterface::TARGET_TOP &&
-                    !$flow->hasParent()
+                    $this->flowTarget === InterrupterInterface::TARGET_TOP
+                    && ! $flow->hasParent()
                 )
             );
     }

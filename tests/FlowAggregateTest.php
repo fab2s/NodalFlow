@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -19,14 +19,11 @@ class FlowAggregateTest extends TestCase
     /**
      * @dataProvider flowCasesProvider
      *
-     * @param FlowInterface   $flow
      * @param NodeInterface[] $nodes
-     * @param mixed           $param
-     * @param mixed           $expected
      *
      * @throws NodalFlowException
      */
-    public function testAggregate(FlowInterface $flow, array $nodes, $param, $expected)
+    public function test_aggregate(FlowInterface $flow, array $nodes, $param, $expected)
     {
         foreach ($nodes as $key => $nodeSetup) {
             if (isset($nodeSetup['aggregate'])) {
@@ -73,7 +70,7 @@ class FlowAggregateTest extends TestCase
 
                 $this->assertSame($nodeStats['num_iterate'], $this->traversableIterations * 2 * $nodeStats['num_exec'], "Node num_iterate {$nodeStats['num_iterate']} does not match expected \$this->traversableIterations * 2 * num_exec = $this->traversableIterations * 2 * {$nodeStats['num_exec']}");
             } elseif (isset($nodeSetup['payloadSetup'])) {
-                $payloadSetup   = $nodeSetup['payloadSetup'];
+                $payloadSetup = $nodeSetup['payloadSetup'];
                 // get spy's invocations
                 // check multi phpunit versions support
                 if (is_callable([$payloadSetup['spy'], 'getInvocations'])) {
@@ -112,8 +109,8 @@ class FlowAggregateTest extends TestCase
         // two traversable and properly pass the param
         $cases = [
             'single1' => [
-                'flowName'     => 'NodalFlow',
-                'nodes'        => [
+                'flowName' => 'NodalFlow',
+                'nodes'    => [
                     [
                         'aggregate'           => true,
                         'nodes'               => ['getTraversableInstance', 'getTraversableInstance'],
@@ -166,8 +163,8 @@ class FlowAggregateTest extends TestCase
                 ],
             ],
             'single2' => [
-                'flowName'     => 'NodalFlow',
-                'nodes'        => [
+                'flowName' => 'NodalFlow',
+                'nodes'    => [
                     [
                         'aggregate'           => true,
                         'nodes'               => ['getTraversableInstance', 'getTraversableInstance'],
@@ -220,8 +217,8 @@ class FlowAggregateTest extends TestCase
                 ],
             ],
             'single3' => [
-                'flowName'     => 'NodalFlow',
-                'nodes'        => [
+                'flowName' => 'NodalFlow',
+                'nodes'    => [
                     [
                         'aggregate'           => true,
                         'nodes'               => ['getTraversableInstance', 'getTraversableInstance'],
@@ -274,8 +271,8 @@ class FlowAggregateTest extends TestCase
                 ],
             ],
             'single4' => [
-                'flowName'     => 'NodalFlow',
-                'nodes'        => [
+                'flowName' => 'NodalFlow',
+                'nodes'    => [
                     [
                         'aggregate'           => true,
                         'nodes'               => ['getTraversableInstance', 'getTraversableInstance'],

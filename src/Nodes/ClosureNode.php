@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -21,9 +21,6 @@ class ClosureNode extends CallableNode
     /**
      * Instantiate a Closure Node
      *
-     * @param Closure $payload
-     * @param bool    $isAReturningVal
-     * @param bool    $isATraversable
      *
      * @throws NodalFlowException
      */
@@ -35,7 +32,6 @@ class ClosureNode extends CallableNode
     /**
      * Get this Node's Traversable (payload must be consistent for the usage)
      *
-     * @param mixed $param
      *
      * @return Generator
      */
@@ -51,8 +47,6 @@ class ClosureNode extends CallableNode
      * Execute this Node (payload must be consistent for the usage)
      *
      * @param mixed|null $param
-     *
-     * @return mixed
      */
     public function exec($param = null)
     {

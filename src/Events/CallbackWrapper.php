@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -26,8 +26,6 @@ class CallbackWrapper implements EventSubscriberInterface
 
     /**
      * CallbackWrapper constructor.
-     *
-     * @param CallbackInterface $callBack
      */
     public function __construct(CallbackInterface $callBack)
     {
@@ -35,9 +33,10 @@ class CallbackWrapper implements EventSubscriberInterface
     }
 
     /**
-     * @return array
+     * Symfony 8 added the array return type to EventSubscriberInterface,
+     * declaring it here stays compatible with symfony 6.4 and 7.x
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             FlowEventInterface::FLOW_START    => ['start', 0],
@@ -49,8 +48,6 @@ class CallbackWrapper implements EventSubscriberInterface
 
     /**
      * Triggered when a Flow starts
-     *
-     * @param FlowEventInterface $event
      */
     public function start(FlowEventInterface $event)
     {
@@ -60,8 +57,6 @@ class CallbackWrapper implements EventSubscriberInterface
     /**
      * Triggered when a Flow progresses,
      * eg exec once or generates once
-     *
-     * @param FlowEventInterface $event
      */
     public function progress(FlowEventInterface $event)
     {
@@ -70,8 +65,6 @@ class CallbackWrapper implements EventSubscriberInterface
 
     /**
      * Triggered when a Flow completes without exceptions
-     *
-     * @param FlowEventInterface $event
      */
     public function success(FlowEventInterface $event)
     {
@@ -80,8 +73,6 @@ class CallbackWrapper implements EventSubscriberInterface
 
     /**
      * Triggered when a Flow fails
-     *
-     * @param FlowEventInterface $event
      */
     public function fail(FlowEventInterface $event)
     {

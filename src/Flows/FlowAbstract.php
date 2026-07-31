@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -31,8 +31,6 @@ abstract class FlowAbstract extends FlowInterruptAbstract
 
     /**
      * Get the stats array with latest Node stats
-     *
-     * @return FlowMapInterface
      */
     public function getFlowMap(): FlowMapInterface
     {
@@ -51,8 +49,6 @@ abstract class FlowAbstract extends FlowInterruptAbstract
 
     /**
      * Get/Generate Node Map
-     *
-     * @return array
      */
     public function getNodeMap(): array
     {
@@ -64,10 +60,8 @@ abstract class FlowAbstract extends FlowInterruptAbstract
      *      - clean (isClean()): everything went well
      *      - dirty (isDirty()): one Node broke the flow
      *      - exception (isException()): an exception was raised during the flow
-     *
-     * @return FlowStatusInterface
      */
-    public function getFlowStatus(): ? FlowStatusInterface
+    public function getFlowStatus(): ?FlowStatusInterface
     {
         return $this->flowStatus;
     }
@@ -76,8 +70,6 @@ abstract class FlowAbstract extends FlowInterruptAbstract
      * getId() alias for backward compatibility
      *
      * @throws Exception
-     *
-     * @return string
      *
      * @deprecated use `getId` instead
      */

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -15,7 +15,7 @@ use Generator;
 /**
  * Class CallableNode
  */
-class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterface, ExecNodeInterface
+class CallableNode extends PayloadNodeAbstract implements ExecNodeInterface, TraversableNodeInterface
 {
     /**
      * The underlying executable or traversable Payload
@@ -27,9 +27,6 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
     /**
      * Instantiate a Callable Node
      *
-     * @param callable $payload
-     * @param bool     $isAReturningVal
-     * @param bool     $isATraversable
      *
      * @throws NodalFlowException
      */
@@ -42,8 +39,6 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
      * Execute this node
      *
      * @param mixed|null $param
-     *
-     * @return mixed
      */
     public function exec($param = null)
     {
@@ -53,7 +48,6 @@ class CallableNode extends PayloadNodeAbstract implements TraversableNodeInterfa
     /**
      * Get this Node's Traversable
      *
-     * @param mixed $param
      *
      * @return Generator
      */

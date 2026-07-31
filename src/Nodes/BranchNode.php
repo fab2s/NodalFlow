@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -32,8 +32,6 @@ class BranchNode extends PayloadNodeAbstract implements BranchNodeInterface
     /**
      * Instantiate the BranchNode
      *
-     * @param FlowInterface $payload
-     * @param bool          $isAReturningVal
      *
      * @throws NodalFlowException
      */
@@ -47,8 +45,6 @@ class BranchNode extends PayloadNodeAbstract implements BranchNodeInterface
      * Execute the BranchNode
      *
      * @param mixed|null $param
-     *
-     * @return mixed
      */
     public function exec($param = null)
     {

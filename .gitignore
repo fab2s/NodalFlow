@@ -1,3 +1,5 @@
 /vendor
 .*.cache
 composer.lock
+/.*
+/cov

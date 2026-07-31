@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -19,45 +19,38 @@ interface FlowInterface extends FlowIdInterface
 {
     /**
      * get the Node Map
-     *
-     * @return array
      */
     public function getNodeMap(): array;
 
     /**
      * Get the stats array with latest Node stats
-     *
-     * @return FlowMapInterface
      */
     public function getFlowMap(): FlowMapInterface;
 
     /**
      * Get the latest Node stats
-     *
-     * @return array
      */
     public function getStats(): array;
 
     /**
      * Adds a Node to the Flow
      *
-     * @param NodeInterface $node
      *
-     * @throws NodalFlowException
      *
      * @return $this
+     *
+     * @throws NodalFlowException
      */
     public function add(NodeInterface $node): self;
 
     /**
      * Replaces a node with another one
      *
-     * @param int           $nodeIdx
-     * @param NodeInterface $node
      *
-     * @throws NodalFlowException
      *
      * @return $this
+     *
+     * @throws NodalFlowException
      */
     public function replace(int $nodeIdx, NodeInterface $node): self;
 
@@ -97,7 +90,6 @@ interface FlowInterface extends FlowIdInterface
     /**
      * Set parent Flow, happens only when branched
      *
-     * @param self $flow
      *
      * @return $this
      */
@@ -112,8 +104,6 @@ interface FlowInterface extends FlowIdInterface
 
     /**
      * Tells if this flow has a parent
-     *
-     * @return bool
      */
     public function hasParent(): bool;
 
@@ -127,12 +117,9 @@ interface FlowInterface extends FlowIdInterface
     public function getRootFlow(self $flow): self;
 
     /**
-     * @param string|null $nodeId
-     * @param mixed|null  $param
+     * @param mixed|null $param
      *
      * @throws NodalFlowException
-     *
-     * @return mixed
      */
     public function sendTo(?string $nodeId = null, $param = null);
 
@@ -141,10 +128,8 @@ interface FlowInterface extends FlowIdInterface
      *      - clean (isClean()): everything went well
      *      - dirty (isDirty()): one Node broke the flow
      *      - exception (isException()): an exception was raised during the flow
-     *
-     * @return FlowStatusInterface
      */
-    public function getFlowStatus(): ? FlowStatusInterface;
+    public function getFlowStatus(): ?FlowStatusInterface;
 
     /**
      * Get the underlying node array
@@ -157,7 +142,6 @@ interface FlowInterface extends FlowIdInterface
      * Nodes may call breakFlow() on their carrier to
      * break the flow
      *
-     * @param InterrupterInterface|null $flowInterrupt
      *
      * @return $this
      */
@@ -168,16 +152,12 @@ interface FlowInterface extends FlowIdInterface
      * skip the rest of the nodes and continue with next
      * value from the first upstream traversable if any
      *
-     * @param InterrupterInterface|null $flowInterrupt
      *
      * @return $this
      */
     public function continueFlow(?InterrupterInterface $flowInterrupt = null): self;
 
     /**
-     * @param string                    $interruptType
-     * @param InterrupterInterface|null $flowInterrupt
-     *
      * @return $this
      */
     public function interruptFlow(string $interruptType, ?InterrupterInterface $flowInterrupt = null): self;

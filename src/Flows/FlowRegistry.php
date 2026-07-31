@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of NodalFlow.
+ * This file is part of NodalFlow
  *     (c) Fabrice de Stefanis / https://github.com/fab2s/NodalFlow
  * This source file is licensed under the MIT license which you will
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
@@ -34,10 +34,6 @@ class FlowRegistry implements FlowRegistryInterface
 
     /**
      * Get registry meta data reference
-     *
-     * @param string $flowId
-     *
-     * @return mixed
      */
     public function &get(string $flowId)
     {
@@ -47,12 +43,11 @@ class FlowRegistry implements FlowRegistryInterface
     /**
      * Used upon FlowMap un-serialization
      *
-     * @param FlowInterface $flow
-     * @param array         $entry
      *
-     * @throws NodalFlowException
      *
      * @return $this
+     *
+     * @throws NodalFlowException
      */
     public function load(FlowInterface $flow, array $entry): FlowRegistryInterface
     {
@@ -68,11 +63,9 @@ class FlowRegistry implements FlowRegistryInterface
     }
 
     /**
-     * @param FlowInterface $flow
+     * @return $this
      *
      * @throws NodalFlowException
-     *
-     * @return $this
      */
     public function registerFlow(FlowInterface $flow): FlowRegistryInterface
     {
@@ -90,11 +83,9 @@ class FlowRegistry implements FlowRegistryInterface
     }
 
     /**
-     * @param NodeInterface $node
+     * @return $this
      *
      * @throws NodalFlowException
-     *
-     * @return $this
      */
     public function registerNode(NodeInterface $node): FlowRegistryInterface
     {
@@ -111,29 +102,17 @@ class FlowRegistry implements FlowRegistryInterface
         return $this;
     }
 
-    /**
-     * @param string $flowId
-     *
-     * @return FlowInterface|null
-     */
-    public function getFlow(string $flowId): ? FlowInterface
+    public function getFlow(string $flowId): ?FlowInterface
     {
         return isset(static::$flows[$flowId]) ? static::$flows[$flowId] : null;
     }
 
-    /**
-     * @param string $nodeId
-     *
-     * @return NodeInterface|null
-     */
-    public function getNode(string $nodeId): ? NodeInterface
+    public function getNode(string $nodeId): ?NodeInterface
     {
         return isset(static::$nodes[$nodeId]) ? static::$nodes[$nodeId] : null;
     }
 
     /**
-     * @param NodeInterface $node
-     *
      * @return $this
      */
     public function removeNode(NodeInterface $node): FlowRegistryInterface
